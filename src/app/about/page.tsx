@@ -22,7 +22,6 @@ export default function About() {
             <p className="text-stone-600 leading-relaxed">
               Kendi bünyemizdeki üretim tesisimizde, malzemeyi ustalıkla işleyerek ev, ofis, okul ve ticari mekanlar için yüksek standartlarda mobilyalar üretiyoruz. Amacımız, müşterilerimizin hayallerindeki mekanları tam zamanında ve eksiksiz bir şekilde gerçeğe dönüştürmektir.
             </p>
-            <p>deneme</p>
           </div>
         </div>
 
