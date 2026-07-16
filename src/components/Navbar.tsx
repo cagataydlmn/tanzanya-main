@@ -1,0 +1,128 @@
+"use client";
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState, useEffect, useRef } from 'react';
+
+export default function Navbar() {
+  const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  // Close mobile menu when clicking outside of the navbar
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (isMobileMenuOpen && navRef.current && !navRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+
+  const navLinks = [
+    { name: 'Ana Sayfa', href: '/' },
+    { name: 'Hakkımızda', href: '/about' },
+    { name: 'Hizmetler', href: '/services' },
+    { name: 'Ürünler', href: '/products' },
+    { name: 'Üretim', href: '/production' },
+    { name: 'Projeler', href: '/projects' },
+    { name: 'Galeri', href: '/gallery' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'İletişim', href: '/contact' },
+  ];
+
+  return (
+    <header ref={navRef} className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
+      <nav className="flex items-center justify-between px-6 lg:px-12 py-5 max-w-[1600px] mx-auto">
+        {/* Logo */}
+        <Link 
+          href="/" 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="text-2xl font-serif font-bold text-stone-900 tracking-tight shrink-0 mr-8"
+        >
+          TANZANYA.
+        </Link>
+        
+        {/* Desktop Links */}
+        <div className="hidden xl:flex items-center gap-8">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link 
+                key={link.href}
+                href={link.href} 
+                className={`font-medium text-sm uppercase tracking-widest transition-colors whitespace-nowrap ${
+                  isActive ? 'text-amber-700' : 'text-stone-600 hover:text-amber-700'
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Action Button & Mobile Menu Toggle */}
+        <div className="flex items-center gap-4 shrink-0">
+          <Link 
+            href="/quote"
+            className="hidden sm:inline-flex items-center justify-center px-8 py-3 bg-stone-900 text-white font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-amber-800"
+          >
+            Teklif Al
+          </Link>
+          
+          <button 
+            className="xl:hidden p-2 text-stone-900 hover:bg-stone-100 transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle Menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isMobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="xl:hidden absolute top-full left-0 w-full bg-white border-b border-stone-200 shadow-lg flex flex-col max-h-[80vh] overflow-y-auto">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link 
+                key={link.href}
+                href={link.href} 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`px-6 py-4 border-b border-stone-100 font-medium text-sm uppercase tracking-widest transition-colors ${
+                  isActive ? 'bg-stone-50 text-amber-700' : 'text-stone-700 hover:bg-stone-50'
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+          <div className="p-6 sm:hidden">
+            <Link 
+              href="/quote"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex w-full items-center justify-center px-8 py-4 bg-stone-900 text-white font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-amber-800"
+            >
+              Teklif Al
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
