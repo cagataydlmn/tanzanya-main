@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Sıkça Sorulan Sorular",
+  description: "Tasarım süreci, üretim süreleri, teslimat, montaj ve garanti koşulları hakkında sıkça sorulan sorulara yanıtlar bulabilirsiniz.",
+};
+
 export default function FAQ() {
   const faqs = [
     {

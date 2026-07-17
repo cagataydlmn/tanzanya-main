@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Kullanım Şartları",
+  description: "Web sitemizin kullanımına ilişkin genel kural ve koşullar hakkında bilgilendirme metni.",
+};
+
 export default function Terms() {
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">

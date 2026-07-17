@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -22,6 +23,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "postcss": "^8.5.16",
+    "prisma": "^6.19.3",
     "tailwindcss": "^4.3.2",
     "typescript": "^5"
   }

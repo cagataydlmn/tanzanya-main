@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "İletişim",
+  description: "Tanzanya Mobilya ile iletişime geçin. Proje talepleriniz, mobilya üretim detayları ve showroom adresimiz için iletişim bilgilerimiz.",
+};
+
 export default function Contact() {
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">

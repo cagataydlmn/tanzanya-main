@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -18,8 +19,14 @@ export default function Footer() {
           
           {/* Brand & About */}
           <div className="space-y-6">
-            <Link href="/" className="text-2xl font-serif font-bold text-white tracking-tight block">
-              TANZANYA.
+            <Link href="/" className="flex items-center block">
+              <Image 
+                src="/logo/logo.jpeg"
+                alt="Tanzanya Logo"
+                width={160}
+                height={50}
+                className="h-10 w-auto object-contain brightness-0 invert"
+              />
             </Link>
             <p className="text-sm leading-relaxed text-stone-400">
               Geleneksel ahşap ustalığını modern tasarım vizyonuyla birleştirerek, yaşam ve çalışma alanlarınıza değer katan anahtar teslim mobilya çözümleri sunuyoruz.

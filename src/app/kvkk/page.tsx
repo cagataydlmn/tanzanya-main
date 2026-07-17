@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "KVKK Aydınlatma Metni",
+  description: "Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında verilerinizin işlenme ve korunma esasları hakkında bilgilendirme metni.",
+};
+
 export default function KVKK() {
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">

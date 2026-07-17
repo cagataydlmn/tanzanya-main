@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -63,9 +64,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return (
       <div className="min-h-screen bg-stone-100 flex items-center justify-center px-6">
         <div className="w-full max-w-md bg-white border border-stone-200 shadow-xl p-8 md:p-12">
-          <div className="text-center mb-10">
-            <h1 className="text-3xl font-serif font-bold text-stone-900 tracking-tight mb-2">TANZANYA.</h1>
-            <p className="text-stone-500 text-sm uppercase tracking-widest">Yönetim Paneli Girişi</p>
+          <div className="flex flex-col items-center mb-8">
+            <Image 
+              src="/logo/logo.jpeg"
+              alt="Tanzanya Logo"
+              width={180}
+              height={55}
+              className="h-12 w-auto object-contain mb-3"
+            />
+            <p className="text-stone-500 text-xs uppercase tracking-widest">Yönetim Paneli Girişi</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -124,9 +131,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-stone-900 text-stone-300 flex-shrink-0 shadow-xl z-20">
         <div className="p-6 border-b border-stone-800 flex items-center justify-between">
-          <Link href="/admin" className="text-white font-serif font-bold text-xl tracking-wider">
-            TANZANYA.
-            <span className="block text-xs font-sans text-amber-500 font-normal tracking-widest mt-1">YÖNETİM PANELİ</span>
+          <Link href="/admin" className="flex flex-col gap-2">
+            <Image 
+              src="/logo/logo.jpeg"
+              alt="Tanzanya Logo"
+              width={130}
+              height={40}
+              className="h-8 w-auto object-contain brightness-0 invert"
+            />
+            <span className="block text-[10px] font-sans text-amber-500 font-normal tracking-widest mt-1">YÖNETİM PANELİ</span>
           </Link>
           <Link href="/" className="md:hidden p-2 text-stone-500 hover:text-white" title="Siteye Dön">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

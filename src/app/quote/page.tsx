@@ -1,4 +1,53 @@
+"use client";
+
+import { useState } from 'react';
+import { submitQuote } from '@/app/actions/quotes';
+
 export default function Quote() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    service: 'Ev & Konut Mobilyası',
+    message: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.phone) {
+      setStatusMsg({ type: 'error', text: 'Lütfen zorunlu alanları (*) doldurunuz.' });
+      return;
+    }
+
+    setLoading(true);
+    setStatusMsg(null);
+
+    const res = await submitQuote(formData);
+
+    setLoading(false);
+    if (res.success) {
+      setStatusMsg({
+        type: 'success',
+        text: 'Teklif talebiniz başarıyla kaydedilmiştir. Proje ekibimiz en kısa sürede sizinle iletişime geçecektir.'
+      });
+      // Formu temizle
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        service: 'Ev & Konut Mobilyası',
+        message: ''
+      });
+    } else {
+      setStatusMsg({
+        type: 'error',
+        text: res.error || 'Bir hata oluştu, lütfen daha sonra tekrar deneyiniz.'
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
       <div className="max-w-4xl mx-auto px-6">
@@ -14,37 +63,62 @@ export default function Quote() {
 
         {/* Form Container */}
         <div className="bg-white p-8 md:p-12 border border-stone-200 shadow-sm">
-          <form className="space-y-8">
+          
+          {/* Status Message */}
+          {statusMsg && (
+            <div className={`mb-8 p-4 border text-sm font-medium ${
+              statusMsg.type === 'success' 
+                ? 'bg-green-50 border-green-200 text-green-700' 
+                : 'bg-red-50 border-red-200 text-red-700'
+            }`}>
+              {statusMsg.text}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-8">
             
             {/* Personal Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">Ad Soyad / Firma Adı *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Ad Soyad / Firma Adı *</label>
                 <input 
                   type="text" 
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 transition-colors"
                   placeholder="Kurum veya şahıs adı"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">E-Posta Adresi *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">E-Posta Adresi *</label>
                 <input 
                   type="email" 
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 transition-colors"
                   placeholder="ornek@firma.com"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">Telefon Numarası *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Telefon Numarası *</label>
                 <input 
                   type="tel" 
+                  required
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 transition-colors"
                   placeholder="0 (5XX) XXX XX XX"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">Proje Türü</label>
-                <select className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 transition-colors appearance-none">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Proje Türü</label>
+                <select 
+                  value={formData.service}
+                  onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 transition-colors appearance-none"
+                >
                   <option>Ev & Konut Mobilyası</option>
                   <option>Ofis & Çalışma Alanı</option>
                   <option>Otel / Restoran / Kafe</option>
@@ -57,33 +131,24 @@ export default function Quote() {
 
             {/* Project Details */}
             <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">Proje Detayları ve Beklentileriniz</label>
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Proje Detayları ve Beklentileriniz</label>
               <textarea 
                 rows={5}
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 transition-colors resize-y"
                 placeholder="İhtiyaç duyduğunuz ürünler, yaklaşık metrekare, tercih ettiğiniz malzemeler vb."
               ></textarea>
             </div>
 
-            {/* File Upload Mock */}
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">Proje Dosyası / Çizim Ekle (Opsiyonel)</label>
-              <div className="w-full border-2 border-dashed border-stone-300 bg-stone-50 px-4 py-10 flex flex-col items-center justify-center text-center hover:bg-stone-100 transition-colors cursor-pointer">
-                <svg className="w-8 h-8 text-stone-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-                <p className="text-stone-600 font-medium">Dosyaları buraya sürükleyin veya <span className="text-amber-700 underline">seçmek için tıklayın</span></p>
-                <p className="text-stone-400 text-xs mt-2">Maks. 10MB (PDF, JPG, PNG, DWG)</p>
-              </div>
-            </div>
-
             {/* Submit Button */}
             <div className="pt-4 text-center">
               <button 
-                type="button" 
-                className="px-12 py-4 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors w-full md:w-auto"
+                type="submit" 
+                disabled={loading}
+                className="px-12 py-4 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors w-full md:w-auto disabled:bg-stone-400 disabled:cursor-not-allowed"
               >
-                Teklif İsteğini Gönder
+                {loading ? 'Gönderiliyor...' : 'Teklif İsteğini Gönder'}
               </button>
               <p className="text-stone-400 text-xs mt-4">
                 Bilgileriniz KVKK kapsamında korunmaktadır ve üçüncü şahıslarla paylaşılmaz.

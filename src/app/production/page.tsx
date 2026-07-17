@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Üretim Süreçlerimiz",
+  description: "Tasarım, malzeme seçimi, ebatlama, CNC kesim, boya, cila ve titiz kalite kontrol aşamalarıyla fabrikamızda uyguladığımız profesyonel üretim aşamaları.",
+};
+
 export default function Production() {
   const steps = [
     {

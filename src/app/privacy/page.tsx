@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Gizlilik Politikası",
+  description: "Web sitemizi ziyaret ettiğinizde verilerinizin gizliliğinin nasıl sağlandığına dair politikamız.",
+};
+
 export default function Privacy() {
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">

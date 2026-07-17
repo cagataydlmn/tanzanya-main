@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -46,9 +47,16 @@ export default function Navbar() {
         <Link 
           href="/" 
           onClick={() => setIsMobileMenuOpen(false)}
-          className="text-2xl font-serif font-bold text-stone-900 tracking-tight shrink-0 mr-8"
+          className="flex items-center shrink-0 mr-8"
         >
-          TANZANYA.
+          <Image 
+            src="/logo/logo.jpeg"
+            alt="Tanzanya Logo"
+            width={160}
+            height={50}
+            priority
+            className="h-10 w-auto object-contain"
+          />
         </Link>
         
         {/* Desktop Links */}

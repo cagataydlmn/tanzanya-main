@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Hizmetlerimiz",
+  description: "İç mimari ve tasarım, özel mobilya üretimi, anahtar teslim uygulama ve montaj hizmetlerimizle projelerinizi eksiksiz hayata geçiriyoruz.",
+};
+
 export default function Services() {
   const services = [
     {

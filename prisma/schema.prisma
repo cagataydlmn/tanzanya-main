@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model BlogPost {
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String   @unique
+  category  String
+  excerpt   String   @db.Text
+  content   String   @db.LongText
+  image     String?
+  status    String   @default("Yayında")
+  views     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    String
+  description String?  @db.Text
+  img         String
+  createdAt   DateTime @default(now())
+}
+
+model Quote {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  service   String
+  message   String   @db.Text
+  status    String   @default("Yeni")
+  createdAt DateTime @default(now())
+}
+
+model GalleryItem {
+  id        Int      @id @default(autoincrement())
+  title     String
+  category  String
+  img       String
+  createdAt DateTime @default(now())
+}

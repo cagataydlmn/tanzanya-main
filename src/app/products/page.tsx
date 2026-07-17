@@ -1,24 +1,36 @@
+import type { Metadata } from 'next';
+import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: "Ürün Gruplarımız",
+  description: "Ev mobilyaları, ofis mobilyaları, okul & kütüphane donanımları ve ticari projeleriniz için ürettiğimiz özel ahşap ve dekorasyon ürünleri.",
+};
+
 export default function Products() {
   const categories = [
     {
       title: "Ev Mobilyaları",
       desc: "Evlerinize sıcaklık ve şıklık katacak, tamamen yaşam tarzınıza özel tasarlanmış ahşap mobilya çözümleri.",
-      items: ["Mutfak Dolapları", "Gardıroplar", "TV Üniteleri", "Yemek Masaları", "Orta Sehpa", "Koltuk Takımları", "Berjerler", "Kitaplıklar"]
+      items: ["Mutfak Dolapları", "Gardıroplar", "TV Üniteleri", "Yemek Masaları", "Orta Sehpa", "Koltuk Takımları", "Berjerler", "Kitaplıklar"],
+      img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.15.jpeg"
     },
     {
       title: "Ofis Mobilyaları",
       desc: "Çalışma alanlarınızın verimliliğini artıracak, kurumsal kimliğinizi yansıtan ergonomik ve modern ofis çözümleri.",
-      items: ["Yönetici Masaları", "Çalışma Masaları", "Bankolar (Reception)", "Toplantı Masaları", "Ofis Bölmeleri", "Dosya Dolapları"]
+      items: ["Yönetici Masaları", "Çalışma Masaları", "Bankolar (Reception)", "Toplantı Masaları", "Ofis Bölmeleri", "Dosya Dolapları"],
+      img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.09.jpeg"
     },
     {
       title: "Okul Mobilyaları",
       desc: "Öğrencilerin sağlığına uygun, dayanıklı ve eğitim kalitesini destekleyen pedagojik sınıf ve laboratuvar mobilyaları.",
-      items: ["Öğrenci Sıraları", "Öğretmen Masaları", "Dolaplar", "Kütüphane Mobilyaları", "Laboratuvar Mobilyaları"]
+      items: ["Öğrenci Sıraları", "Öğretmen Masaları", "Dolaplar", "Kütüphane Mobilyaları", "Laboratuvar Mobilyaları"],
+      img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.10.jpeg"
     },
     {
       title: "Ticari Projeler",
       desc: "Kafe, restoran ve otellerin konseptine uygun, yoğun kullanıma dayanıklı, müşteri deneyimini üst seviyeye taşıyan mobilyalar.",
-      items: ["Restoran Masaları", "Kafe Sandalyeleri", "Otel Odası Mobilyaları", "Lobi Koltukları", "Stand ve Teşhir Üniteleri"]
+      items: ["Restoran Masaları", "Kafe Sandalyeleri", "Otel Odası Mobilyaları", "Lobi Koltukları", "Stand ve Teşhir Üniteleri"],
+      img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.12.jpeg"
     }
   ];
 
@@ -38,10 +50,16 @@ export default function Products() {
         {/* Categories */}
         <div className="space-y-16">
           {categories.map((category, index) => (
-            <div key={index} className="bg-white border border-stone-200 overflow-hidden flex flex-col md:flex-row">
+            <div key={index} className="bg-white border border-stone-200 overflow-hidden flex flex-col md:flex-row shadow-sm hover:shadow-md transition-shadow">
               {/* Image Side */}
-              <div className="md:w-2/5 aspect-[4/3] md:aspect-auto bg-stone-200 flex items-center justify-center text-stone-400 border-r border-stone-200">
-                [Görsel]
+              <div className="md:w-2/5 aspect-[4/3] md:aspect-auto relative bg-stone-100 border-r border-stone-200 min-h-[300px] md:min-h-full">
+                <Image 
+                  src={category.img}
+                  alt={category.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  className="object-cover"
+                />
               </div>
               
               {/* Content Side */}

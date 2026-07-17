@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+@keyframes hammer {
+  0% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-40deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-hammer {
+  animation: hammer 1s ease-in-out infinite;
+  transform-origin: 30% 80%; /* Çekicin sap ucunu dönme merkezi yapar */
+}
