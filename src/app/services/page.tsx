@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import { servicesData } from '@/data/servicesData';
 
 export const metadata: Metadata = {
   title: "Hizmetlerimiz",
@@ -6,29 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function Services() {
-  const services = [
-    {
-      title: "İç Mimari ve Tasarım",
-      desc: "Ev, ofis veya ticari alanlarınız için uzman ekibimizle yaşam tarzınıza uygun estetik ve fonksiyonel tasarımlar hazırlıyoruz. 3D modelleme ile mekanınızın bitmiş halini önceden görün.",
-    },
-    {
-      title: "Özel Mobilya Üretimi",
-      desc: "Standartların dışına çıkın. Fabrikamızda tamamen alanınıza ve zevkinize özel, milimetrik ölçülerde mobilya üretimi yapıyoruz.",
-    },
-    {
-      title: "Anahtar Teslim Projeler",
-      desc: "İnşaat, dekorasyon ve mobilya süreçlerini tek elden yönetiyoruz. Mekanı boş teslim alıp, anahtarınızı oturmaya hazır şekilde teslim ediyoruz.",
-    },
-    {
-      title: "Montaj ve Uygulama",
-      desc: "Ürettiğimiz tüm mobilyaların kurulumu ve şantiye içi uygulamaları profesyonel montaj ekiplerimiz tarafından titizlikle gerçekleştirilir.",
-    },
-    {
-      title: "Projelendirme ve 3D Tasarım",
-      desc: "Uygulama öncesi mekanınızın fotogerçekçi 3D renderlarını hazırlayarak renk, doku ve malzeme uyumunu kusursuzlaştırıyoruz.",
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-6">
@@ -41,27 +20,44 @@ export default function Services() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {services.map((service, i) => (
-            <div key={i} className="bg-white p-10 border border-stone-200 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-stone-100 flex items-center justify-center mb-6">
-                <span className="text-amber-700 font-serif text-xl font-bold">{i + 1}</span>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {servicesData.map((service, i) => (
+            <Link 
+              key={service.slug} 
+              href={`/services/${service.slug}`}
+              className="bg-white p-8 md:p-10 border border-stone-200 shadow-sm flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all rounded-lg group"
+            >
+              <div>
+                <div className="w-12 h-12 bg-amber-50 border border-amber-100 flex items-center justify-center mb-6 rounded">
+                  <span className="text-amber-700 font-serif text-xl font-bold">{i + 1}</span>
+                </div>
+                <h3 className="text-2xl font-bold font-serif text-stone-900 mb-4 group-hover:text-amber-700 transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-stone-600 leading-relaxed text-sm mb-6 line-clamp-3">
+                  {service.desc}
+                </p>
               </div>
-              <h3 className="text-2xl font-bold text-stone-900 mb-4">{service.title}</h3>
-              <p className="text-stone-600 leading-relaxed flex-grow">
-                {service.desc}
-              </p>
-            </div>
+
+              <div className="pt-4 border-t border-stone-100 flex items-center justify-between text-amber-700 font-bold text-xs uppercase tracking-wider">
+                <span>Detaylı İncele</span>
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+            </Link>
           ))}
           
-          <div className="bg-stone-900 p-10 flex flex-col justify-center items-center text-center">
-            <h3 className="text-2xl font-serif text-white mb-4">Projeniz mi var?</h3>
-            <p className="text-stone-400 mb-8">
-              Mekanınıza özel çözümler ve fiyatlandırma için bizimle iletişime geçin.
+          {/* CTA Box */}
+          <div className="bg-stone-900 p-8 md:p-10 flex flex-col justify-center items-center text-center rounded-lg border border-stone-800 shadow-sm">
+            <span className="text-amber-500 text-xs font-bold uppercase tracking-widest block mb-2">Özel Projelendirme</span>
+            <h3 className="text-2xl font-serif text-white mb-4 font-bold">Projeniz mi var?</h3>
+            <p className="text-stone-400 text-sm mb-8 leading-relaxed">
+              Mekanınıza özel ahşap çözümleri ve bütçelendirme için bizimle iletişime geçin.
             </p>
-            <a href="/quote" className="px-8 py-3 bg-white text-stone-900 font-bold uppercase tracking-wider text-sm hover:bg-stone-200 transition-colors">
+            <Link href="/quote" className="px-8 py-3 bg-amber-700 hover:bg-amber-800 text-white font-bold uppercase tracking-wider text-xs transition-colors rounded shadow-md w-full">
               Hemen Teklif Al
-            </a>
+            </Link>
           </div>
         </div>
 

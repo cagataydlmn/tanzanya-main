@@ -145,18 +145,21 @@ export default function AdminProjects() {
         </div>
       )}
 
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-serif text-stone-900">Projeler Yönetimi</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-serif text-stone-900 font-bold">Projeler Yönetimi</h1>
+          <p className="text-xs text-stone-500 mt-1">Sitenizdeki projeleri ekleyin ve yönetin.</p>
+        </div>
         <button 
           onClick={showForm ? () => setShowForm(false) : handleAddNewClick}
-          className="px-6 py-2 bg-stone-900 text-white font-medium text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer"
+          className="px-6 py-2.5 bg-stone-900 text-white font-medium text-xs md:text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer rounded shrink-0"
         >
           {showForm ? 'Listeye Dön' : '+ Yeni Proje Ekle'}
         </button>
       </div>
 
       {showForm ? (
-        <div className="bg-white p-8 border border-stone-200 shadow-sm">
+        <div className="bg-white p-6 sm:p-8 border border-stone-200 shadow-sm rounded">
           <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">Yeni Proje Ekle</h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -167,7 +170,7 @@ export default function AdminProjects() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
                   placeholder="Örn: Vadi İstanbul Konutları" 
                 />
               </div>
@@ -176,7 +179,7 @@ export default function AdminProjects() {
                 <select 
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700"
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
                 >
                   <option>Konut</option>
                   <option>Otel</option>
@@ -195,7 +198,7 @@ export default function AdminProjects() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
-                className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
                 placeholder="Proje detaylarını, kullanılan malzemeleri ve özellikleri yazın..." 
               />
             </div>
@@ -209,6 +212,7 @@ export default function AdminProjects() {
                     src={img} 
                     alt="Yüklenen Görsel Önizleme" 
                     fill 
+                    unoptimized
                     sizes="(max-width: 768px) 100vw, 448px"
                     className="object-cover" 
                   />
@@ -265,14 +269,14 @@ export default function AdminProjects() {
               <button 
                 type="button" 
                 onClick={() => setShowForm(false)} 
-                className="px-8 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-sm hover:bg-stone-300 transition-colors cursor-pointer"
+                className="px-8 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-sm hover:bg-stone-300 transition-colors cursor-pointer rounded"
               >
                 İptal
               </button>
               <button 
                 type="submit" 
                 disabled={loading || uploading || !img}
-                className="px-8 py-3 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors cursor-pointer disabled:bg-stone-400 disabled:cursor-not-allowed"
+                className="px-8 py-3 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors cursor-pointer disabled:bg-stone-400 disabled:cursor-not-allowed rounded"
               >
                 {loading ? 'Yükleniyor...' : 'Projeyi Kaydet'}
               </button>
@@ -280,7 +284,7 @@ export default function AdminProjects() {
           </form>
         </div>
       ) : (
-        <div className="bg-white border border-stone-200 shadow-sm overflow-hidden rounded">
+        <div className="bg-white border border-stone-200 shadow-sm overflow-x-auto rounded">
           {projects.length === 0 ? (
             <div className="text-center py-10 text-stone-500">
               Henüz eklenmiş proje bulunmuyor.

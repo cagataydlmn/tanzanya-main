@@ -27,7 +27,6 @@ const defaultSlides = [
   }
 ];
 
-// Tüm slaytları getir (Boşsa varsayılan 3 slaytı ekle)
 export async function getSlides() {
   try {
     let slides = await prisma.slide.findMany({
@@ -50,7 +49,6 @@ export async function getSlides() {
   }
 }
 
-// Yeni slayt ekle
 export async function createSlide(formData: {
   title: string;
   subtitle: string;
@@ -60,8 +58,6 @@ export async function createSlide(formData: {
 }) {
   try {
     const { title, subtitle, desc, bg, order } = formData;
-    
-    // Varsayılan sıra sırasını belirle
     const count = await prisma.slide.count();
     
     const newSlide = await prisma.slide.create({
@@ -83,7 +79,6 @@ export async function createSlide(formData: {
   }
 }
 
-// Slayt sil
 export async function deleteSlide(id: number) {
   try {
     await prisma.slide.delete({
@@ -99,7 +94,6 @@ export async function deleteSlide(id: number) {
   }
 }
 
-// Slayt güncelle
 export async function updateSlide(id: number, formData: {
   title: string;
   subtitle: string;

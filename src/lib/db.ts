@@ -8,6 +8,11 @@ declare global {
   var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
+// Reset stale cached instance in dev mode if new models like slide are missing
+if (globalThis.prismaGlobal && !(globalThis.prismaGlobal as any).slide) {
+  globalThis.prismaGlobal = undefined;
+}
+
 const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 
 export default prisma;

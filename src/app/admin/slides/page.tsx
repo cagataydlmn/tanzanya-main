@@ -177,14 +177,14 @@ export default function AdminSlides() {
         </div>
       )}
 
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-serif text-stone-900">Hero Slider Yönetimi</h1>
-          <p className="text-sm text-stone-500 mt-1">Anasayfadaki geniş duyuru ve kapak slaytlarını yönetin ve düzenleyin.</p>
+          <h1 className="text-2xl font-serif text-stone-900 font-bold">Hero Slider Yönetimi</h1>
+          <p className="text-xs text-stone-500 mt-1">Anasayfadaki geniş duyuru ve kapak slaytlarını yönetin ve düzenleyin.</p>
         </div>
         <button 
           onClick={showForm ? () => { setShowForm(false); setEditingId(null); } : handleAddNewClick}
-          className="px-6 py-2 bg-stone-900 text-white font-medium text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer"
+          className="px-6 py-2.5 bg-stone-900 text-white font-medium text-xs md:text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer rounded shrink-0"
         >
           {showForm ? 'Listeye Dön' : '+ Yeni Slayt Ekle'}
         </button>

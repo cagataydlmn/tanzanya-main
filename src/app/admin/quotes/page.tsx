@@ -96,7 +96,7 @@ export default function AdminQuotes() {
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Quotes List */}
-        <div className="w-full lg:w-1/2 bg-white border border-stone-200 shadow-sm overflow-hidden">
+        <div className="w-full lg:w-1/2 bg-white border border-stone-200 shadow-sm overflow-x-auto rounded">
           {quotes.length === 0 ? (
             <div className="text-center py-12 text-stone-500">
               Henüz teklif talebi bulunmuyor.
@@ -200,10 +200,10 @@ export default function AdminQuotes() {
               </div>
 
               <div className="space-y-4">
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <a 
                     href={`mailto:${selectedQuote.email}?subject=Tanzanya Mobilya Teklif Talebi`}
-                    className="flex-1 text-center px-6 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer"
+                    className="flex-1 text-center px-6 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer rounded"
                   >
                     E-Posta İle Yanıtla
                   </a>

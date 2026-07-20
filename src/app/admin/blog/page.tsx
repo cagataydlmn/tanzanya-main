@@ -180,11 +180,14 @@ export default function AdminBlog() {
         </div>
       )}
 
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-serif text-stone-900">Blog Yönetimi</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-serif text-stone-900 font-bold">Blog Yönetimi</h1>
+          <p className="text-xs text-stone-500 mt-1">Blog makalelerinizi yazın ve düzenleyin.</p>
+        </div>
         <button 
           onClick={showForm ? () => setShowForm(false) : handleAddNewClick}
-          className="px-6 py-2 bg-stone-900 text-white font-medium text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer"
+          className="px-6 py-2.5 bg-stone-900 text-white font-medium text-xs md:text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer rounded shrink-0"
         >
           {showForm ? 'Listeye Dön' : '+ Yeni Yazı Ekle'}
         </button>
@@ -269,6 +272,7 @@ export default function AdminBlog() {
                     src={image} 
                     alt="Yüklenen Görsel Önizleme" 
                     fill 
+                    unoptimized
                     sizes="(max-width: 768px) 100vw, 448px"
                     className="object-cover" 
                   />
@@ -340,7 +344,7 @@ export default function AdminBlog() {
           </form>
         </div>
       ) : (
-        <div className="bg-white border border-stone-200 shadow-sm overflow-hidden rounded">
+        <div className="bg-white border border-stone-200 shadow-sm overflow-x-auto rounded">
           {posts.length === 0 ? (
             <div className="text-center py-10 text-stone-500">
               Henüz eklenmiş blog yazısı bulunmuyor.

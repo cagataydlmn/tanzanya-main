@@ -24,24 +24,60 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
-              { title: "İç Mimari & Tasarım", desc: "Mekanlarınıza özel estetik ve fonksiyonel çözümleri, alanında uzman iç mimarlarımızla tasarlıyoruz." },
-              { title: "Özel Mobilya Üretimi", desc: "Kendi fabrikamızda, birinci sınıf malzemelerle size ve projenize özel ölçü mobilya üretimi yapıyoruz." },
-              { title: "Anahtar Teslim Uygulama", desc: "Tasarım, üretim ve şantiye yönetimini tek elden yürüterek projenizi eksiksiz teslim ediyoruz." }
+              { 
+                title: "İç Mimari & Tasarım", 
+                slug: "ic-mimari-ve-tasarim",
+                desc: "Mekanlarınıza özel estetik ve fonksiyonel çözümleri, alanında uzman iç mimarlarımızla tasarlıyoruz.",
+                img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.05.jpeg"
+              },
+              { 
+                title: "Özel Mobilya Üretimi", 
+                slug: "ozel-mobilya-uretimi",
+                desc: "Kendi fabrikamızda, birinci sınıf malzemelerle size ve projenize özel ölçü mobilya üretimi yapıyoruz.",
+                img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.04.jpeg"
+              },
+              { 
+                title: "Anahtar Teslim Uygulama", 
+                slug: "anahtar-teslim-projeler",
+                desc: "Tasarım, üretim ve şantiye yönetimini tek elden yürüterek projenizi eksiksiz teslim ediyoruz.",
+                img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.07.jpeg"
+              }
             ].map((feature, i) => (
-              <div key={i} className="flex flex-col text-center group">
-                <div className="w-full aspect-[4/3] mb-8 border border-stone-200 relative overflow-hidden bg-stone-100 shadow-sm">
+              <Link 
+                key={i} 
+                href={`/services/${feature.slug}`}
+                className="flex flex-col text-center group bg-stone-50 border border-stone-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all hover:-translate-y-1 p-6"
+              >
+                <div className="w-full aspect-[4/3] mb-6 border border-stone-200 relative overflow-hidden bg-stone-100 rounded">
                   <Image
-                    src="/dummygorsel/factory_workshop.png"
+                    src={feature.img}
                     alt={feature.title}
                     fill
+                    unoptimized
                     sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <h3 className="text-xl font-serif text-stone-900 mb-3">{feature.title}</h3>
-                <p className="text-stone-600 leading-relaxed text-sm">{feature.desc}</p>
-              </div>
+                <h3 className="text-xl font-serif font-bold text-stone-900 mb-3 group-hover:text-amber-700 transition-colors">
+                  {feature.title}
+                </h3>
+                <p className="text-stone-600 leading-relaxed text-sm flex-grow mb-4">
+                  {feature.desc}
+                </p>
+                <span className="text-amber-700 font-bold text-xs uppercase tracking-wider inline-flex items-center justify-center gap-1 group-hover:text-amber-800">
+                  Detaylı İncele →
+                </span>
+              </Link>
             ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link 
+              href="/services" 
+              className="inline-block px-8 py-3 bg-stone-900 text-white font-bold text-xs uppercase tracking-wider hover:bg-amber-800 transition-colors rounded shadow-sm"
+            >
+              Tüm Hizmetlerimizi İncele
+            </Link>
           </div>
         </div>
       </section>

@@ -59,3 +59,19 @@ export async function deleteProject(id: number) {
     return { success: false, error: error.message || "Proje silinemedi." };
   }
 }
+
+// Tek bir projeyi ID ile getir
+export async function getProjectById(id: number) {
+  try {
+    const project = await prisma.project.findUnique({
+      where: { id }
+    });
+    if (!project) {
+      return { success: false, error: "Proje bulunamadı." };
+    }
+    return { success: true, data: project };
+  } catch (error: any) {
+    console.error("getProjectById error:", error);
+    return { success: false, error: error.message || "Proje çekilemedi." };
+  }
+}
