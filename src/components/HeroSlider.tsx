@@ -18,13 +18,13 @@ const fallbackSlides: Slide[] = [
     subtitle: "Kurumsal Üretici & İç Mimarlık",
     title: "Geleneksel Ustalık, Modern Tasarım",
     desc: "Ev, ofis, okul ve ticari projeleriniz için kendi tesislerimizde ürettiğimiz; estetiği ve kaliteyi bir araya getiren anahtar teslim ahşap ve mobilya çözümleri.",
-    bg: "/dummygorsel/premium_kitchen.png"
+    bg: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.07.jpeg"
   },
   {
     subtitle: "Kendi Fabrikamızdan",
     title: "Sıfır Hata, Yüksek Kalite",
     desc: "5000 m² üretim tesisimizde, son teknoloji makine parkurumuz ve deneyimli ustalarımızla hayallerinizi ahşaba işliyoruz.",
-    bg: "/dummygorsel/premium_office.png"
+    bg: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.10.jpeg"
   },
   {
     subtitle: "Anahtar Teslim Projeler",
