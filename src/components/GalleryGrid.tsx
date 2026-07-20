@@ -73,21 +73,22 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
           <div 
             key={img.id} 
             onClick={() => setActiveIndex(i)}
-            className={`group relative bg-stone-200 overflow-hidden cursor-pointer shadow-sm ${getMasonrySize(i)}`}
+            className={`group relative bg-stone-900 overflow-hidden cursor-pointer shadow-luxury hover:shadow-luxury-hover transition-shadow duration-700 rounded-sm ${getMasonrySize(i)}`}
           >
             <Image 
               src={img.img || "/dummygorsel/factory_workshop.png"}
               alt={img.title}
               fill
+              unoptimized
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-              className="object-cover group-hover:scale-110 transition-transform duration-700"
+              className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100"
             />
             {/* Hover overlay with title & category */}
-            <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/70 transition-colors duration-300 flex flex-col items-center justify-center p-4">
-              <span className="text-white opacity-0 group-hover:opacity-100 font-serif text-base md:text-lg translate-y-4 group-hover:translate-y-0 transition-all duration-300 text-center font-bold px-2">
+            <div className="absolute inset-0 bg-stone-950/0 group-hover:bg-stone-950/60 transition-colors duration-700 flex flex-col items-center justify-center p-6">
+              <span className="text-white opacity-0 group-hover:opacity-100 font-serif text-xl md:text-2xl translate-y-4 group-hover:translate-y-0 transition-all duration-700 text-center font-normal px-2">
                 {img.title}
               </span>
-              <span className="text-amber-500 opacity-0 group-hover:opacity-100 text-xs uppercase tracking-widest mt-2 translate-y-4 group-hover:translate-y-0 transition-all duration-300 font-bold">
+              <span className="text-amber-500 opacity-0 group-hover:opacity-100 text-[10px] uppercase tracking-[0.2em] mt-3 translate-y-4 group-hover:translate-y-0 transition-all duration-700 delay-75 font-medium">
                 {img.category}
               </span>
             </div>

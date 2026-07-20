@@ -25,25 +25,26 @@ export default function ProjectsGrid({ projects }: ProjectsGridProps) {
           <Link 
             key={project.id} 
             href={`/projects/${projectSlug}`}
-            className="group relative aspect-[16/10] bg-stone-200 overflow-hidden border border-stone-200 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 rounded block"
+            className="group relative aspect-[16/10] bg-stone-900 overflow-hidden shadow-luxury hover:shadow-luxury-hover transition-all duration-700 hover:-translate-y-2 rounded-sm block"
           >
             <Image 
               src={project.img || "/dummygorsel/factory_workshop.png"}
               alt={project.name}
               fill
+              unoptimized
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover group-hover:scale-105 transition-transform duration-700"
+              className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100"
             />
             {/* Hover overlay with category & description */}
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/95 via-stone-900/45 to-transparent flex flex-col justify-end p-8 transition-colors duration-500 group-hover:from-stone-950/98">
-              <span className="text-amber-500 text-xs font-bold uppercase tracking-widest mb-2">
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-900/20 to-transparent flex flex-col justify-end p-8 transition-colors duration-700">
+              <span className="text-amber-500 text-[10px] font-medium uppercase tracking-[0.2em] mb-3 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                 {project.category}
               </span>
-              <h3 className="text-xl md:text-2xl font-serif text-white">
+              <h3 className="text-2xl md:text-3xl font-serif text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 delay-75">
                 {project.name}
               </h3>
               {project.description && (
-                <p className="text-xs text-stone-300 mt-3 line-clamp-3 max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                <p className="text-xs text-stone-300 mt-4 line-clamp-3 max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-700 ease-in-out delay-100 font-light leading-relaxed">
                   {project.description}
                 </p>
               )}

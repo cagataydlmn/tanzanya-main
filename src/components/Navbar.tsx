@@ -41,8 +41,8 @@ export default function Navbar() {
   ];
 
   return (
-    <header ref={navRef} className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
-      <nav className="flex items-center justify-between px-6 lg:px-12 py-5 max-w-[1600px] mx-auto">
+    <header ref={navRef} className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md shadow-sm transition-all duration-500">
+      <nav className="flex items-center justify-between px-6 lg:px-12 py-4 md:py-6 max-w-[1600px] mx-auto">
         {/* Logo */}
         <Link 
           href="/" 
@@ -81,7 +81,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4 shrink-0">
           <Link 
             href="/quote"
-            className="hidden sm:inline-flex items-center justify-center px-8 py-3 bg-stone-900 text-white font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-amber-800"
+            className="hidden sm:inline-flex items-center justify-center px-8 py-3 bg-stone-900 text-white font-medium text-xs uppercase tracking-[0.15em] transition-all duration-300 hover:bg-stone-800 hover:shadow-luxury"
           >
             Teklif Al
           </Link>
