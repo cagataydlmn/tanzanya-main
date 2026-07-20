@@ -185,12 +185,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Desktop & Mobile Sidebar Drawer */}
       <aside className={`
-        fixed md:static inset-y-0 left-0 z-50 w-64 bg-stone-900 text-stone-300 flex flex-col justify-between shadow-2xl md:shadow-xl transition-transform duration-300 ease-in-out flex-shrink-0
+        fixed md:sticky top-0 inset-y-0 left-0 z-50 w-64 md:h-screen bg-stone-900 text-stone-300 flex flex-col justify-between shadow-2xl md:shadow-xl transition-transform duration-300 ease-in-out flex-shrink-0 overflow-y-auto
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
-        <div>
+        <div className="flex flex-col">
           {/* Sidebar Header */}
-          <div className="p-6 border-b border-stone-800 flex items-center justify-between">
+          <div className="p-6 border-b border-stone-800 flex items-center justify-between shrink-0">
             <Link href="/admin" className="flex flex-col gap-1">
               <Image 
                 src="/logo/logo.jpeg"
@@ -205,7 +205,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Close Button on Mobile Drawer */}
             <button 
               onClick={() => setIsMobileMenuOpen(false)}
-              className="md:hidden p-2 text-stone-400 hover:text-white"
+              className="md:hidden p-2 text-stone-400 hover:text-white cursor-pointer"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -214,7 +214,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           
           {/* Navigation Links */}
-          <nav className="p-4 space-y-2">
+          <nav className="p-4 space-y-2 flex-1">
             {menuItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
               return (
@@ -223,7 +223,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded transition-colors ${
                     isActive 
-                      ? 'bg-amber-700 text-white font-bold' 
+                      ? 'bg-amber-700 text-white font-bold shadow-sm' 
                       : 'text-stone-400 hover:bg-stone-800 hover:text-stone-100'
                   }`}
                 >
@@ -237,8 +237,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
         </div>
 
-        {/* Sidebar Footer Controls */}
-        <div className="p-4 border-t border-stone-800 space-y-2">
+        {/* Sidebar Footer Controls - Fixed at bottom of viewport */}
+        <div className="p-4 border-t border-stone-800 space-y-2 shrink-0 bg-stone-900">
           <button 
             onClick={handleLogout} 
             className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-stone-800 hover:text-red-300 transition-colors rounded text-left cursor-pointer"
@@ -249,7 +249,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="font-medium text-sm">Çıkış Yap</span>
           </button>
 
-          <Link href="/" className="flex items-center gap-3 px-4 py-3 text-stone-500 hover:text-white transition-colors">
+          <Link href="/" className="flex items-center gap-3 px-4 py-3 text-stone-400 hover:text-white transition-colors rounded hover:bg-stone-800">
             <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -260,13 +260,34 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-        {/* Desktop Top Header Bar */}
-        <header className="hidden md:flex bg-white border-b border-stone-200 px-8 py-4 justify-between items-center z-10 shadow-sm">
+        {/* Desktop Top Header Bar with Quick Links */}
+        <header className="hidden md:flex bg-white border-b border-stone-200 px-8 py-4 justify-between items-center z-10 shadow-sm sticky top-0">
           <h2 className="text-xl font-serif text-stone-900 font-bold">
             {menuItems.find(m => m.href === pathname)?.name || "Dashboard"}
           </h2>
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-stone-900 text-amber-500 font-bold text-sm flex items-center justify-center border border-stone-700 shadow-sm" title="Yönetici Arayüzü">
+          
+          <div className="flex items-center gap-6">
+            <Link 
+              href="/" 
+              className="text-xs font-bold uppercase tracking-wider text-stone-600 hover:text-amber-700 transition-colors flex items-center gap-1.5"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Siteye Dön
+            </Link>
+
+            <button 
+              onClick={handleLogout}
+              className="text-xs font-bold uppercase tracking-wider text-red-600 hover:text-red-800 transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Çıkış Yap
+            </button>
+
+            <div className="w-9 h-9 rounded-full bg-stone-900 text-amber-500 font-bold text-xs flex items-center justify-center border border-stone-700 shadow-sm" title="Yönetici Arayüzü">
               AD
             </div>
           </div>
