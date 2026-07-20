@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { getSlides, createSlide, deleteSlide } from '@/app/actions/slides';
+import { getSlides, createSlide, updateSlide, deleteSlide } from '@/app/actions/slides';
 import { uploadImageAction } from '@/app/actions/upload';
 import Image from 'next/image';
 
@@ -18,6 +18,7 @@ interface Slide {
 export default function AdminSlides() {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   // Form States
   const [title, setTitle] = useState('');
@@ -43,11 +44,23 @@ export default function AdminSlides() {
   }, []);
 
   const handleAddNewClick = () => {
+    setEditingId(null);
     setTitle('');
     setSubtitle('');
     setDesc('');
     setBg('');
     setOrder(slides.length + 1);
+    setShowForm(true);
+    setMessage(null);
+  };
+
+  const handleEditClick = (slide: Slide) => {
+    setEditingId(slide.id);
+    setTitle(slide.title);
+    setSubtitle(slide.subtitle);
+    setDesc(slide.desc);
+    setBg(slide.bg);
+    setOrder(slide.order);
     setShowForm(true);
     setMessage(null);
   };
@@ -118,22 +131,37 @@ export default function AdminSlides() {
     setLoading(true);
     setMessage(null);
 
-    const res = await createSlide({
-      title,
-      subtitle,
-      desc,
-      bg,
-      order: Number(order)
-    });
+    let res;
+    if (editingId) {
+      res = await updateSlide(editingId, {
+        title,
+        subtitle,
+        desc,
+        bg,
+        order: Number(order)
+      });
+    } else {
+      res = await createSlide({
+        title,
+        subtitle,
+        desc,
+        bg,
+        order: Number(order)
+      });
+    }
 
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: 'Slayt başarıyla eklendi.' });
+      setMessage({ 
+        type: 'success', 
+        text: editingId ? 'Slayt başarıyla güncellendi.' : 'Slayt başarıyla eklendi.' 
+      });
       setShowForm(false);
+      setEditingId(null);
       fetchSlides();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Slayt eklenirken bir hata oluştu.' });
+      setMessage({ type: 'error', text: res.error || 'İşlem gerçekleştirilirken bir hata oluştu.' });
     }
   };
 
@@ -152,10 +180,10 @@ export default function AdminSlides() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-serif text-stone-900">Hero Slider Yönetimi</h1>
-          <p className="text-sm text-stone-500 mt-1">Anasayfadaki geniş duyuru ve kapak slaytlarını yönetin.</p>
+          <p className="text-sm text-stone-500 mt-1">Anasayfadaki geniş duyuru ve kapak slaytlarını yönetin ve düzenleyin.</p>
         </div>
         <button 
-          onClick={showForm ? () => setShowForm(false) : handleAddNewClick}
+          onClick={showForm ? () => { setShowForm(false); setEditingId(null); } : handleAddNewClick}
           className="px-6 py-2 bg-stone-900 text-white font-medium text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer"
         >
           {showForm ? 'Listeye Dön' : '+ Yeni Slayt Ekle'}
@@ -164,7 +192,9 @@ export default function AdminSlides() {
 
       {showForm ? (
         <div className="bg-white p-8 border border-stone-200 shadow-sm">
-          <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">Yeni Slayt Ekle</h2>
+          <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
+            {editingId ? 'Slaytı Düzenle' : 'Yeni Slayt Ekle'}
+          </h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -268,7 +298,7 @@ export default function AdminSlides() {
             <div className="pt-4 flex justify-end gap-4">
               <button 
                 type="button" 
-                onClick={() => setShowForm(false)} 
+                onClick={() => { setShowForm(false); setEditingId(null); }} 
                 className="px-8 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-sm hover:bg-stone-300 transition-colors cursor-pointer"
               >
                 İptal
@@ -278,7 +308,7 @@ export default function AdminSlides() {
                 disabled={loading || uploading || !bg}
                 className="px-8 py-3 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors cursor-pointer disabled:bg-stone-400 disabled:cursor-not-allowed"
               >
-                {loading ? 'Yükleniyor...' : 'Slaytı Kaydet'}
+                {loading ? 'Yükleniyor...' : editingId ? 'Değişiklikleri Kaydet' : 'Slaytı Kaydet'}
               </button>
             </div>
           </form>
@@ -320,7 +350,13 @@ export default function AdminSlides() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 flex items-center gap-3">
+                  <button 
+                    onClick={() => handleEditClick(slide)}
+                    className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 font-medium text-xs uppercase tracking-wider rounded border border-stone-300 transition-colors cursor-pointer"
+                  >
+                    Düzenle
+                  </button>
                   <button 
                     onClick={() => handleDelete(slide.id)}
                     className="px-4 py-2 text-red-600 hover:bg-red-50 border border-red-200 font-medium text-xs uppercase tracking-wider rounded transition-colors cursor-pointer"

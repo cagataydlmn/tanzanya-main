@@ -98,3 +98,34 @@ export async function deleteSlide(id: number) {
     return { success: false, error: error.message || "Slayt silinemedi." };
   }
 }
+
+// Slayt güncelle
+export async function updateSlide(id: number, formData: {
+  title: string;
+  subtitle: string;
+  desc: string;
+  bg: string;
+  order?: number;
+}) {
+  try {
+    const { title, subtitle, desc, bg, order } = formData;
+    
+    const updatedSlide = await prisma.slide.update({
+      where: { id },
+      data: {
+        title,
+        subtitle,
+        desc,
+        bg,
+        ...(order !== undefined && { order })
+      }
+    });
+
+    revalidatePath('/');
+    revalidatePath('/admin/slides');
+    return { success: true, data: updatedSlide };
+  } catch (error: any) {
+    console.error("updateSlide error:", error);
+    return { success: false, error: error.message || "Slayt güncellenemedi." };
+  }
+}
