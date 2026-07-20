@@ -3,35 +3,56 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getSlides } from '@/app/actions/slides';
+
+interface Slide {
+  id?: number;
+  subtitle: string;
+  title: string;
+  desc: string;
+  bg: string;
+}
+
+const fallbackSlides: Slide[] = [
+  {
+    subtitle: "Kurumsal Üretici & İç Mimarlık",
+    title: "Geleneksel Ustalık, Modern Tasarım",
+    desc: "Ev, ofis, okul ve ticari projeleriniz için kendi tesislerimizde ürettiğimiz; estetiği ve kaliteyi bir araya getiren anahtar teslim ahşap ve mobilya çözümleri.",
+    bg: "/dummygorsel/premium_kitchen.png"
+  },
+  {
+    subtitle: "Kendi Fabrikamızdan",
+    title: "Sıfır Hata, Yüksek Kalite",
+    desc: "5000 m² üretim tesisimizde, son teknoloji makine parkurumuz ve deneyimli ustalarımızla hayallerinizi ahşaba işliyoruz.",
+    bg: "/dummygorsel/premium_office.png"
+  },
+  {
+    subtitle: "Anahtar Teslim Projeler",
+    title: "Tasarımından Montajına Kadar",
+    desc: "Otel, restoran ve ofis projelerinizde iç mimari tasarım, üretim ve saha montajını tek elden kusursuzca yönetiyoruz.",
+    bg: "/dummygorsel/factory_workshop.png"
+  }
+];
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  const slides = [
-    {
-      subtitle: "Kurumsal Üretici & İç Mimarlık",
-      title: "Geleneksel Ustalık, Modern Tasarım",
-      desc: "Ev, ofis, okul ve ticari projeleriniz için kendi tesislerimizde ürettiğimiz; estetiği ve kaliteyi bir araya getiren anahtar teslim ahşap ve mobilya çözümleri.",
-      bg: "/dummygorsel/premium_kitchen.png"
-    },
-    {
-      subtitle: "Kendi Fabrikamızdan",
-      title: "Sıfır Hata, Yüksek Kalite",
-      desc: "5000 m² üretim tesisimizde, son teknoloji makine parkurumuz ve deneyimli ustalarımızla hayallerinizi ahşaba işliyoruz.",
-      bg: "/dummygorsel/premium_office.png"
-    },
-    {
-      subtitle: "Anahtar Teslim Projeler",
-      title: "Tasarımından Montajına Kadar",
-      desc: "Otel, restoran ve ofis projelerinizde iç mimari tasarım, üretim ve saha montajını tek elden kusursuzca yönetiyoruz.",
-      bg: "/dummygorsel/factory_workshop.png"
-    }
-  ];
+  const [slides, setSlides] = useState<Slide[]>(fallbackSlides);
 
   useEffect(() => {
+    async function loadSlides() {
+      const res = await getSlides();
+      if (res.success && res.data && res.data.length > 0) {
+        setSlides(res.data);
+      }
+    }
+    loadSlides();
+  }, []);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 6000); // 6 saniyede bir değişir
+    }, 6000);
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -51,6 +72,7 @@ export default function HeroSlider() {
             alt={slide.title}
             fill
             priority={index === 0}
+            unoptimized
             sizes="100vw"
             className="object-cover"
           />
@@ -102,18 +124,20 @@ export default function HeroSlider() {
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-8 h-[3px] transition-all cursor-pointer rounded-full ${
-              index === currentSlide ? "bg-amber-500" : "bg-white/20 hover:bg-white/50"
-            }`}
-            aria-label={`Slide ${index + 1}`}
-          />
-        ))}
-      </div>
+      {slides.length > 1 && (
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-8 h-[3px] transition-all cursor-pointer rounded-full ${
+                index === currentSlide ? "bg-amber-500" : "bg-white/20 hover:bg-white/50"
+              }`}
+              aria-label={`Slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
     </section>
   );
