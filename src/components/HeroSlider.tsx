@@ -57,7 +57,7 @@ export default function HeroSlider() {
   }, [slides.length]);
 
   return (
-    <section className="relative h-[480px] md:h-[580px] w-full flex flex-col justify-center items-center px-6 overflow-hidden bg-stone-950">
+    <section className="relative h-[460px] md:h-[540px] lg:h-[580px] max-h-[640px] w-full max-w-[1920px] mx-auto flex flex-col justify-center items-center px-6 overflow-hidden bg-stone-950">
       
       {/* Background Slides with Dual-Layer Optimization */}
       {slides.map((slide, index) => (

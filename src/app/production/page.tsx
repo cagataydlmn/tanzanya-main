@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: "Üretim Süreçlerimiz",
@@ -47,8 +48,22 @@ export default function Production() {
         </div>
 
         {/* Hero Image */}
-        <div className="w-full h-[400px] md:h-[500px] bg-stone-200 border border-stone-300 mb-20 flex items-center justify-center text-stone-500">
-          [Geniş Fabrika Üretim Alanı Görseli]
+        <div className="relative w-full aspect-[16/9] md:aspect-[21/9] bg-stone-900 border border-stone-200 rounded-xl overflow-hidden shadow-xl mb-20 group">
+          <Image
+            src="/dummygorsel/factory_workshop.png"
+            alt="Tanzanya Mobilya 5000m² Fabrika Üretim Alanı"
+            fill
+            priority
+            unoptimized
+            sizes="100vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-white z-10">
+            <span className="bg-stone-900/80 backdrop-blur-md px-4 py-2 rounded text-xs md:text-sm font-bold uppercase tracking-widest border border-amber-600/40 text-amber-400">
+              5000 m² Entegre Üretim Tesisimiz
+            </span>
+          </div>
         </div>
 
         {/* Process Timeline */}
