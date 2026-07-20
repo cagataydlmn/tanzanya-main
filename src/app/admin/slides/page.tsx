@@ -260,7 +260,7 @@ export default function AdminSlides() {
                   <p className="text-stone-700 font-bold text-sm">
                     {uploading ? 'Görsel Yükleniyor...' : isDragging ? 'Bırakın ve Yükleyin' : 'Görsel Seçmek İçin Tıklayın veya Sürükleyin'}
                   </p>
-                  <p className="text-stone-400 text-xs mt-2">Yüksek çözünürlüklü manzara formatlı resimler önerilir (Maks. 5MB)</p>
+                  <p className="text-amber-700 font-medium text-xs mt-2">Önerilen Görsel Ölçüsü: 1920 x 1080px (16:9 yatay açı). Görseller otomatik olarak ortalanıp sinematik geçişle harmanlanır.</p>
                 </label>
               )}
             </div>

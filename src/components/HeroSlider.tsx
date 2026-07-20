@@ -59,7 +59,7 @@ export default function HeroSlider() {
   return (
     <section className="relative h-[480px] md:h-[580px] w-full flex flex-col justify-center items-center px-6 overflow-hidden bg-stone-950">
       
-      {/* Background Slides with Optimized Next.js Images */}
+      {/* Background Slides with Dual-Layer Optimization */}
       {slides.map((slide, index) => (
         <div 
           key={index}
@@ -67,6 +67,18 @@ export default function HeroSlider() {
             index === currentSlide ? "opacity-100 z-0" : "opacity-0 -z-10"
           }`}
         >
+          {/* Layer 1: Blurred background fill to prevent edge gaps */}
+          <Image 
+            src={slide.bg}
+            alt=""
+            fill
+            priority={index === 0}
+            unoptimized
+            aria-hidden="true"
+            className="object-cover blur-2xl scale-110 opacity-50"
+          />
+
+          {/* Layer 2: Main crisp image centered */}
           <Image 
             src={slide.bg}
             alt={slide.title}
@@ -74,10 +86,11 @@ export default function HeroSlider() {
             priority={index === 0}
             unoptimized
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-center"
           />
-          {/* Black overlay for maximum text readability */}
-          <div className="absolute inset-0 bg-stone-950/65" />
+
+          {/* Layer 3: Multi-stage gradient mask for premium dark contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-stone-950/40" />
         </div>
       ))}
 
