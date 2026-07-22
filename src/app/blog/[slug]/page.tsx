@@ -22,15 +22,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const post = response.data;
   return {
-    title: post.title,
-    description: post.excerpt,
+    title: post.metaTitle || post.title,
+    description: post.metaDesc || post.excerpt,
+    ...(post.metaKeys ? { keywords: post.metaKeys } : {}),
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title: post.metaTitle || post.title,
+      description: post.metaDesc || post.excerpt,
       url: `https://tanzanyamobilya.com/blog/${post.slug}`,
       type: 'article',
       publishedTime: post.createdAt.toISOString(),
-      images: post.image ? [{ url: post.image, alt: post.title }] : []
+      images: post.image ? [{ url: post.image, alt: post.metaTitle || post.title }] : []
     }
   };
 }
@@ -84,7 +85,7 @@ export default async function BlogPostDetail({ params }: Props) {
           <div className="w-full aspect-[21/9] bg-stone-200 border border-stone-200 shadow-sm relative overflow-hidden mb-12">
             <Image 
               src={post.image}
-              alt={post.title}
+              alt={post.metaTitle || post.title}
               fill
               unoptimized
               sizes="(max-width: 1200px) 100vw, 1200px"

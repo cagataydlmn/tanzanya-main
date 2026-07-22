@@ -81,7 +81,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4 shrink-0">
           <Link 
             href="/quote"
-            className="hidden sm:inline-flex items-center justify-center px-8 py-3 bg-stone-900 text-white font-medium text-xs uppercase tracking-[0.15em] transition-all duration-300 hover:bg-stone-800 hover:shadow-luxury"
+            className="hidden sm:inline-flex items-center justify-center px-8 py-3 bg-stone-900 text-white font-medium text-xs uppercase tracking-[0.15em] transition-all duration-300 hover:bg-amber-700 hover:shadow-luxury"
           >
             Teklif Al
           </Link>
@@ -124,7 +124,7 @@ export default function Navbar() {
             <Link 
               href="/quote"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="flex w-full items-center justify-center px-8 py-4 bg-stone-900 text-white font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-amber-800"
+              className="flex w-full items-center justify-center px-8 py-4 bg-stone-900 text-white font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-amber-700"
             >
               Teklif Al
             </Link>

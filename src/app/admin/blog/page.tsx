@@ -15,6 +15,9 @@ interface Post {
   status: string;
   views: number;
   image: string | null;
+  metaTitle?: string | null;
+  metaDesc?: string | null;
+  metaKeys?: string | null;
   createdAt: Date;
 }
 
@@ -30,6 +33,9 @@ export default function AdminBlog() {
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDesc, setMetaDesc] = useState('');
+  const [metaKeys, setMetaKeys] = useState('');
   
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -56,6 +62,9 @@ export default function AdminBlog() {
     setExcerpt(post.excerpt);
     setContent(post.content);
     setImage(post.image || '');
+    setMetaTitle(post.metaTitle || '');
+    setMetaDesc(post.metaDesc || '');
+    setMetaKeys(post.metaKeys || '');
     setShowForm(true);
     setMessage(null);
   };
@@ -68,6 +77,9 @@ export default function AdminBlog() {
     setExcerpt('');
     setContent('');
     setImage('');
+    setMetaTitle('');
+    setMetaDesc('');
+    setMetaKeys('');
     setShowForm(true);
     setMessage(null);
   };
@@ -144,7 +156,10 @@ export default function AdminBlog() {
       excerpt,
       content,
       status,
-      image: image || undefined
+      image: image || undefined,
+      metaTitle,
+      metaDesc,
+      metaKeys
     };
 
     let res;
@@ -237,6 +252,49 @@ export default function AdminBlog() {
                   <option>Taslak</option>
                 </select>
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                  <span>Meta Başlık (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                </label>
+                <input 
+                  type="text" 
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                  placeholder="Alt etiket veya detaylı başlık yazın..." 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                  <span>Anahtar Kelimeler (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                </label>
+                <input 
+                  type="text" 
+                  value={metaKeys}
+                  onChange={(e) => setMetaKeys(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                  placeholder="Örn: ofis mobilyası, yeni trendler" 
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                <span>Meta Açıklama (SEO)</span>
+                <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+              </label>
+              <textarea 
+                value={metaDesc}
+                onChange={(e) => setMetaDesc(e.target.value)}
+                rows={2}
+                className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                placeholder="Google'da çıkacak özet açıklama..." 
+              />
             </div>
 
             <div className="space-y-2">

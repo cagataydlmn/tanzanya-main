@@ -30,14 +30,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!project) return { title: "Proje Bulunamadı | Tanzanya Mobilya" };
 
-  const pageTitle = `${project.name} - ${project.category} Projesi | Tanzanya Mobilya`;
-  const pageDesc = project.description 
+  const pageTitle = project.metaTitle || `${project.name} - ${project.category} Projesi | Tanzanya Mobilya`;
+  const pageDesc = project.metaDesc || (project.description 
     ? project.description.slice(0, 160) 
-    : `${project.name} özel tasarım ahşap mobilya ve iç mimarlık projesi.`;
+    : `${project.name} özel tasarım ahşap mobilya ve iç mimarlık projesi.`);
 
   return {
     title: pageTitle,
     description: pageDesc,
+    ...(project.metaKeys ? { keywords: project.metaKeys } : {}),
     openGraph: {
       title: pageTitle,
       description: pageDesc,
@@ -87,7 +88,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         <div className="absolute inset-0 opacity-20">
           <Image 
             src={project.img} 
-            alt="" 
+            alt={project.metaTitle || project.name} 
             fill 
             unoptimized 
             className="object-cover blur-3xl scale-125"
@@ -122,7 +123,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         <div className="relative aspect-[16/10] md:aspect-[21/9] w-full rounded-xl overflow-hidden border border-stone-800 shadow-2xl bg-stone-900 mb-10 group">
           <Image 
             src={project.img}
-            alt={project.name}
+            alt={project.metaTitle || project.name}
             fill
             priority
             unoptimized
@@ -250,7 +251,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   <div className="relative aspect-[16/10] bg-stone-100 overflow-hidden">
                     <Image 
                       src={item.img}
-                      alt={item.name}
+                      alt={item.metaTitle || item.name}
                       fill
                       unoptimized
                       className="object-cover group-hover:scale-105 transition-transform duration-500"

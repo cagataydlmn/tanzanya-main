@@ -1,0 +1,389 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { getAboutPage, updateAboutPage } from '@/app/actions/about';
+import { uploadImageAction } from '@/app/actions/upload';
+
+export default function AboutAdmin() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [dataId, setDataId] = useState<number | null>(null);
+
+  // Upload states
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
+  const [dragField, setDragField] = useState<string | null>(null);
+
+  // Form states
+  const [metaTitle, setMetaTitle] = useState("");
+  const [metaDesc, setMetaDesc] = useState("");
+  const [metaKeys, setMetaKeys] = useState("");
+
+  const [storyImg, setStoryImg] = useState("");
+  const [storyTitle, setStoryTitle] = useState("");
+  const [storyDesc1, setStoryDesc1] = useState("");
+  const [storyDesc2, setStoryDesc2] = useState("");
+
+  const [visionText, setVisionText] = useState("");
+  const [missionText, setMissionText] = useState("");
+
+  const [bridgeLabel, setBridgeLabel] = useState("");
+  const [bridgeTitle, setBridgeTitle] = useState("");
+  const [bridgeDesc1, setBridgeDesc1] = useState("");
+  const [bridgeDesc2, setBridgeDesc2] = useState("");
+  const [bridgeImg, setBridgeImg] = useState("");
+
+  const [brochureLabel, setBrochureLabel] = useState("");
+  const [brochureTitle, setBrochureTitle] = useState("");
+  const [brochureDesc, setBrochureDesc] = useState("");
+  const [brochureUrl, setBrochureUrl] = useState("");
+  
+  const [brochureHighlights, setBrochureHighlights] = useState<any[]>([]);
+  const [materials, setMaterials] = useState("");
+
+  const [policyTitle, setPolicyTitle] = useState("");
+  const [policies, setPolicies] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    setLoading(true);
+    const res = await getAboutPage();
+    if (res.success && res.data) {
+      const d = res.data;
+      setDataId(d.id);
+      
+      setMetaTitle(d.metaTitle || "");
+      setMetaDesc(d.metaDesc || "");
+      setMetaKeys(d.metaKeys || "");
+
+      setStoryImg(d.storyImg || "");
+      setStoryTitle(d.storyTitle || "");
+      setStoryDesc1(d.storyDesc1 || "");
+      setStoryDesc2(d.storyDesc2 || "");
+
+      setVisionText(d.visionText || "");
+      setMissionText(d.missionText || "");
+
+      setBridgeLabel(d.bridgeLabel || "");
+      setBridgeTitle(d.bridgeTitle || "");
+      setBridgeDesc1(d.bridgeDesc1 || "");
+      setBridgeDesc2(d.bridgeDesc2 || "");
+      setBridgeImg(d.bridgeImg || "");
+
+      setBrochureLabel(d.brochureLabel || "");
+      setBrochureTitle(d.brochureTitle || "");
+      setBrochureDesc(d.brochureDesc || "");
+      setBrochureUrl(d.brochureUrl || "");
+      
+      try { setBrochureHighlights(typeof d.brochureHighlights === 'string' ? JSON.parse(d.brochureHighlights) : d.brochureHighlights); } catch(e) {}
+      setMaterials(d.materials || "");
+
+      setPolicyTitle(d.policyTitle || "");
+      try { setPolicies(typeof d.policies === 'string' ? JSON.parse(d.policies) : d.policies); } catch(e) {}
+    }
+    setLoading(false);
+  }
+
+  const uploadFile = async (file: File, setUrl: (url: string) => void, fieldName: string) => {
+    setUploadingField(fieldName);
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await uploadImageAction(formData);
+    setUploadingField(null);
+    if (res.success && res.url) {
+      setUrl(res.url);
+      alert('Dosya başarıyla yüklendi.');
+    } else {
+      alert(res.error || 'Dosya yüklenemedi.');
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, setUrl: (url: string) => void, fieldName: string) => {
+    const file = e.target.files?.[0];
+    if (file) await uploadFile(file, setUrl, fieldName);
+  };
+
+  const handleDragOver = (e: React.DragEvent, fieldName: string) => {
+    e.preventDefault();
+    setDragField(fieldName);
+  };
+
+  const handleDragLeave = () => {
+    setDragField(null);
+  };
+
+  const handleDrop = async (e: React.DragEvent, setUrl: (url: string) => void, fieldName: string) => {
+    e.preventDefault();
+    setDragField(null);
+    const file = e.dataTransfer.files?.[0];
+    if (file) await uploadFile(file, setUrl, fieldName);
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!dataId) return;
+    
+    setSaving(true);
+    const res = await updateAboutPage(dataId, {
+      metaTitle, metaDesc, metaKeys,
+      storyImg, storyTitle, storyDesc1, storyDesc2,
+      visionText, missionText,
+      bridgeLabel, bridgeTitle, bridgeDesc1, bridgeDesc2, bridgeImg,
+      brochureLabel, brochureTitle, brochureDesc, brochureUrl,
+      brochureHighlights: JSON.stringify(brochureHighlights),
+      materials,
+      policyTitle,
+      policies: JSON.stringify(policies)
+    });
+    setSaving(false);
+
+    if (res.success) {
+      alert("Hakkımızda sayfası başarıyla güncellendi.");
+    } else {
+      alert("Hata: " + res.error);
+    }
+  };
+
+  // Generic JSON Array Handler
+  const handleArrayChange = (setter: any, array: any[], index: number, field: string, value: string) => {
+    const newArr = [...array];
+    newArr[index][field] = value;
+    setter(newArr);
+  };
+  const addArrayItem = (setter: any, array: any[]) => setter([...array, { title: "", desc: "" }]);
+  const removeArrayItem = (setter: any, array: any[], index: number) => {
+    const newArr = [...array];
+    newArr.splice(index, 1);
+    setter(newArr);
+  };
+
+  if (loading) return <div className="p-8 text-stone-500">Yükleniyor...</div>;
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-serif text-stone-900 font-bold">Hakkımızda Sayfası</h1>
+          <p className="text-sm text-stone-500 mt-1">Sitenizin hakkımızda sayfasındaki tüm alanları yönetin.</p>
+        </div>
+        <button 
+          onClick={handleSave}
+          disabled={saving}
+          className="px-6 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-700 transition-colors disabled:opacity-50"
+        >
+          {saving ? 'Kaydediliyor...' : 'Tümünü Kaydet'}
+        </button>
+      </div>
+
+      <form className="space-y-12 pb-24" onSubmit={handleSave}>
+        
+        {/* SEO Section */}
+        <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200 space-y-6">
+          <h2 className="text-xl font-serif font-bold text-stone-900 border-b border-stone-100 pb-2">SEO Ayarları</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Meta Başlık</label>
+              <input type="text" value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Anahtar Kelimeler</label>
+              <input type="text" value={metaKeys} onChange={(e) => setMetaKeys(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Meta Açıklama</label>
+            <textarea value={metaDesc} onChange={(e) => setMetaDesc(e.target.value)} rows={2} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+        </section>
+
+        {/* Story Section */}
+        <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200 space-y-6">
+          <h2 className="text-xl font-serif font-bold text-stone-900 border-b border-stone-100 pb-2">Hikayemiz Bölümü</h2>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kapak Görseli Yükleyin</label>
+            {storyImg ? (
+              <div className="relative aspect-[4/3] w-full max-w-sm bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
+                <Image src={storyImg} alt="Kapak Görseli" fill className="object-cover" unoptimized />
+                <div className="absolute inset-0 bg-stone-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <button type="button" onClick={() => setStoryImg('')} className="px-6 py-2 bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded shadow hover:bg-red-700 transition-colors">Resmi Kaldır</button>
+                </div>
+              </div>
+            ) : (
+              <label 
+                onDragOver={(e) => handleDragOver(e, 'story')}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, setStoryImg, 'story')}
+                className={`block w-full max-w-sm border-2 border-dashed px-4 py-12 flex flex-col items-center justify-center text-center cursor-pointer transition-all rounded ${dragField === 'story' ? 'border-amber-700 bg-amber-50/50' : 'border-stone-300 bg-stone-50 hover:bg-stone-100'}`}
+              >
+                <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setStoryImg, 'story')} disabled={uploadingField === 'story'} className="hidden" />
+                <span className="text-sm font-bold text-stone-700">{uploadingField === 'story' ? 'Yükleniyor...' : 'Görsel Seçin veya Sürükleyin'}</span>
+              </label>
+            )}
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Başlık</label>
+            <input type="text" value={storyTitle} onChange={(e) => setStoryTitle(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Paragraf 1</label>
+            <textarea value={storyDesc1} onChange={(e) => setStoryDesc1(e.target.value)} rows={3} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Paragraf 2</label>
+            <textarea value={storyDesc2} onChange={(e) => setStoryDesc2(e.target.value)} rows={3} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+        </section>
+
+        {/* Mission & Vision Section */}
+        <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200 space-y-6">
+          <h2 className="text-xl font-serif font-bold text-stone-900 border-b border-stone-100 pb-2">Misyon & Vizyon</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Vizyon Metni</label>
+              <textarea value={visionText} onChange={(e) => setVisionText(e.target.value)} rows={4} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Misyon Metni</label>
+              <textarea value={missionText} onChange={(e) => setMissionText(e.target.value)} rows={4} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+            </div>
+          </div>
+        </section>
+
+        {/* Bridge Section */}
+        <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200 space-y-6">
+          <h2 className="text-xl font-serif font-bold text-stone-900 border-b border-stone-100 pb-2">Tanzanya Köprüsü Bölümü</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Üst Etiket</label>
+              <input type="text" value={bridgeLabel} onChange={(e) => setBridgeLabel(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Görsel Yükleyin</label>
+              {bridgeImg ? (
+                <div className="relative aspect-[3/2] w-full max-w-sm bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
+                  <Image src={bridgeImg} alt="Köprü Görseli" fill className="object-cover" unoptimized />
+                  <div className="absolute inset-0 bg-stone-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <button type="button" onClick={() => setBridgeImg('')} className="px-6 py-2 bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded shadow hover:bg-red-700 transition-colors">Resmi Kaldır</button>
+                  </div>
+                </div>
+              ) : (
+                <label 
+                  onDragOver={(e) => handleDragOver(e, 'bridge')}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, setBridgeImg, 'bridge')}
+                  className={`block w-full border-2 border-dashed px-4 py-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all rounded ${dragField === 'bridge' ? 'border-amber-700 bg-amber-50/50' : 'border-stone-300 bg-stone-50 hover:bg-stone-100'}`}
+                >
+                  <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setBridgeImg, 'bridge')} disabled={uploadingField === 'bridge'} className="hidden" />
+                  <span className="text-sm font-bold text-stone-700">{uploadingField === 'bridge' ? 'Yükleniyor...' : 'Görsel Seçin veya Sürükleyin'}</span>
+                </label>
+              )}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Ana Başlık (HTML &lt;br/&gt; kullanabilirsiniz)</label>
+            <input type="text" value={bridgeTitle} onChange={(e) => setBridgeTitle(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Paragraf 1</label>
+            <textarea value={bridgeDesc1} onChange={(e) => setBridgeDesc1(e.target.value)} rows={3} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Paragraf 2</label>
+            <textarea value={bridgeDesc2} onChange={(e) => setBridgeDesc2(e.target.value)} rows={3} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+        </section>
+
+        {/* Brochure Section */}
+        <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200 space-y-6">
+          <h2 className="text-xl font-serif font-bold text-stone-900 border-b border-stone-100 pb-2">Kurumsal Yayınlar / Broşür</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Üst Etiket</label>
+              <input type="text" value={brochureLabel} onChange={(e) => setBrochureLabel(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Broşür Dosyası (PDF) Yükleyin</label>
+              {brochureUrl ? (
+                <div className="flex gap-4 items-center bg-stone-100 p-4 rounded border border-stone-200">
+                  <div className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium text-stone-600">{brochureUrl}</div>
+                  <button type="button" onClick={() => setBrochureUrl('')} className="px-4 py-2 bg-red-600 text-white font-bold text-xs uppercase rounded">Kaldır</button>
+                </div>
+              ) : (
+                <label 
+                  onDragOver={(e) => handleDragOver(e, 'brochure')}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, setBrochureUrl, 'brochure')}
+                  className={`block w-full border-2 border-dashed px-4 py-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all rounded ${dragField === 'brochure' ? 'border-amber-700 bg-amber-50/50' : 'border-stone-300 bg-stone-50 hover:bg-stone-100'}`}
+                >
+                  <input type="file" accept=".pdf" onChange={(e) => handleFileUpload(e, setBrochureUrl, 'brochure')} disabled={uploadingField === 'brochure'} className="hidden" />
+                  <span className="text-sm font-bold text-stone-700">{uploadingField === 'brochure' ? 'Yükleniyor...' : 'PDF Seçin veya Sürükleyin'}</span>
+                </label>
+              )}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Başlık</label>
+            <input type="text" value={brochureTitle} onChange={(e) => setBrochureTitle(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Açıklama</label>
+            <textarea value={brochureDesc} onChange={(e) => setBrochureDesc(e.target.value)} rows={2} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+          
+          <div className="mt-8 border-t border-stone-100 pt-6">
+            <div className="flex justify-between items-center mb-4">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Özellikler Listesi</label>
+              <button type="button" onClick={() => addArrayItem(setBrochureHighlights, brochureHighlights)} className="text-xs bg-amber-700 text-white px-3 py-1 rounded">Ekle</button>
+            </div>
+            <div className="space-y-4">
+              {brochureHighlights.map((item, idx) => (
+                <div key={idx} className="flex gap-4 items-start bg-stone-50 p-4 rounded border border-stone-200">
+                  <div className="flex-1 space-y-2">
+                    <input type="text" value={item.title} onChange={(e) => handleArrayChange(setBrochureHighlights, brochureHighlights, idx, 'title', e.target.value)} className="w-full bg-white border border-stone-200 px-3 py-2 rounded text-sm" placeholder="Başlık" />
+                    <textarea value={item.desc} onChange={(e) => handleArrayChange(setBrochureHighlights, brochureHighlights, idx, 'desc', e.target.value)} className="w-full bg-white border border-stone-200 px-3 py-2 rounded text-sm" placeholder="Açıklama" rows={2} />
+                  </div>
+                  <button type="button" onClick={() => removeArrayItem(setBrochureHighlights, brochureHighlights, idx)} className="text-red-500 font-bold px-2 py-1">X</button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2 mt-6">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kullanılan Malzemeler (Virgülle ayırın)</label>
+            <textarea value={materials} onChange={(e) => setMaterials(e.target.value)} rows={3} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" placeholder="MDF, Masif Ahşap, ..." />
+          </div>
+        </section>
+
+        {/* Policy Section */}
+        <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200 space-y-6">
+          <h2 className="text-xl font-serif font-bold text-stone-900 border-b border-stone-100 pb-2">Kalite Politikamız</h2>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Başlık</label>
+            <input type="text" value={policyTitle} onChange={(e) => setPolicyTitle(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+          </div>
+          <div className="mt-6 border-t border-stone-100 pt-6">
+            <div className="flex justify-between items-center mb-4">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Politika Maddeleri</label>
+              <button type="button" onClick={() => addArrayItem(setPolicies, policies)} className="text-xs bg-amber-700 text-white px-3 py-1 rounded">Ekle</button>
+            </div>
+            <div className="space-y-4">
+              {policies.map((item, idx) => (
+                <div key={idx} className="flex gap-4 items-start bg-stone-50 p-4 rounded border border-stone-200">
+                  <div className="flex-1 space-y-2">
+                    <input type="text" value={item.title} onChange={(e) => handleArrayChange(setPolicies, policies, idx, 'title', e.target.value)} className="w-full bg-white border border-stone-200 px-3 py-2 rounded text-sm" placeholder="Başlık" />
+                    <textarea value={item.desc} onChange={(e) => handleArrayChange(setPolicies, policies, idx, 'desc', e.target.value)} className="w-full bg-white border border-stone-200 px-3 py-2 rounded text-sm" placeholder="Açıklama" rows={2} />
+                  </div>
+                  <button type="button" onClick={() => removeArrayItem(setPolicies, policies, idx)} className="text-red-500 font-bold px-2 py-1">X</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+      </form>
+    </div>
+  );
+}

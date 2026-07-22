@@ -8,6 +8,7 @@ interface Project {
   category: string;
   description: string | null;
   img: string;
+  metaTitle?: string | null;
   createdAt: Date;
 }
 
@@ -29,7 +30,7 @@ export default function ProjectsGrid({ projects }: ProjectsGridProps) {
           >
             <Image 
               src={project.img || "/dummygorsel/factory_workshop.png"}
-              alt={project.name}
+              alt={project.metaTitle || project.name}
               fill
               unoptimized
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

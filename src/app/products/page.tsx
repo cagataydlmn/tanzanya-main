@@ -1,38 +1,16 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 
+import { getProductGroups } from '@/app/actions/products';
+
 export const metadata: Metadata = {
   title: "Ürün Gruplarımız",
   description: "Ev mobilyaları, ofis mobilyaları, okul & kütüphane donanımları ve ticari projeleriniz için ürettiğimiz özel ahşap ve dekorasyon ürünleri.",
 };
 
-export default function Products() {
-  const categories = [
-    {
-      title: "Ev Mobilyaları",
-      desc: "Evlerinize sıcaklık ve şıklık katacak, tamamen yaşam tarzınıza özel tasarlanmış ahşap mobilya çözümleri.",
-      items: ["Mutfak Dolapları", "Gardıroplar", "TV Üniteleri", "Yemek Masaları", "Orta Sehpa", "Koltuk Takımları", "Berjerler", "Kitaplıklar"],
-      img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.15.jpeg"
-    },
-    {
-      title: "Ofis Mobilyaları",
-      desc: "Çalışma alanlarınızın verimliliğini artıracak, kurumsal kimliğinizi yansıtan ergonomik ve modern ofis çözümleri.",
-      items: ["Yönetici Masaları", "Çalışma Masaları", "Bankolar (Reception)", "Toplantı Masaları", "Ofis Bölmeleri", "Dosya Dolapları"],
-      img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.09.jpeg"
-    },
-    {
-      title: "Okul Mobilyaları",
-      desc: "Öğrencilerin sağlığına uygun, dayanıklı ve eğitim kalitesini destekleyen pedagojik sınıf ve laboratuvar mobilyaları.",
-      items: ["Öğrenci Sıraları", "Öğretmen Masaları", "Dolaplar", "Kütüphane Mobilyaları", "Laboratuvar Mobilyaları"],
-      img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.10.jpeg"
-    },
-    {
-      title: "Ticari Projeler",
-      desc: "Kafe, restoran ve otellerin konseptine uygun, yoğun kullanıma dayanıklı, müşteri deneyimini üst seviyeye taşıyan mobilyalar.",
-      items: ["Restoran Masaları", "Kafe Sandalyeleri", "Otel Odası Mobilyaları", "Lobi Koltukları", "Stand ve Teşhir Üniteleri"],
-      img: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.12.jpeg"
-    }
-  ];
+export default async function Products() {
+  const res = await getProductGroups();
+  const categories = res.success && res.data ? res.data : [];
 
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
@@ -55,7 +33,7 @@ export default function Products() {
               <div className="md:w-2/5 aspect-[4/3] md:aspect-auto relative bg-stone-100 border-r border-stone-200 min-h-[300px] md:min-h-full">
                 <Image 
                   src={category.img}
-                  alt={category.title}
+                  alt={category.metaTitle || category.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 40vw"
                   className="object-cover"
@@ -70,12 +48,12 @@ export default function Products() {
                 </p>
                 
                 <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                  {category.items.map((item, idx) => (
+                  {category.items ? category.items.split(',').map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-amber-700 shrink-0"></div>
-                      <span className="text-stone-800 font-medium">{item}</span>
+                      <span className="text-stone-800 font-medium">{item.trim()}</span>
                     </div>
-                  ))}
+                  )) : null}
                 </div>
               </div>
             </div>

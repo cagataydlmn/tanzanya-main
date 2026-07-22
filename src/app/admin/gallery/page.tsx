@@ -1,26 +1,41 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { getGalleryItems, createGalleryItem, deleteGalleryItem } from '@/app/actions/gallery';
+
+import { getGalleryItems, createGalleryItem, deleteGalleryItem, updateGalleryItem } from '@/app/actions/gallery';
+import { getCategories, createCategory } from '@/app/actions/categories';
 import { uploadImageAction } from '@/app/actions/upload';
 import Image from 'next/image';
 
 interface GalleryItem {
   id: number;
   title: string;
+  metaTitle?: string | null;
+  metaDesc?: string | null;
+  metaKeys?: string | null;
   category: string;
   img: string;
+  order: number;
   createdAt: Date;
 }
 
 export default function AdminGallery() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
   
   // Form States
   const [title, setTitle] = useState('');
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDesc, setMetaDesc] = useState('');
+  const [metaKeys, setMetaKeys] = useState('');
   const [category, setCategory] = useState('Konut');
   const [img, setImg] = useState('');
+  const [order, setOrder] = useState<number>(999);
+  
+  const [isNewCategory, setIsNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [availableCategories, setAvailableCategories] = useState<string[]>(["Konut", "Otel", "Ofis", "Restoran", "Eğitim", "Sağlık"]);
   
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -28,9 +43,17 @@ export default function AdminGallery() {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const fetchItems = async () => {
-    const res = await getGalleryItems();
-    if (res.success && res.data) {
-      setItems(res.data as GalleryItem[]);
+    const [galleryRes, catRes] = await Promise.all([
+      getGalleryItems(),
+      getCategories()
+    ]);
+    
+    if (galleryRes.success && galleryRes.data) {
+      setItems(galleryRes.data as GalleryItem[]);
+    }
+    
+    if (catRes.success && catRes.data) {
+      setAvailableCategories((catRes.data as any[]).map(c => c.name));
     }
   };
 
@@ -39,9 +62,31 @@ export default function AdminGallery() {
   }, []);
 
   const handleAddNewClick = () => {
+    setEditingId(null);
     setTitle('');
+    setMetaTitle('');
+    setMetaDesc('');
+    setMetaKeys('');
     setCategory('Konut');
     setImg('');
+    setOrder(999);
+    setIsNewCategory(false);
+    setNewCategoryName('');
+    setShowForm(true);
+    setMessage(null);
+  };
+
+  const handleEditClick = (item: GalleryItem) => {
+    setEditingId(item.id);
+    setTitle(item.title);
+    setMetaTitle(item.metaTitle || '');
+    setMetaDesc(item.metaDesc || '');
+    setMetaKeys(item.metaKeys || '');
+    setCategory(item.category);
+    setImg(item.img);
+    setOrder(item.order !== undefined ? item.order : 999);
+    setIsNewCategory(false);
+    setNewCategoryName('');
     setShowForm(true);
     setMessage(null);
   };
@@ -112,20 +157,44 @@ export default function AdminGallery() {
     setLoading(true);
     setMessage(null);
 
-    const res = await createGalleryItem({
-      title,
-      category,
-      img
-    });
+    let finalCategory = category;
+    if (isNewCategory && newCategoryName.trim() !== '') {
+      finalCategory = newCategoryName.trim();
+      await createCategory(finalCategory);
+    }
+
+    let res;
+    if (editingId) {
+      res = await updateGalleryItem(editingId, {
+        title,
+        metaTitle,
+        metaDesc,
+        metaKeys,
+        category: finalCategory,
+        img,
+        order
+      });
+    } else {
+      res = await createGalleryItem({
+        title,
+        metaTitle,
+        metaDesc,
+        metaKeys,
+        category: finalCategory,
+        img,
+        order
+      });
+    }
 
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: 'Görsel başarıyla galeriye eklendi.' });
+      setMessage({ type: 'success', text: editingId ? 'Görsel başarıyla güncellendi.' : 'Görsel başarıyla galeriye eklendi.' });
       setShowForm(false);
+      setEditingId(null);
       fetchItems();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Görsel eklenirken bir hata oluştu.' });
+      setMessage({ type: 'error', text: res.error || (editingId ? 'Görsel güncellenirken bir hata oluştu.' : 'Görsel eklenirken bir hata oluştu.') });
     }
   };
 
@@ -156,7 +225,9 @@ export default function AdminGallery() {
 
       {showForm ? (
         <div className="bg-white p-8 border border-stone-200 shadow-sm mb-8">
-          <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">Yeni Görsel Ekle</h2>
+          <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
+            {editingId ? 'Görseli Düzenle' : 'Yeni Görsel Ekle'}
+          </h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -171,19 +242,96 @@ export default function AdminGallery() {
                 />
               </div>
               <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                  <span>Meta Başlık (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                </label>
+                <input 
+                  type="text" 
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                  placeholder="Alt etiket veya detaylı başlık yazın..." 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                  <span>Meta Açıklama (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                </label>
+                <textarea 
+                  value={metaDesc}
+                  onChange={(e) => setMetaDesc(e.target.value)}
+                  rows={2}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                  placeholder="Google'da çıkacak özet açıklama..." 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                  <span>Anahtar Kelimeler (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                </label>
+                <input 
+                  type="text" 
+                  value={metaKeys}
+                  onChange={(e) => setMetaKeys(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                  placeholder="Örn: ahşap masa, ofis tasarımı" 
+                />
+              </div>
+              <div className="space-y-2 md:col-span-1">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Sıralama (Opsiyonel)</label>
+                <input 
+                  type="number" 
+                  value={order}
+                  onChange={(e) => setOrder(parseInt(e.target.value) || 999)}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
+                  placeholder="1, 2, 3... (Örn: 1 en üstte)" 
+                />
+              </div>
+              <div className="space-y-2 md:col-span-1">
                 <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kategori *</label>
-                <select 
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700"
-                >
-                  <option>Konut</option>
-                  <option>Ofis</option>
-                  <option>Otel</option>
-                  <option>Restoran</option>
-                  <option>Eğitim</option>
-                  <option>Üretim (Fabrika)</option>
-                </select>
+                {isNewCategory ? (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      required
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
+                      placeholder="Yeni kategori adı..."
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsNewCategory(false);
+                        setNewCategoryName('');
+                      }}
+                      className="px-4 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-xs hover:bg-stone-300 transition-colors rounded whitespace-nowrap"
+                    >
+                      İptal
+                    </button>
+                  </div>
+                ) : (
+                  <select 
+                    value={category}
+                    onChange={(e) => {
+                      if (e.target.value === 'YENI_EKLE') {
+                        setIsNewCategory(true);
+                      } else {
+                        setCategory(e.target.value);
+                      }
+                    }}
+                    className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
+                  >
+                    {availableCategories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                    <option value="YENI_EKLE" className="font-bold text-amber-700">+ Yeni Kategori Ekle...</option>
+                  </select>
+                )}
               </div>
             </div>
 
@@ -261,7 +409,7 @@ export default function AdminGallery() {
                 disabled={loading || uploading || !img}
                 className="px-8 py-3 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors cursor-pointer disabled:bg-stone-400 disabled:cursor-not-allowed"
               >
-                {loading ? 'Yükleniyor...' : 'Görseli Kaydet'}
+                {loading ? 'Kaydediliyor...' : (editingId ? 'Değişiklikleri Kaydet' : 'Görseli Kaydet')}
               </button>
             </div>
           </form>
@@ -286,6 +434,15 @@ export default function AdminGallery() {
                   {/* Actions Overlay */}
                   <div className="absolute inset-0 bg-stone-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 z-10">
                     <button 
+                      onClick={() => handleEditClick(img)} 
+                      className="p-3 bg-white text-amber-600 rounded-full hover:bg-amber-600 hover:text-white transition-colors cursor-pointer shadow-md" 
+                      title="Düzenle"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      </svg>
+                    </button>
+                    <button 
                       onClick={() => handleDelete(img.id)} 
                       className="p-3 bg-white text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors cursor-pointer shadow-md" 
                       title="Sil"
@@ -296,9 +453,12 @@ export default function AdminGallery() {
                     </button>
                   </div>
                 </div>
-                <div className="p-4 border-t border-stone-100 flex-grow">
+                <div className="p-4 border-t border-stone-100 flex-grow relative">
                   <h3 className="font-bold text-stone-900 text-sm truncate">{img.title}</h3>
-                  <p className="text-xs text-stone-500 uppercase tracking-wider mt-1">{img.category}</p>
+                  <div className="flex justify-between items-center mt-1">
+                    <p className="text-xs text-stone-500 uppercase tracking-wider">{img.category}</p>
+                    <span className="text-[10px] bg-stone-100 text-stone-500 px-2 py-0.5 rounded-full font-bold">Sıra: {img.order}</span>
+                  </div>
                 </div>
               </div>
             ))

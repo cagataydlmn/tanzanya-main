@@ -72,9 +72,12 @@ export async function createBlogPost(formData: {
   content: string;
   status?: string;
   image?: string;
+  metaTitle?: string;
+  metaDesc?: string;
+  metaKeys?: string;
 }) {
   try {
-    const { title, category, excerpt, content, status, image } = formData;
+    const { title, category, excerpt, content, status, image, metaTitle, metaDesc, metaKeys } = formData;
     let baseSlug = slugify(title);
     
     // Benzersiz bir slug oluştur (aynı isimde varsa sonuna sayı ekler)
@@ -96,6 +99,9 @@ export async function createBlogPost(formData: {
         content,
         status: status || "Yayında",
         image: image || null,
+        metaTitle,
+        metaDesc,
+        metaKeys,
       }
     });
 
@@ -116,9 +122,12 @@ export async function updateBlogPost(id: number, formData: {
   content: string;
   status: string;
   image?: string;
+  metaTitle?: string;
+  metaDesc?: string;
+  metaKeys?: string;
 }) {
   try {
-    const { title, category, excerpt, content, status, image } = formData;
+    const { title, category, excerpt, content, status, image, metaTitle, metaDesc, metaKeys } = formData;
     const existingPost = await prisma.blogPost.findUnique({ where: { id } });
     if (!existingPost) return { success: false, error: "Yazı bulunamadı." };
 
@@ -146,6 +155,9 @@ export async function updateBlogPost(id: number, formData: {
         content,
         status,
         image: image !== undefined ? image : existingPost.image,
+        metaTitle,
+        metaDesc,
+        metaKeys,
       }
     });
 

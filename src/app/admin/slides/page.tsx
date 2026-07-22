@@ -12,6 +12,9 @@ interface Slide {
   desc: string;
   bg: string;
   order: number;
+  metaTitle?: string | null;
+  metaDesc?: string | null;
+  metaKeys?: string | null;
   createdAt: Date;
 }
 
@@ -26,6 +29,9 @@ export default function AdminSlides() {
   const [desc, setDesc] = useState('');
   const [bg, setBg] = useState('');
   const [order, setOrder] = useState<number>(1);
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDesc, setMetaDesc] = useState('');
+  const [metaKeys, setMetaKeys] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -50,6 +56,9 @@ export default function AdminSlides() {
     setDesc('');
     setBg('');
     setOrder(slides.length + 1);
+    setMetaTitle('');
+    setMetaDesc('');
+    setMetaKeys('');
     setShowForm(true);
     setMessage(null);
   };
@@ -61,6 +70,9 @@ export default function AdminSlides() {
     setDesc(slide.desc);
     setBg(slide.bg);
     setOrder(slide.order);
+    setMetaTitle(slide.metaTitle || '');
+    setMetaDesc(slide.metaDesc || '');
+    setMetaKeys(slide.metaKeys || '');
     setShowForm(true);
     setMessage(null);
   };
@@ -138,7 +150,10 @@ export default function AdminSlides() {
         subtitle,
         desc,
         bg,
-        order: Number(order)
+        order: Number(order),
+        metaTitle,
+        metaDesc,
+        metaKeys
       });
     } else {
       res = await createSlide({
@@ -146,7 +161,10 @@ export default function AdminSlides() {
         subtitle,
         desc,
         bg,
-        order: Number(order)
+        order: Number(order),
+        metaTitle,
+        metaDesc,
+        metaKeys
       });
     }
 
@@ -220,6 +238,49 @@ export default function AdminSlides() {
                   placeholder="Örn: Geleneksel Ustalık, Modern Tasarım" 
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                  <span>Meta Başlık (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                </label>
+                <input 
+                  type="text" 
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                  placeholder="Alt etiket veya detaylı başlık yazın..." 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                  <span>Anahtar Kelimeler (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                </label>
+                <input 
+                  type="text" 
+                  value={metaKeys}
+                  onChange={(e) => setMetaKeys(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                  placeholder="Örn: ana sayfa, ahşap yatak" 
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
+                <span>Meta Açıklama (SEO)</span>
+                <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+              </label>
+              <textarea 
+                value={metaDesc}
+                onChange={(e) => setMetaDesc(e.target.value)}
+                rows={2}
+                className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
+                placeholder="Google'da çıkacak özet açıklama..." 
+              />
             </div>
 
             <div className="space-y-2">

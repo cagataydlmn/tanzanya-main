@@ -55,9 +55,12 @@ export async function createSlide(formData: {
   desc: string;
   bg: string;
   order?: number;
+  metaTitle?: string;
+  metaDesc?: string;
+  metaKeys?: string;
 }) {
   try {
-    const { title, subtitle, desc, bg, order } = formData;
+    const { title, subtitle, desc, bg, order, metaTitle, metaDesc, metaKeys } = formData;
     const count = await prisma.slide.count();
     
     const newSlide = await prisma.slide.create({
@@ -66,7 +69,10 @@ export async function createSlide(formData: {
         subtitle,
         desc,
         bg,
-        order: order ?? count + 1
+        order: order ?? count + 1,
+        metaTitle,
+        metaDesc,
+        metaKeys
       }
     });
 
@@ -100,9 +106,12 @@ export async function updateSlide(id: number, formData: {
   desc: string;
   bg: string;
   order?: number;
+  metaTitle?: string;
+  metaDesc?: string;
+  metaKeys?: string;
 }) {
   try {
-    const { title, subtitle, desc, bg, order } = formData;
+    const { title, subtitle, desc, bg, order, metaTitle, metaDesc, metaKeys } = formData;
     
     const updatedSlide = await prisma.slide.update({
       where: { id },
@@ -111,6 +120,9 @@ export async function updateSlide(id: number, formData: {
         subtitle,
         desc,
         bg,
+        metaTitle,
+        metaDesc,
+        metaKeys,
         ...(order !== undefined && { order })
       }
     });

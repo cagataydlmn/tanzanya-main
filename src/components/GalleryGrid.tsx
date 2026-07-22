@@ -8,6 +8,7 @@ interface GalleryItem {
   title: string;
   category: string;
   img: string;
+  metaTitle?: string | null;
   createdAt: Date;
 }
 
@@ -77,7 +78,7 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
           >
             <Image 
               src={img.img || "/dummygorsel/factory_workshop.png"}
-              alt={img.title}
+              alt={img.metaTitle || img.title}
               fill
               unoptimized
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
@@ -139,7 +140,7 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
             >
               <Image 
                 src={items[activeIndex].img || "/dummygorsel/factory_workshop.png"}
-                alt={items[activeIndex].title}
+                alt={items[activeIndex].metaTitle || items[activeIndex].title}
                 fill
                 unoptimized
                 className="object-contain"

@@ -1,91 +1,90 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { getProjects, createProject, deleteProject, updateProject } from '@/app/actions/projects';
-import { getCategories, createCategory } from '@/app/actions/categories';
+import { getServices, createService, updateService, deleteService } from '@/app/actions/services';
 import { uploadImageAction } from '@/app/actions/upload';
 import Image from 'next/image';
 
-interface Project {
+interface ServiceItem {
   id: number;
-  name: string;
-  category: string;
-  description: string | null;
+  slug: string;
+  title: string;
+  desc: string;
+  longDesc: string;
+  features: string;
+  steps: string;
   img: string;
   metaTitle?: string | null;
   metaDesc?: string | null;
   metaKeys?: string | null;
+  isFeatured?: boolean;
   createdAt: Date;
 }
 
-export default function AdminProjects() {
-  const [projects, setProjects] = useState<Project[]>([]);
+export default function AdminServices() {
+  const [services, setServices] = useState<ServiceItem[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   
   // Form States
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState('Konut');
-  const [description, setDescription] = useState('');
+  const [slug, setSlug] = useState('');
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+  const [longDesc, setLongDesc] = useState('');
+  const [features, setFeatures] = useState('');
+  const [steps, setSteps] = useState('');
   const [img, setImg] = useState('');
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDesc, setMetaDesc] = useState('');
   const [metaKeys, setMetaKeys] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
-  const [isNewCategory, setIsNewCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
   
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-  const fetchProjects = async () => {
-    const [res, catRes] = await Promise.all([
-      getProjects(),
-      getCategories()
-    ]);
+  const fetchServices = async () => {
+    const res = await getServices();
     if (res.success && res.data) {
-      setProjects(res.data as Project[]);
-    }
-    if (catRes.success && catRes.data) {
-      setAvailableCategories((catRes.data as any[]).map(c => c.name));
+      setServices(res.data as ServiceItem[]);
     }
   };
 
   useEffect(() => {
-    fetchProjects();
+    fetchServices();
   }, []);
 
   const handleAddNewClick = () => {
     setEditingId(null);
-    setName('');
-    setCategory('Konut');
-    setDescription('');
+    setSlug('');
+    setTitle('');
+    setDesc('');
+    setLongDesc('');
+    setFeatures('');
+    setSteps('');
     setImg('');
     setMetaTitle('');
     setMetaDesc('');
     setMetaKeys('');
     setIsFeatured(false);
-    setIsNewCategory(false);
-    setNewCategoryName('');
     setShowForm(true);
     setMessage(null);
   };
 
-  const handleEditClick = (project: Project) => {
-    setEditingId(project.id);
-    setName(project.name);
-    setCategory(project.category);
-    setDescription(project.description || '');
-    setImg(project.img);
-    setMetaTitle(project.metaTitle || '');
-    setMetaDesc(project.metaDesc || '');
-    setMetaKeys(project.metaKeys || '');
-    setIsFeatured(project.isFeatured || false);
-    setIsNewCategory(false);
-    setNewCategoryName('');
+  const handleEditClick = (item: ServiceItem) => {
+    setEditingId(item.id);
+    setSlug(item.slug);
+    setTitle(item.title);
+    setDesc(item.desc);
+    setLongDesc(item.longDesc);
+    setFeatures(item.features);
+    setSteps(item.steps);
+    setImg(item.img);
+    setMetaTitle(item.metaTitle || '');
+    setMetaDesc(item.metaDesc || '');
+    setMetaKeys(item.metaKeys || '');
+    setIsFeatured(item.isFeatured || false);
     setShowForm(true);
     setMessage(null);
   };
@@ -102,7 +101,7 @@ export default function AdminProjects() {
 
     if (res.success && res.url) {
       setImg(res.url);
-      setMessage({ type: 'success', text: 'Kapak görseli başarıyla yüklendi.' });
+      setMessage({ type: 'success', text: 'Görsel başarıyla yüklendi.' });
     } else {
       setMessage({ type: 'error', text: res.error || 'Görsel yüklenemedi.' });
     }
@@ -132,63 +131,64 @@ export default function AdminProjects() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Bu projeyi silmek istediğinize emin misiniz?")) return;
+    if (!window.confirm("Bu hizmeti silmek istediğinize emin misiniz?")) return;
     
     setLoading(true);
-    const res = await deleteProject(id);
+    const res = await deleteService(id);
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: 'Proje başarıyla silindi.' });
-      fetchProjects();
+      setMessage({ type: 'success', text: 'Hizmet başarıyla silindi.' });
+      fetchServices();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Proje silinemedi.' });
+      setMessage({ type: 'error', text: res.error || 'Hizmet silinemedi.' });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !img) {
-      setMessage({ type: 'error', text: 'Lütfen proje adını girin ve bir kapak görseli yükleyin.' });
+    if (!title || !slug || !img) {
+      setMessage({ type: 'error', text: 'Lütfen zorunlu alanları doldurun ve görsel yükleyin.' });
       return;
     }
 
     setLoading(true);
     setMessage(null);
 
-    let finalCategory = category;
-    if (isNewCategory && newCategoryName.trim() !== '') {
-      finalCategory = newCategoryName.trim();
-      await createCategory(finalCategory); // Arka planda DB'ye kategori olarak da kaydet
-    }
-
     const data = {
-      name, category: finalCategory, description, img, metaTitle, metaDesc, metaKeys, isFeatured
+      slug, title, desc, longDesc, features, steps, img, metaTitle, metaDesc, metaKeys, isFeatured
     };
 
     let res;
     if (editingId) {
-      res = await updateProject(editingId, data);
+      res = await updateService(editingId, data);
     } else {
-      res = await createProject(data);
+      res = await createService(data);
     }
 
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: editingId ? 'Proje başarıyla güncellendi.' : 'Proje başarıyla eklendi.' });
+      setMessage({ type: 'success', text: editingId ? 'Hizmet güncellendi.' : 'Hizmet eklendi.' });
       setShowForm(false);
       setEditingId(null);
-      fetchProjects();
+      fetchServices();
     } else {
-      setMessage({ type: 'error', text: res.error || (editingId ? 'Proje güncellenirken bir hata oluştu.' : 'Proje eklenirken bir hata oluştu.') });
+      setMessage({ type: 'error', text: res.error || 'Bir hata oluştu.' });
     }
+  };
+
+  const generateSlug = (text: string) => {
+    return text.toString().toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/\-\-+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
   };
 
   return (
     <div className="space-y-6">
-      
-      {/* Alert Message */}
       {message && (
         <div className={`p-4 border text-sm font-medium ${
           message.type === 'success' ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'
@@ -199,77 +199,51 @@ export default function AdminProjects() {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-serif text-stone-900 font-bold">Projeler Yönetimi</h1>
-          <p className="text-xs text-stone-500 mt-1">Sitenizdeki projeleri ekleyin ve yönetin.</p>
+          <h1 className="text-2xl font-serif text-stone-900 font-bold">Hizmetler Yönetimi</h1>
+          <p className="text-xs text-stone-500 mt-1">Sitenizdeki hizmetleri ve detay sayfalarını yönetin.</p>
         </div>
         <button 
           onClick={showForm ? () => setShowForm(false) : handleAddNewClick}
           className="px-6 py-2.5 bg-stone-900 text-white font-medium text-xs md:text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer rounded shrink-0"
         >
-          {showForm ? 'Listeye Dön' : '+ Yeni Proje Ekle'}
+          {showForm ? 'Listeye Dön' : '+ Yeni Hizmet Ekle'}
         </button>
       </div>
 
       {showForm ? (
         <div className="bg-white p-6 sm:p-8 border border-stone-200 shadow-sm rounded">
           <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
-            {editingId ? 'Projeyi Düzenle' : 'Yeni Proje Ekle'}
+            {editingId ? 'Hizmeti Düzenle' : 'Yeni Hizmet Ekle'}
           </h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Proje Adı *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Hizmet Başlığı *</label>
                 <input 
                   type="text" 
                   required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={title}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                    if (!editingId) setSlug(generateSlug(e.target.value));
+                  }}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                  placeholder="Örn: Vadi İstanbul Konutları" 
+                  placeholder="Örn: İç Mimari Tasarım" 
                 />
               </div>
+
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kategori *</label>
-                {isNewCategory ? (
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      required
-                      value={newCategoryName}
-                      onChange={(e) => setNewCategoryName(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
-                      placeholder="Yeni kategori adı..."
-                      autoFocus
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsNewCategory(false);
-                        setNewCategoryName('');
-                      }}
-                      className="px-4 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-xs hover:bg-stone-300 transition-colors rounded whitespace-nowrap"
-                    >
-                      İptal
-                    </button>
-                  </div>
-                ) : (
-                  <select 
-                    value={category}
-                    onChange={(e) => {
-                      if (e.target.value === 'YENI_EKLE') {
-                        setIsNewCategory(true);
-                      } else {
-                        setCategory(e.target.value);
-                      }
-                    }}
-                    className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
-                  >
-                    {availableCategories.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                    <option value="YENI_EKLE" className="font-bold text-amber-700">+ Yeni Kategori Ekle...</option>
-                  </select>
-                )}
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">URL (Slug) *</label>
+                <input 
+                  type="text" 
+                  required
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
+                  placeholder="örn: ic-mimari-tasarim" 
+                />
+                <p className="text-xs text-stone-500">Adres çubuğunda görünecek isim. Boşluk bırakmadan yazın.</p>
               </div>
             </div>
 
@@ -282,10 +256,10 @@ export default function AdminProjects() {
                 className="w-4 h-4 text-amber-800 border-stone-300 rounded focus:ring-amber-700"
               />
               <label htmlFor="isFeatured" className="text-sm font-bold text-stone-900 uppercase tracking-wider cursor-pointer">
-                Öne Çıkan Proje mi?
+                Öne Çıkan Hizmet mi?
               </label>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
@@ -310,7 +284,7 @@ export default function AdminProjects() {
                   value={metaKeys}
                   onChange={(e) => setMetaKeys(e.target.value)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                  placeholder="Örn: ahşap ev, modern tasarım" 
+                  placeholder="Örn: iç mimari, ev tasarımı" 
                 />
               </div>
             </div>
@@ -329,23 +303,57 @@ export default function AdminProjects() {
               />
             </div>
 
-            {/* Description Textarea */}
             <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Proje Açıklaması</label>
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kısa Açıklama (Özet)</label>
               <textarea 
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={4}
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
+                rows={2}
                 className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                placeholder="Proje detaylarını, kullanılan malzemeleri ve özellikleri yazın..." 
+                placeholder="Hizmetler listesinde görünecek kısa özet..." 
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kapak Görseli Seçin / Yükleyin *</label>
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Uzun Açıklama (Detay Sayfası İçin)</label>
+              <textarea 
+                value={longDesc}
+                onChange={(e) => setLongDesc(e.target.value)}
+                rows={4}
+                className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
+                placeholder="Detay sayfasında görünecek uzun açıklama metni..." 
+              />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Özellikler (Virgülle Ayırın)</label>
+                <textarea 
+                  value={features}
+                  onChange={(e) => setFeatures(e.target.value)}
+                  rows={3}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
+                  placeholder="Örn: 3D Tasarım, Hızlı Teslimat, A Kalite Malzeme" 
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Süreç Adımları (Virgülle Ayırın)</label>
+                <textarea 
+                  value={steps}
+                  onChange={(e) => setSteps(e.target.value)}
+                  rows={3}
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
+                  placeholder="Örn: Keşif, Tasarım, Üretim, Montaj" 
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Hizmet Görseli Seçin / Yükleyin *</label>
               
               {img ? (
-                <div className="relative aspect-[16/9] w-full max-w-md bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
+                <div className="relative aspect-[4/3] w-full max-w-md bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
                   <Image 
                     src={img} 
                     alt="Yüklenen Görsel Önizleme" 
@@ -366,7 +374,7 @@ export default function AdminProjects() {
                 </div>
               ) : (
                 <label 
-                  htmlFor="project-file-input"
+                  htmlFor="group-file-input"
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
@@ -377,7 +385,7 @@ export default function AdminProjects() {
                   }`}
                 >
                   <input 
-                    id="project-file-input"
+                    id="group-file-input"
                     type="file" 
                     accept="image/*"
                     onChange={handleFileUpload}
@@ -413,66 +421,56 @@ export default function AdminProjects() {
               </button>
               <button 
                 type="submit" 
-                disabled={loading || uploading || !img}
+                disabled={loading || uploading || !img || !slug}
                 className="px-8 py-3 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors cursor-pointer disabled:bg-stone-400 disabled:cursor-not-allowed rounded"
               >
-                {loading ? 'Kaydediliyor...' : (editingId ? 'Değişiklikleri Kaydet' : 'Projeyi Kaydet')}
+                {loading ? 'Kaydediliyor...' : (editingId ? 'Değişiklikleri Kaydet' : 'Hizmeti Kaydet')}
               </button>
             </div>
           </form>
         </div>
       ) : (
         <div className="bg-white border border-stone-200 shadow-sm overflow-x-auto rounded">
-          {projects.length === 0 ? (
+          {services.length === 0 ? (
             <div className="text-center py-10 text-stone-500">
-              Henüz eklenmiş proje bulunmuyor.
+              Henüz eklenmiş hizmet bulunmuyor.
             </div>
           ) : (
             <table className="w-full text-left text-sm text-stone-600">
               <thead className="bg-stone-50 text-stone-900 uppercase tracking-wider font-bold border-b border-stone-200">
                 <tr>
-                  <th className="px-6 py-4">Proje Adı</th>
-                  <th className="px-6 py-4">Kategori</th>
-                  <th className="px-6 py-4">Tarih</th>
+                  <th className="px-6 py-4">Hizmet Başlığı</th>
+                  <th className="px-6 py-4">URL (Slug)</th>
                   <th className="px-6 py-4">Durum</th>
                   <th className="px-6 py-4 text-right">İşlemler</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100">
-                {projects.map((project) => {
-                  const formattedDate = new Date(project.createdAt).toLocaleDateString('tr-TR', {
-                    day: 'numeric',
-                    month: 'numeric',
-                    year: 'numeric'
-                  });
-
-                  return (
-                    <tr key={project.id} className="hover:bg-stone-50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-stone-900">{project.name}</td>
-                      <td className="px-6 py-4">{project.category}</td>
-                      <td className="px-6 py-4">{formattedDate}</td>
-                      <td className="px-6 py-4">
-                        {project.isFeatured && (
-                          <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-1 rounded font-bold uppercase">Öne Çıkan</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-right whitespace-nowrap space-x-3">
-                        <button 
-                          onClick={() => handleEditClick(project)}
-                          className="text-amber-700 hover:text-amber-900 font-medium cursor-pointer"
-                        >
-                          Düzenle
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(project.id)}
-                          className="text-red-600 hover:text-red-800 font-medium cursor-pointer"
-                        >
-                          Sil
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {services.map((service) => (
+                  <tr key={service.id} className="hover:bg-stone-50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-stone-900">{service.title}</td>
+                    <td className="px-6 py-4">/{service.slug}</td>
+                    <td className="px-6 py-4">
+                      {service.isFeatured && (
+                        <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-1 rounded font-bold uppercase">Öne Çıkan</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-right whitespace-nowrap space-x-3">
+                      <button 
+                        onClick={() => handleEditClick(service)}
+                        className="text-amber-700 hover:text-amber-900 font-medium cursor-pointer"
+                      >
+                        Düzenle
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(service.id)}
+                        className="text-red-600 hover:text-red-800 font-medium cursor-pointer"
+                      >
+                        Sil
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}

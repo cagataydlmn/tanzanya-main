@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { servicesData } from '@/data/servicesData';
+import { getServices } from '@/app/actions/services';
 
 export const metadata: Metadata = {
   title: "Hizmetlerimiz",
   description: "İç mimari ve tasarım, özel mobilya üretimi, anahtar teslim uygulama ve montaj hizmetlerimizle projelerinizi eksiksiz hayata geçiriyoruz.",
 };
 
-export default function Services() {
+export default async function Services() {
+  const res = await getServices();
+  const services = res.success && res.data ? res.data : [];
+
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-6">
@@ -21,7 +24,7 @@ export default function Services() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {servicesData.map((service, i) => (
+          {services.map((service: any, i: number) => (
             <Link 
               key={service.slug} 
               href={`/services/${service.slug}`}

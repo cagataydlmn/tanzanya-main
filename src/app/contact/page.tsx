@@ -35,7 +35,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900 mb-1">Fabrika & Merkez</h3>
-                  <p className="text-stone-600">Organize Sanayi Bölgesi, Mobilyacılar Cad. No: 42<br />İnegöl / Bursa</p>
+                  <p className="text-stone-600">Mikocheni B, Rose Garden Road, Uzima Street<br />Kinondoni District, Dar es Salaam, Tanzania</p>
                 </div>
               </div>
 
@@ -47,8 +47,8 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900 mb-1">Telefon</h3>
-                  <p className="text-stone-600">+90 (224) 555 00 00</p>
-                  <p className="text-stone-600">+90 (532) 555 00 00 (WhatsApp)</p>
+                  <p className="text-stone-600">0 651 137 287</p>
+                  <p className="text-stone-600">0 651 137 287 (WhatsApp)</p>
                 </div>
               </div>
 
@@ -60,16 +60,21 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900 mb-1">E-Posta</h3>
-                  <p className="text-stone-600">info@tanzanyamobilya.com</p>
-                  <p className="text-stone-600">proje@tanzanyamobilya.com</p>
+                  <p className="text-stone-600">stardecortz@gmail.com</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Map Placeholder */}
-          <div className="bg-stone-200 border border-stone-300 w-full min-h-[400px] flex items-center justify-center">
-            <p className="text-stone-500 font-semibold">[Google Haritalar Alanı]</p>
+          <div className="bg-stone-200 border border-stone-300 w-full min-h-[400px] flex items-center justify-center relative overflow-hidden">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.062996987857!2d39.2519711!3d-6.7621734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4d7b36781765%3A0x212569b7181875a7!2sersanfurnitureTZ!5e0!3m2!1str!2str!4v1784646295368!5m2!1str!2str" 
+              className="absolute inset-0 w-full h-full border-0"
+              allowFullScreen={true}
+              loading="lazy" 
+              referrerPolicy="strict-origin-when-cross-origin"
+            ></iframe>
           </div>
 
         </div>

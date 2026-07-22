@@ -22,15 +22,23 @@ export async function createProject(formData: {
   category: string;
   description?: string;
   img?: string;
+  metaTitle?: string;
+  metaDesc?: string;
+  metaKeys?: string;
+  isFeatured?: boolean;
 }) {
   try {
     const { name, category, description, img } = formData;
     const newProject = await prisma.project.create({
       data: {
-        name,
-        category,
-        description: description || "",
-        img: img || "/dummygorsel/factory_workshop.png", // Varsayılan görsel
+        name: formData.name,
+        category: formData.category,
+        description: formData.description || "",
+        img: formData.img || "/dummygorsel/factory_workshop.png", // Varsayılan görsel
+        metaTitle: formData.metaTitle,
+        metaDesc: formData.metaDesc,
+        metaKeys: formData.metaKeys,
+        isFeatured: formData.isFeatured || false,
       }
     });
 
@@ -73,5 +81,44 @@ export async function getProjectById(id: number) {
   } catch (error: any) {
     console.error("getProjectById error:", error);
     return { success: false, error: error.message || "Proje çekilemedi." };
+  }
+}
+
+// Proje güncelle
+export async function updateProject(
+  id: number,
+  formData: {
+    name?: string;
+    category?: string;
+    description?: string;
+    img?: string;
+    metaTitle?: string;
+    metaDesc?: string;
+    metaKeys?: string;
+    isFeatured?: boolean;
+  }
+) {
+  try {
+    const updatedProject = await prisma.project.update({
+      where: { id },
+      data: {
+        ...(formData.name && { name: formData.name }),
+        ...(formData.category && { category: formData.category }),
+        ...(formData.description !== undefined && { description: formData.description }),
+        ...(formData.img && { img: formData.img }),
+        ...(formData.metaTitle !== undefined && { metaTitle: formData.metaTitle }),
+        ...(formData.metaDesc !== undefined && { metaDesc: formData.metaDesc }),
+        ...(formData.metaKeys !== undefined && { metaKeys: formData.metaKeys }),
+        ...(formData.isFeatured !== undefined && { isFeatured: formData.isFeatured }),
+      }
+    });
+
+    revalidatePath('/projects');
+    revalidatePath('/admin/projects');
+    revalidatePath('/');
+    return { success: true, data: updatedProject };
+  } catch (error: any) {
+    console.error("updateProject error:", error);
+    return { success: false, error: error.message || "Proje güncellenemedi." };
   }
 }

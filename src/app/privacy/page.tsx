@@ -42,7 +42,7 @@ export default function Privacy() {
 
           <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">5. İletişim</h3>
           <p>
-            Gizlilik politikamız veya kişisel verilerinizin işlenmesiyle ilgili sorularınız için bizimle <strong>info@tanzanyamobilya.com</strong> adresi üzerinden iletişime geçebilirsiniz.
+            Gizlilik politikamız veya kişisel verilerinizin işlenmesiyle ilgili sorularınız için bizimle <strong>stardecortz@gmail.com</strong> adresi üzerinden iletişime geçebilirsiniz.
           </p>
           
           <p className="pt-8 text-sm text-stone-400 border-t border-stone-200 mt-8">

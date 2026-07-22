@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { getServiceBySlug, servicesData } from '@/data/servicesData';
+import { getServiceBySlug, getServices } from '@/app/actions/services';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -10,34 +10,45 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const res = await getServiceBySlug(slug);
+  const service = res.success && res.data ? res.data : null;
 
   if (!service) return { title: "Hizmet Bulunamadı | Tanzanya Mobilya" };
 
   return {
-    title: `${service.title} - Hizmetlerimiz | Tanzanya Mobilya`,
-    description: service.desc,
+    title: service.metaTitle || `${service.title} - Hizmetlerimiz | Tanzanya Mobilya`,
+    description: service.metaDesc || service.desc,
+    ...(service.metaKeys ? { keywords: service.metaKeys } : {}),
     openGraph: {
-      title: `${service.title} | Tanzanya Mobilya`,
-      description: service.desc,
+      title: service.metaTitle || `${service.title} | Tanzanya Mobilya`,
+      description: service.metaDesc || service.desc,
       images: [{ url: service.img }],
     }
   };
 }
 
 export async function generateStaticParams() {
-  return servicesData.map(service => ({
-    slug: service.slug,
-  }));
+  const res = await getServices();
+  if (res.success && res.data) {
+    return res.data.map((service: any) => ({
+      slug: service.slug,
+    }));
+  }
+  return [];
 }
 
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  
+  const res = await getServiceBySlug(slug);
+  const service = res.success && res.data ? res.data : null;
 
   if (!service) notFound();
 
-  const otherServices = servicesData.filter(s => s.slug !== service.slug);
+  const allRes = await getServices();
+  const otherServices = allRes.success && allRes.data 
+    ? allRes.data.filter((s: any) => s.slug !== service.slug) 
+    : [];
 
   return (
     <div className="min-h-screen bg-stone-50 pb-24">
@@ -47,7 +58,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         <div className="absolute inset-0 opacity-20">
           <Image 
             src={service.img} 
-            alt="" 
+            alt={service.metaTitle || service.title} 
             fill 
             unoptimized 
             className="object-cover blur-3xl scale-125"
@@ -83,7 +94,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         <div className="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-xl overflow-hidden border border-stone-800 shadow-2xl bg-stone-900 mb-12">
           <Image 
             src={service.img}
-            alt={service.title}
+            alt={service.metaTitle || service.title}
             fill
             priority
             unoptimized
@@ -110,14 +121,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <div className="pt-6 border-t border-stone-100 space-y-4">
                 <h3 className="text-stone-900 font-bold text-base">Öne Çıkan Özellikler ve Avantajlar:</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {service.features.map((feat, idx) => (
+                  {service.features ? service.features.split(',').map((feat: string, idx: number) => (
                     <div key={idx} className="flex items-start gap-3 bg-stone-50 p-3.5 rounded border border-stone-100">
                       <svg className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span className="text-stone-800 text-sm font-medium">{feat}</span>
+                      <span className="text-stone-800 text-sm font-medium">{feat.trim()}</span>
                     </div>
-                  ))}
+                  )) : null}
                 </div>
               </div>
             </div>
@@ -128,19 +139,19 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 Çalışma ve Uygulama Sürecimiz
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
-                {service.steps.map((step, idx) => (
+                {service.steps ? service.steps.split(',').map((step: string, idx: number) => (
                   <div key={idx} className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-amber-700 text-white rounded-full flex items-center justify-center font-bold font-serif shrink-0 text-lg shadow-sm">
                       {idx + 1}
                     </div>
                     <div>
-                      <h4 className="font-bold text-stone-900 text-base mb-1">{step}</h4>
+                      <h4 className="font-bold text-stone-900 text-base mb-1">{step.trim()}</h4>
                       <p className="text-xs text-stone-500 leading-relaxed">
                         Tesislerimizde hassasiyetle yönetilen adım.
                       </p>
                     </div>
                   </div>
-                ))}
+                )) : null}
               </div>
             </div>
 
@@ -180,7 +191,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         <div className="mt-20 border-t border-stone-200 pt-16">
           <h2 className="text-2xl font-serif text-stone-900 font-bold mb-8">Diğer Hizmetlerimiz</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {otherServices.map((item) => (
+            {otherServices.map((item: any) => (
               <Link 
                 key={item.slug}
                 href={`/services/${item.slug}`}

@@ -11,6 +11,7 @@ interface Slide {
   title: string;
   desc: string;
   bg: string;
+  metaTitle?: string | null;
 }
 
 const fallbackSlides: Slide[] = [
@@ -81,7 +82,7 @@ export default function HeroSlider() {
           {/* Layer 2: Main crisp image centered */}
           <Image 
             src={slide.bg}
-            alt={slide.title}
+            alt={slide.metaTitle || slide.title}
             fill
             priority={index === 0}
             unoptimized

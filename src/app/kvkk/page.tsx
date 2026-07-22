@@ -53,7 +53,7 @@ export default function KVKK() {
             <li>Eksik veya yanlış işlenmiş verilerin düzeltilmesini isteme,</li>
             <li>Kişisel verilerin silinmesini veya yok edilmesini talep etme</li>
           </ul>
-          <p className="mt-2">haklarına sahiptir. Bu haklarınızı kullanmak için taleplerinizi kimliğinizi tespit edici belgeler ile birlikte <strong>info@tanzanyamobilya.com</strong> adresine yazılı olarak iletebilirsiniz.</p>
+          <p className="mt-2">haklarına sahiptir. Bu haklarınızı kullanmak için taleplerinizi kimliğinizi tespit edici belgeler ile birlikte <strong>stardecortz@gmail.com</strong> adresine yazılı olarak iletebilirsiniz.</p>
 
           <p className="pt-8 text-sm text-stone-400 border-t border-stone-200 mt-8">
             Son Güncelleme: Ekim 2026

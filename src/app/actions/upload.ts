@@ -10,15 +10,18 @@ export async function uploadImageAction(formData: FormData) {
       return { success: false, error: 'Dosya seçilmedi veya yüklenemedi.' };
     }
 
-    // Dosya boyutu kontrolü (Maks. 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      return { success: false, error: 'Dosya boyutu 5MB\'dan büyük olamaz.' };
+    // Dosya uzantısı ve türü kontrolü
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml', 'application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      return { success: false, error: 'Yalnızca görsel dosyaları (JPG, PNG, vb.) veya PDF yükleyebilirsiniz.' };
     }
 
-    // Dosya uzantısı ve türü kontrolü
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
-    if (!allowedTypes.includes(file.type)) {
-      return { success: false, error: 'Yalnızca görsel dosyaları (JPG, PNG, WEBP, GIF, SVG) yükleyebilirsiniz.' };
+    const isPdf = file.type === 'application/pdf';
+    const maxSize = isPdf ? 15 * 1024 * 1024 : 5 * 1024 * 1024; // PDF'ler için 15MB, görseller için 5MB
+    
+    // Dosya boyutu kontrolü
+    if (file.size > maxSize) {
+      return { success: false, error: `Dosya boyutu ${isPdf ? '15MB' : '5MB'}'dan büyük olamaz.` };
     }
 
     // ArrayBuffer okuma
