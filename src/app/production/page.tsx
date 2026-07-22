@@ -20,7 +20,7 @@ export default async function Production() {
     getProductionSteps()
   ]);
 
-  const defaultInfo = {
+  const defaultInfo: any = {
     title: "Üretim",
     desc: "Tasarımdan teslimata kadar tüm süreçlerin fabrikamızda yürütüldüğü, kalite standartlarından ödün vermeyen entegre üretim hattımız.",
     img: "/dummygorsel/factory_workshop.png"

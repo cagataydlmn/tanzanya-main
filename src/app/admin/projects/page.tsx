@@ -15,6 +15,7 @@ interface Project {
   metaTitle?: string | null;
   metaDesc?: string | null;
   metaKeys?: string | null;
+  isFeatured?: boolean;
   createdAt: Date;
 }
 
