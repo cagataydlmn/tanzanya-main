@@ -201,6 +201,7 @@ export default function HomeAdmin() {
                 >
                   <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setWhyUsImg, 'whyUs')} disabled={uploadingField === 'whyUs'} className="hidden" />
                   <span className="text-sm font-bold text-stone-700">{uploadingField === 'whyUs' ? 'Yükleniyor...' : 'Görsel Seçin veya Sürükleyin'}</span>
+                  <p className="text-amber-700 font-medium text-xs mt-1">Önerilen Görsel Ölçüsü: 800 x 800px (kare format)</p>
                 </label>
               )}
             </div>
@@ -280,7 +281,7 @@ export default function HomeAdmin() {
           <button 
             type="submit" 
             disabled={saving}
-            className="w-full md:w-auto px-12 py-4 bg-amber-700 text-white font-bold uppercase tracking-widest text-sm hover:bg-amber-800 disabled:opacity-50 transition-colors rounded shadow-luxury"
+            className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'Kaydediliyor...' : 'Tüm Değişiklikleri Kaydet'}
           </button>

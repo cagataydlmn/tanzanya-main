@@ -27,7 +27,7 @@ export default async function Production() {
   };
 
   const info = infoRes.success && infoRes.data ? infoRes.data : defaultInfo;
-  
+
   const defaultSteps = [
     {
       title: "Tasarım ve Projelendirme",
@@ -41,7 +41,7 @@ export default async function Production() {
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Header */}
         <div className="text-center mb-20">
           <h1 className="text-4xl md:text-5xl font-serif text-stone-900 mb-4">{info.title}</h1>
@@ -62,12 +62,7 @@ export default async function Production() {
             sizes="100vw"
             className="object-cover group-hover:scale-105 transition-transform duration-700"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-white z-10">
-            <span className="bg-stone-900/80 backdrop-blur-md px-4 py-2 rounded text-xs md:text-sm font-bold uppercase tracking-widest border border-amber-600/40 text-amber-400">
-              5000 m² Entegre Üretim Tesisimiz
-            </span>
-          </div>
+
         </div>
 
         {/* Process Timeline */}
@@ -78,7 +73,7 @@ export default async function Production() {
           <div className="space-y-12">
             {steps.map((step: any, i: number) => (
               <div key={i} className={`flex flex-col md:flex-row items-center justify-between ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                
+
                 {/* Content */}
                 <div className="w-full md:w-[45%] bg-white p-8 border border-stone-200 shadow-sm relative z-10 group hover:border-amber-700 transition-colors">
                   <div className="text-amber-700 font-serif text-5xl font-bold mb-4 opacity-20">0{i + 1}</div>

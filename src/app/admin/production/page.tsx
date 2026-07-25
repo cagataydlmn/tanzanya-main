@@ -272,6 +272,7 @@ export default function ProductionAdmin() {
                   {uploading ? 'Görsel Yükleniyor...' : 'Görsel Yüklemek İçin Tıklayın veya Sürükleyin'}
                 </span>
                 <span className="text-xs text-stone-500 mt-1">PNG, JPG, WEBP (Max. 5MB)</span>
+                <p className="text-amber-700 font-medium text-xs mt-1">Önerilen Görsel Ölçüsü: 1920 x 1080px (veya benzeri geniş yatay format)</p>
               </label>
             )}
           </div>
@@ -319,7 +320,7 @@ export default function ProductionAdmin() {
             <button 
               type="submit" 
               disabled={infoSaving}
-              className="px-6 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-700 transition-colors disabled:opacity-50"
+              className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {infoSaving ? 'Kaydediliyor...' : 'Genel Bilgileri Kaydet'}
             </button>
@@ -397,7 +398,7 @@ export default function ProductionAdmin() {
               <button 
                 type="submit" 
                 disabled={stepSaving}
-                className="px-6 py-3 bg-amber-700 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors rounded disabled:opacity-50"
+                className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {stepSaving ? 'Kaydediliyor...' : 'Kaydet'}
               </button>

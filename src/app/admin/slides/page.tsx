@@ -367,7 +367,7 @@ export default function AdminSlides() {
               <button 
                 type="submit" 
                 disabled={loading || uploading || !bg}
-                className="px-8 py-3 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors cursor-pointer disabled:bg-stone-400 disabled:cursor-not-allowed"
+                className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Yükleniyor...' : editingId ? 'Değişiklikleri Kaydet' : 'Slaytı Kaydet'}
               </button>

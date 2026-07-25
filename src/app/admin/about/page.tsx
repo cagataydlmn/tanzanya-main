@@ -164,18 +164,11 @@ export default function AboutAdmin() {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-end mb-8 border-b border-stone-200 pb-4">
         <div>
-          <h1 className="text-2xl font-serif text-stone-900 font-bold">Hakkımızda Sayfası</h1>
+          <h1 className="text-2xl font-serif font-bold text-stone-900">Hakkımızda Sayfası İçeriği</h1>
           <p className="text-sm text-stone-500 mt-1">Sitenizin hakkımızda sayfasındaki tüm alanları yönetin.</p>
         </div>
-        <button 
-          onClick={handleSave}
-          disabled={saving}
-          className="px-6 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-700 transition-colors disabled:opacity-50"
-        >
-          {saving ? 'Kaydediliyor...' : 'Tümünü Kaydet'}
-        </button>
       </div>
 
       <form className="space-y-12 pb-24" onSubmit={handleSave}>
@@ -220,6 +213,7 @@ export default function AboutAdmin() {
               >
                 <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setStoryImg, 'story')} disabled={uploadingField === 'story'} className="hidden" />
                 <span className="text-sm font-bold text-stone-700">{uploadingField === 'story' ? 'Yükleniyor...' : 'Görsel Seçin veya Sürükleyin'}</span>
+                <p className="text-amber-700 font-medium text-xs mt-1">Önerilen Görsel Ölçüsü: 800 x 800px (kare format)</p>
               </label>
             )}
           </div>
@@ -278,6 +272,7 @@ export default function AboutAdmin() {
                 >
                   <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setBridgeImg, 'bridge')} disabled={uploadingField === 'bridge'} className="hidden" />
                   <span className="text-sm font-bold text-stone-700">{uploadingField === 'bridge' ? 'Yükleniyor...' : 'Görsel Seçin veya Sürükleyin'}</span>
+                  <p className="text-amber-700 font-medium text-xs mt-1">Önerilen Görsel Ölçüsü: 1920 x 1080px (16:9 yatay format)</p>
                 </label>
               )}
             </div>
@@ -383,6 +378,15 @@ export default function AboutAdmin() {
           </div>
         </section>
 
+        <div className="flex justify-end pt-6 border-t border-stone-200">
+          <button 
+            type="submit"
+            disabled={saving}
+            className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -39,18 +39,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+import { getContactSettings } from '@/app/actions/contact';
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const contactRes = await getContactSettings();
+  const contactSettings = contactRes.success ? contactRes.data : null;
+
   return (
     <html lang="en" className={`${cinzel.variable} ${montserrat.variable}`}>
       <body className="bg-stone-50 text-stone-900 antialiased">
         <RouteLoader />
         <Navbar />
         {children}
-        <Footer />
+        <Footer settings={contactSettings} />
       </body>
     </html>
   );

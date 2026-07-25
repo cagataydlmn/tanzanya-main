@@ -407,6 +407,7 @@ export default function AdminServices() {
                     {uploading ? 'Görsel Hazırlanıyor... Çekiçler Çalışıyor!' : isDragging ? 'Bırakın ve Yükleyin' : 'Kapak Görseli Seçmek İçin Tıklayın veya Sürükleyin'}
                   </p>
                   <p className="text-stone-400 text-xs mt-2">Maks. boyut 5MB (JPG, PNG, WEBP, SVG)</p>
+                  <p className="text-amber-700 font-medium text-xs mt-1">Önerilen Görsel Ölçüsü: 800 x 600px (veya benzeri yatay format)</p>
                 </label>
               )}
             </div>
@@ -422,7 +423,7 @@ export default function AdminServices() {
               <button 
                 type="submit" 
                 disabled={loading || uploading || !img || !slug}
-                className="px-8 py-3 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors cursor-pointer disabled:bg-stone-400 disabled:cursor-not-allowed rounded"
+                className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Kaydediliyor...' : (editingId ? 'Değişiklikleri Kaydet' : 'Hizmeti Kaydet')}
               </button>

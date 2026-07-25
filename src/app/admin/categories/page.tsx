@@ -119,7 +119,7 @@ export default function AdminCategories() {
           <button 
             type="submit" 
             disabled={saving || !newCategory.trim()}
-            className="px-8 py-3 bg-stone-900 text-white font-bold uppercase tracking-wider text-sm hover:bg-amber-800 transition-colors cursor-pointer disabled:bg-stone-400 disabled:cursor-not-allowed rounded shrink-0"
+            className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           >
             {saving ? 'Ekleniyor...' : 'Ekle'}
           </button>
@@ -153,7 +153,7 @@ export default function AdminCategories() {
                           onChange={(e) => setEditingName(e.target.value)}
                           className="flex-1 bg-white border border-stone-300 px-3 py-2 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
                         />
-                        <button type="submit" disabled={saving} className="px-4 py-2 bg-stone-900 text-white text-xs rounded hover:bg-stone-800">Kaydet</button>
+                        <button type="submit" disabled={saving} className="px-4 py-2 bg-stone-900 text-white font-bold text-xs uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">Kaydet</button>
                         <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 bg-stone-200 text-stone-700 text-xs rounded hover:bg-stone-300">İptal</button>
                       </form>
                     ) : (
