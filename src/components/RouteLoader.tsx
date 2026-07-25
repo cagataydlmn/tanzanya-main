@@ -62,11 +62,12 @@ function RouteLoaderInner() {
         {/* Brand details */}
         <div className="space-y-2 flex flex-col items-center">
           <Image 
-            src="/logo/logo.jpeg"
+            src="/logo/StarDecorLogo_page-0002.jpg"
             alt="Tanzanya Logo"
             width={160}
             height={50}
-            className="h-10 w-auto object-contain mb-1"
+            priority
+            className="h-10 w-auto object-contain mb-1 rounded-md"
           />
           <div className="w-12 h-[2px] bg-amber-700 mx-auto"></div>
           <p className="text-xs text-stone-500 font-medium uppercase tracking-widest animate-pulse mt-2">

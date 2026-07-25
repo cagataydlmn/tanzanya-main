@@ -81,11 +81,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="w-full max-w-md bg-white border border-stone-200 shadow-xl p-6 md:p-12 rounded">
           <div className="flex flex-col items-center mb-8">
             <Image 
-              src="/logo/logo.jpeg"
+              src="/logo/StarDecorLogo_page-0003.jpg"
               alt="Tanzanya Logo"
               width={180}
               height={55}
-              className="h-12 w-auto object-contain mb-3"
+              className="h-12 w-auto object-contain mb-3 rounded-md"
             />
             <p className="text-stone-500 text-xs uppercase tracking-widest font-semibold">Yönetim Paneli Girişi</p>
           </div>
@@ -147,11 +147,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <header className="md:hidden bg-stone-900 text-white px-4 py-3 flex items-center justify-between z-30 shadow-md sticky top-0">
         <Link href="/admin" className="flex items-center gap-2">
           <Image 
-            src="/logo/logo.jpeg"
+            src="/logo/StarDecorLogo_page-0003.jpg"
             alt="Tanzanya Logo"
             width={110}
             height={32}
-            className="h-7 w-auto object-contain brightness-0 invert"
+            className="h-7 w-auto object-contain rounded-sm"
           />
           <span className="text-[10px] text-amber-500 font-bold uppercase tracking-widest ml-1">PANEL</span>
         </Link>
@@ -199,11 +199,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="p-6 border-b border-stone-800 flex items-center justify-between shrink-0">
             <Link href="/admin" className="flex flex-col gap-1">
               <Image 
-                src="/logo/logo.jpeg"
+                src="/logo/StarDecorLogo_page-0003.jpg"
                 alt="Tanzanya Logo"
                 width={130}
                 height={40}
-                className="h-8 w-auto object-contain brightness-0 invert"
+                className="h-8 w-auto object-contain rounded-sm"
               />
               <span className="block text-[10px] font-sans text-amber-500 font-normal tracking-widest mt-1">YÖNETİM PANELİ</span>
             </Link>
@@ -293,8 +293,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               Çıkış Yap
             </button>
 
-            <div className="w-9 h-9 rounded-full bg-stone-900 text-amber-500 font-bold text-xs flex items-center justify-center border border-stone-700 shadow-sm" title="Yönetici Arayüzü">
-              AD
+            <div className="w-9 h-9 rounded-full overflow-hidden border border-stone-200 shadow-sm flex items-center justify-center bg-stone-100" title="Yönetici Arayüzü">
+              <Image 
+                src="/logo/StarDecorLogo_page-0006.jpg" 
+                alt="Admin Logo" 
+                width={36} 
+                height={36} 
+                className="w-full h-full object-cover" 
+              />
             </div>
           </div>
         </header>

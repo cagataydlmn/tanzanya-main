@@ -29,11 +29,11 @@ export default function Footer({ settings }: { settings?: any }) {
           <div className="space-y-6 lg:col-span-3">
             <Link href="/" className="flex items-center block">
               <Image 
-                src="/logo/logo.jpeg"
+                src="/logo/StarDecorLogo_page-0003.jpg"
                 alt="Tanzanya Logo"
                 width={160}
                 height={50}
-                className="h-10 w-auto object-contain brightness-0 invert"
+                className="h-10 w-auto object-contain rounded-md"
               />
             </Link>
             <p className="text-sm leading-relaxed text-stone-400">

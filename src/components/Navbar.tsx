@@ -50,7 +50,7 @@ export default function Navbar() {
           className="flex items-center shrink-0 mr-8"
         >
           <Image 
-            src="/logo/logo.jpeg"
+            src="/logo/StarDecorLogo_page-0002.jpg"
             alt="Tanzanya Logo"
             width={160}
             height={50}
