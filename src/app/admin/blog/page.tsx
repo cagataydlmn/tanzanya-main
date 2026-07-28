@@ -15,10 +15,9 @@ interface Post {
   excerpt: string;
   content: string;
   image: string | null;
-  status: 'DRAFT' | 'PUBLISHED';
-  viewCount: number;
+  status: string;
+  views: number;
   createdAt: Date;
-  updatedAt: Date;
   metaTitle?: string | null;
   metaDesc?: string | null;
   metaKeys?: string | null;
@@ -33,7 +32,7 @@ export default function AdminBlog() {
   // Form States
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Trendler');
-  const [status, setStatus] = useState<'DRAFT' | 'PUBLISHED'>('PUBLISHED');
+  const [status, setStatus] = useState('Yayında');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
@@ -85,7 +84,7 @@ export default function AdminBlog() {
     setEditingPost(null);
     setTitle('');
     setCategory(categories.length > 0 ? categories[0].name : '');
-    setStatus('PUBLISHED');
+    setStatus('Yayında');
     setExcerpt('');
     setContent('');
     setImage('');
