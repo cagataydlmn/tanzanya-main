@@ -1,16 +1,22 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "İletişim",
-  description: "Tanzanya Mobilya ile iletişime geçin. Proje talepleriniz, mobilya üretim detayları ve showroom adresimiz için iletişim bilgilerimiz.",
+  title: "Contact",
+  description: "Get in touch with Star Decor. Contact information for project requests, furniture production details, and showroom address.",
 };
 
 import { getContactSettings } from '@/app/actions/contact';
+import { getPageHeader } from '@/app/actions/page-headers';
 import SocialIcon from '@/components/SocialIcon';
 
 export default async function Contact() {
   const contactRes = await getContactSettings();
   const settings = contactRes.success ? contactRes.data : null;
+
+  const headerRes = await getPageHeader('contact');
+  const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
+  const pageTitle = headerData?.title || "Contact Us";
+  const pageDesc = headerData?.description || "Get in touch with us. We are always here for your projects and requests.";
 
   let socialLinks: any[] = [];
   try {
@@ -25,16 +31,18 @@ export default async function Contact() {
 
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif text-stone-900 mb-4">Contact</h1>
+          <h1 className="text-4xl md:text-5xl font-serif text-stone-900 mb-4">{pageTitle}</h1>
           <div className="w-20 h-1 bg-amber-700 mx-auto"></div>
-
+          <p className="text-stone-600 mt-6 max-w-2xl mx-auto whitespace-pre-wrap">
+            {pageDesc}
+          </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-16">
 
           {/* Contact Info */}
           <div className="space-y-8">
-            <h2 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-4">İletişim Bilgileri</h2>
+            <h2 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-4">Contact Information</h2>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
@@ -45,7 +53,7 @@ export default async function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-bold text-stone-900 mb-1">Fabrika & Merkez</h3>
+                  <h3 className="font-bold text-stone-900 mb-1">Factory & Headquarters</h3>
                   <p className="text-stone-600 whitespace-pre-line">{settings?.address || 'Mikocheni B, Rose Garden Road, Uzima Street\nKinondoni District, Dar es Salaam, Tanzania'}</p>
                 </div>
               </div>
@@ -57,7 +65,7 @@ export default async function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-bold text-stone-900 mb-1">Telefon</h3>
+                  <h3 className="font-bold text-stone-900 mb-1">Phone</h3>
                   <p className="text-stone-600">{settings?.phone1 || '0 651 137 287'}</p>
                   {settings?.phone2 && <p className="text-stone-600">{settings?.phone2}</p>}
                 </div>
@@ -70,7 +78,7 @@ export default async function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-bold text-stone-900 mb-1">E-Posta</h3>
+                  <h3 className="font-bold text-stone-900 mb-1">Email</h3>
                   <p className="text-stone-600">{settings?.email || 'stardecortz@gmail.com'}</p>
                 </div>
               </div>
@@ -82,7 +90,7 @@ export default async function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-bold text-stone-900 mb-1">Sosyal Medya</h3>
+                  <h3 className="font-bold text-stone-900 mb-1">Social Media</h3>
                   <div className="flex items-center gap-4 mt-2">
                     {socialLinks.map((link: any, index: number) => {
                       return (
@@ -101,7 +109,7 @@ export default async function Contact() {
           {/* Map Placeholder */}
           <div className="bg-stone-200 border border-stone-300 w-full min-h-[400px] flex items-center justify-center relative overflow-hidden">
             <iframe
-              src={settings?.mapIframe || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.062996987857!2d39.2519711!3d-6.7621734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4d7b36781765%3A0x212569b7181875a7!2sersanfurnitureTZ!5e0!3m2!1str!2str!4v1784646295368!5m2!1str!2str"}
+              src={settings?.mapIframe || "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3962.077108117358!2d39.252118!3d-6.7604522!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4d8a2a606a3d%3A0xa9ce81db02869dac!2sStarDecor%20Furniture%20and%20Interior%20Design!5e0!3m2!1str!2str!4v1785182002797!5m2!1str!2str"}
               className="absolute inset-0 w-full h-full border-0"
               allowFullScreen={true}
               loading="lazy"

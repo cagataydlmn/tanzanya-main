@@ -6,36 +6,36 @@ import { getGalleryItems, createGalleryItem, deleteGalleryItem, updateGalleryIte
 import { getCategories, createCategory } from '@/app/actions/categories';
 import { uploadImageAction } from '@/app/actions/upload';
 import Image from 'next/image';
+import PageHeaderForm from '@/components/admin/PageHeaderForm';
 
 interface GalleryItem {
   id: number;
   title: string;
+  category: string;
+  img: string;
   metaTitle?: string | null;
   metaDesc?: string | null;
   metaKeys?: string | null;
-  category: string;
-  img: string;
   order: number;
   createdAt: Date;
 }
 
 export default function AdminGallery() {
   const [items, setItems] = useState<GalleryItem[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   
   // Form States
   const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [isNewCategory, setIsNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [img, setImg] = useState('');
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDesc, setMetaDesc] = useState('');
   const [metaKeys, setMetaKeys] = useState('');
-  const [category, setCategory] = useState('Konut');
-  const [img, setImg] = useState('');
-  const [order, setOrder] = useState<number>(999);
-  
-  const [isNewCategory, setIsNewCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [availableCategories, setAvailableCategories] = useState<string[]>(["Konut", "Otel", "Ofis", "Restoran", "Eğitim", "Sağlık"]);
+  const [order, setOrder] = useState(0);
   
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -43,34 +43,43 @@ export default function AdminGallery() {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const fetchItems = async () => {
-    const [galleryRes, catRes] = await Promise.all([
-      getGalleryItems(),
-      getCategories()
-    ]);
-    
-    if (galleryRes.success && galleryRes.data) {
-      setItems(galleryRes.data as GalleryItem[]);
+    const res = await getGalleryItems();
+    if (res.success && res.data) {
+      setItems(res.data as GalleryItem[]);
     }
-    
-    if (catRes.success && catRes.data) {
-      setAvailableCategories((catRes.data as any[]).map(c => c.name));
+  };
+
+  const fetchCategories = async () => {
+    const res = await getCategories();
+    if (res.success && res.data) {
+      setCategories(res.data);
+      if (res.data.length > 0 && !category && !isNewCategory) {
+        setCategory(res.data[0].name);
+      }
     }
   };
 
   useEffect(() => {
     fetchItems();
+    fetchCategories();
   }, []);
 
   const handleAddNewClick = () => {
     setEditingId(null);
     setTitle('');
+    setImg('');
     setMetaTitle('');
     setMetaDesc('');
     setMetaKeys('');
-    setCategory('Konut');
-    setImg('');
-    setOrder(999);
-    setIsNewCategory(false);
+    setOrder(items.length > 0 ? items[items.length - 1].order + 1 : 1);
+    
+    if (categories.length > 0) {
+      setIsNewCategory(false);
+      setCategory(categories[0].name);
+    } else {
+      setIsNewCategory(true);
+    }
+    
     setNewCategoryName('');
     setShowForm(true);
     setMessage(null);
@@ -79,14 +88,14 @@ export default function AdminGallery() {
   const handleEditClick = (item: GalleryItem) => {
     setEditingId(item.id);
     setTitle(item.title);
+    setCategory(item.category);
+    setIsNewCategory(false);
+    setNewCategoryName('');
+    setImg(item.img);
     setMetaTitle(item.metaTitle || '');
     setMetaDesc(item.metaDesc || '');
     setMetaKeys(item.metaKeys || '');
-    setCategory(item.category);
-    setImg(item.img);
-    setOrder(item.order !== undefined ? item.order : 999);
-    setIsNewCategory(false);
-    setNewCategoryName('');
+    setOrder(item.order);
     setShowForm(true);
     setMessage(null);
   };
@@ -103,7 +112,7 @@ export default function AdminGallery() {
 
     if (res.success && res.url) {
       setImg(res.url);
-      setMessage({ type: 'success', text: 'Görsel başarıyla sunucuya yüklendi.' });
+      setMessage({ type: 'success', text: 'Görsel başarıyla yüklendi.' });
     } else {
       setMessage({ type: 'error', text: res.error || 'Görsel yüklenemedi.' });
     }
@@ -193,6 +202,7 @@ export default function AdminGallery() {
       setShowForm(false);
       setEditingId(null);
       fetchItems();
+      fetchCategories();
     } else {
       setMessage({ type: 'error', text: res.error || (editingId ? 'Görsel güncellenirken bir hata oluştu.' : 'Görsel eklenirken bir hata oluştu.') });
     }
@@ -200,6 +210,7 @@ export default function AdminGallery() {
 
   return (
     <div className="space-y-6">
+      <PageHeaderForm pageIdentifier="gallery" />
       
       {/* Alert Message */}
       {message && (

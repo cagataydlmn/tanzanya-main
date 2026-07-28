@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { getServices, createService, updateService, deleteService } from '@/app/actions/services';
 import { uploadImageAction } from '@/app/actions/upload';
 import Image from 'next/image';
+import PageHeaderForm from '@/components/admin/PageHeaderForm';
 
 interface ServiceItem {
   id: number;
@@ -22,7 +23,7 @@ interface ServiceItem {
 }
 
 export default function AdminServices() {
-  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [services, setServices] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   
@@ -47,7 +48,7 @@ export default function AdminServices() {
   const fetchServices = async () => {
     const res = await getServices();
     if (res.success && res.data) {
-      setServices(res.data as ServiceItem[]);
+      setServices(res.data as any[]);
     }
   };
 
@@ -72,19 +73,19 @@ export default function AdminServices() {
     setMessage(null);
   };
 
-  const handleEditClick = (item: ServiceItem) => {
-    setEditingId(item.id);
-    setSlug(item.slug);
-    setTitle(item.title);
-    setDesc(item.desc);
-    setLongDesc(item.longDesc);
-    setFeatures(item.features);
-    setSteps(item.steps);
-    setImg(item.img);
-    setMetaTitle(item.metaTitle || '');
-    setMetaDesc(item.metaDesc || '');
-    setMetaKeys(item.metaKeys || '');
-    setIsFeatured(item.isFeatured || false);
+  const handleEditClick = (service: any) => {
+    setEditingId(service.id);
+    setSlug(service.slug);
+    setTitle(service.title);
+    setDesc(service.desc);
+    setLongDesc(service.longDesc);
+    setFeatures(service.features);
+    setSteps(service.steps);
+    setImg(service.img);
+    setMetaTitle(service.metaTitle || '');
+    setMetaDesc(service.metaDesc || '');
+    setMetaKeys(service.metaKeys || '');
+    setIsFeatured(service.isFeatured || false);
     setShowForm(true);
     setMessage(null);
   };
@@ -189,6 +190,7 @@ export default function AdminServices() {
 
   return (
     <div className="space-y-6">
+      <PageHeaderForm pageIdentifier="services" />
       {message && (
         <div className={`p-4 border text-sm font-medium ${
           message.type === 'success' ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'

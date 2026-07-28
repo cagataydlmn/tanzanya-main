@@ -54,14 +54,14 @@ export default async function BlogPostDetail({ params }: Props) {
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
       <div className="max-w-4xl mx-auto px-6">
-        
+
         {/* Breadcrumb / Geri Dönüş */}
         <div className="mb-8">
           <Link href="/blog" className="text-stone-500 hover:text-amber-700 text-sm font-semibold uppercase tracking-wider inline-flex items-center gap-2 transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Blog Listesine Dön
+            Return to Blog List
           </Link>
         </div>
 
@@ -73,7 +73,7 @@ export default async function BlogPostDetail({ params }: Props) {
             </span>
             <time className="text-stone-400 text-sm">{formattedDate}</time>
             <span className="text-stone-300">|</span>
-            <span className="text-stone-400 text-sm">{post.views} Görüntülenme</span>
+            <span className="text-stone-400 text-sm">{post.views} Views</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-serif text-stone-900 leading-tight">
             {post.title}
@@ -83,7 +83,7 @@ export default async function BlogPostDetail({ params }: Props) {
         {/* Kapak Görseli */}
         {post.image && (
           <div className="w-full aspect-[21/9] bg-stone-200 border border-stone-200 shadow-sm relative overflow-hidden mb-12">
-            <Image 
+            <Image
               src={post.image}
               alt={post.metaTitle || post.title}
               fill

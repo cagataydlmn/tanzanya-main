@@ -15,20 +15,20 @@ export default function Footer({ settings }: { settings?: any }) {
 
   let socialLinks: any[] = [];
   try {
-    socialLinks = settings?.socialLinks 
-      ? (typeof settings.socialLinks === 'string' ? JSON.parse(settings.socialLinks) : settings.socialLinks) 
+    socialLinks = settings?.socialLinks
+      ? (typeof settings.socialLinks === 'string' ? JSON.parse(settings.socialLinks) : settings.socialLinks)
       : [];
-  } catch(e) {}
+  } catch (e) { }
 
   return (
     <footer className="bg-stone-900 text-stone-300 pt-20 pb-10 border-t border-stone-800">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-16">
-          
+
           {/* Brand & About */}
           <div className="space-y-6 lg:col-span-3">
             <Link href="/" className="flex items-center block">
-              <Image 
+              <Image
                 src="/logo/StarDecorLogo_page-0003.jpg"
                 alt="Tanzanya Logo"
                 width={160}
@@ -37,7 +37,7 @@ export default function Footer({ settings }: { settings?: any }) {
               />
             </Link>
             <p className="text-sm leading-relaxed text-stone-400">
-              Geleneksel ahşap ustalığını modern tasarım vizyonuyla birleştirerek, yaşam ve çalışma alanlarınıza değer katan anahtar teslim mobilya çözümleri sunuyoruz.
+              Combining traditional woodworking craftsmanship with a modern design vision, we offer turnkey furniture solutions that add value to your living and working spaces.
             </p>
             <div className="flex gap-4 pt-2">
               {socialLinks.map((link: any, index: number) => {
@@ -53,20 +53,20 @@ export default function Footer({ settings }: { settings?: any }) {
 
           {/* Quick Links */}
           <div className="lg:col-span-2">
-            <h4 className="text-white font-bold uppercase tracking-wider mb-6 text-sm">Bağlantılar</h4>
+            <h4 className="text-white font-bold uppercase tracking-wider mb-6 text-sm">Quick Links</h4>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/about" className="hover:text-amber-500 transition-colors">Kurumsal</Link></li>
-              <li><Link href="/services" className="hover:text-amber-500 transition-colors">Hizmetlerimiz</Link></li>
-              <li><Link href="/projects" className="hover:text-amber-500 transition-colors">Referans Projeler</Link></li>
-              <li><Link href="/gallery" className="hover:text-amber-500 transition-colors">Galeri</Link></li>
-              <li><Link href="/production" className="hover:text-amber-500 transition-colors">Üretim Tesisimiz</Link></li>
-              <li><Link href="/contact" className="hover:text-amber-500 transition-colors">İletişim</Link></li>
+              <li><Link href="/about" className="hover:text-amber-500 transition-colors">About Us</Link></li>
+              <li><Link href="/services" className="hover:text-amber-500 transition-colors">Services</Link></li>
+              <li><Link href="/projects" className="hover:text-amber-500 transition-colors">Projects</Link></li>
+              <li><Link href="/gallery" className="hover:text-amber-500 transition-colors">Gallery</Link></li>
+              <li><Link href="/production" className="hover:text-amber-500 transition-colors">Production Facility</Link></li>
+              <li><Link href="/contact" className="hover:text-amber-500 transition-colors">Contact</Link></li>
             </ul>
           </div>
 
           {/* Contact Details */}
           <div className="lg:col-span-3">
-            <h4 className="text-white font-bold uppercase tracking-wider mb-6 text-sm">İletişim</h4>
+            <h4 className="text-white font-bold uppercase tracking-wider mb-6 text-sm">Contact Us</h4>
             <ul className="space-y-4 text-sm text-stone-400">
               <li className="flex items-start gap-3">
                 <svg className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,11 +92,11 @@ export default function Footer({ settings }: { settings?: any }) {
 
           {/* Map Location */}
           <div className="lg:col-span-4 h-[250px] w-full rounded-lg overflow-hidden bg-stone-800 border border-stone-800 relative">
-            <iframe 
-              src={settings?.mapIframe || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.062996987857!2d39.2519711!3d-6.7621734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4d7b36781765%3A0x212569b7181875a7!2sersanfurnitureTZ!5e0!3m2!1str!2str!4v1784646295368!5m2!1str!2str"} 
+            <iframe
+              src={settings?.mapIframe || "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3962.077108117358!2d39.252118!3d-6.7604522!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4d8a2a606a3d%3A0xa9ce81db02869dac!2sStarDecor%20Furniture%20and%20Interior%20Design!5e0!3m2!1str!2str!4v1785182002797!5m2!1str!2str"}
               className="absolute inset-0 w-full h-full border-0 opacity-80 hover:opacity-100 transition-opacity duration-300"
               allowFullScreen={true}
-              loading="lazy" 
+              loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
             ></iframe>
           </div>
@@ -105,11 +105,11 @@ export default function Footer({ settings }: { settings?: any }) {
 
         {/* Copyright */}
         <div className="pt-8 border-t border-stone-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-stone-500">
-          <p>&copy; {currentYear} Tanzanya Mobilya & Dekorasyon. Tüm hakları saklıdır.</p>
+          <p>&copy; {currentYear} Star Decor. All rights reserved. - Designed by <Link href="https://acdigital.tech/">A&C DIGITAL</Link></p>
           <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-amber-500 transition-colors">Gizlilik Politikası</Link>
-            <Link href="/terms" className="hover:text-amber-500 transition-colors">Kullanım Şartları</Link>
-            <Link href="/kvkk" className="hover:text-amber-500 transition-colors">KVKK Aydınlatma Metni</Link>
+            <Link href="/privacy" className="hover:text-amber-500 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-amber-500 transition-colors">Terms of Use</Link>
+            <Link href="/kvkk" className="hover:text-amber-500 transition-colors">Data Privacy (KVKK)</Link>
           </div>
         </div>
       </div>

@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { getBlogPosts, createBlogPost, updateBlogPost, deleteBlogPost } from '@/app/actions/blog';
+import { getCategories } from '@/app/actions/categories';
 import { uploadImageAction } from '@/app/actions/upload';
 import Image from 'next/image';
+import PageHeaderForm from '@/components/admin/PageHeaderForm';
 
 interface Post {
   id: number;
@@ -12,24 +14,26 @@ interface Post {
   category: string;
   excerpt: string;
   content: string;
-  status: string;
-  views: number;
   image: string | null;
+  status: 'DRAFT' | 'PUBLISHED';
+  viewCount: number;
+  createdAt: Date;
+  updatedAt: Date;
   metaTitle?: string | null;
   metaDesc?: string | null;
   metaKeys?: string | null;
-  createdAt: Date;
 }
 
 export default function AdminBlog() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [categories, setCategories] = useState<{ id: number, name: string }[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   
   // Form States
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Trendler');
-  const [status, setStatus] = useState('Yayında');
+  const [status, setStatus] = useState<'DRAFT' | 'PUBLISHED'>('PUBLISHED');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
@@ -50,8 +54,16 @@ export default function AdminBlog() {
     }
   };
 
+  const fetchCategories = async () => {
+    const res = await getCategories();
+    if (res.success && res.data) {
+      setCategories(res.data);
+    }
+  };
+
   useEffect(() => {
     fetchPosts();
+    fetchCategories();
   }, []);
 
   const handleEditClick = (post: Post) => {
@@ -72,8 +84,8 @@ export default function AdminBlog() {
   const handleAddNewClick = () => {
     setEditingPost(null);
     setTitle('');
-    setCategory('Trendler');
-    setStatus('Yayında');
+    setCategory(categories.length > 0 ? categories[0].name : '');
+    setStatus('PUBLISHED');
     setExcerpt('');
     setContent('');
     setImage('');
@@ -185,7 +197,8 @@ export default function AdminBlog() {
 
   return (
     <div className="space-y-6">
-      
+      <PageHeaderForm pageIdentifier="blog" />
+
       {/* Alert Message */}
       {message && (
         <div className={`p-4 border text-sm font-medium ${
@@ -234,11 +247,10 @@ export default function AdminBlog() {
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700"
                 >
-                  <option>Trendler</option>
-                  <option>Ofis Mobilyaları</option>
-                  <option>Üretim Rehberi</option>
-                  <option>Ticari Projeler</option>
-                  <option>Duyurular</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.name}>{cat.name}</option>
+                  ))}
+                  {categories.length === 0 && <option value="">Kategori bulunamadı</option>}
                 </select>
               </div>
               <div className="space-y-2">

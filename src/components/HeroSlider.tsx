@@ -59,17 +59,16 @@ export default function HeroSlider() {
 
   return (
     <section className="relative h-[460px] md:h-[540px] lg:h-[580px] max-h-[640px] w-full max-w-[1920px] mx-auto flex flex-col justify-center items-center px-6 overflow-hidden bg-stone-950">
-      
+
       {/* Background Slides with Dual-Layer Optimization */}
       {slides.map((slide, index) => (
-        <div 
+        <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            index === currentSlide ? "opacity-100 z-0" : "opacity-0 -z-10"
-          }`}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100 z-0" : "opacity-0 -z-10"
+            }`}
         >
           {/* Layer 1: Blurred background fill to prevent edge gaps */}
-          <Image 
+          <Image
             src={slide.bg}
             alt=""
             fill
@@ -80,7 +79,7 @@ export default function HeroSlider() {
           />
 
           {/* Layer 2: Main crisp image centered */}
-          <Image 
+          <Image
             src={slide.bg}
             alt={slide.metaTitle || slide.title}
             fill
@@ -98,39 +97,38 @@ export default function HeroSlider() {
       {/* Content Container */}
       <div className="relative z-10 max-w-4xl w-full h-[380px] md:h-[320px] flex items-center justify-center">
         {slides.map((slide, index) => (
-          <div 
+          <div
             key={index}
-            className={`absolute inset-x-0 bottom-4 top-0 flex flex-col items-center justify-center text-center transition-all duration-700 ease-in-out ${
-              index === currentSlide 
-                ? "opacity-100 scale-100 pointer-events-auto z-10" 
-                : "opacity-0 scale-[0.97] pointer-events-none z-0"
-            }`}
+            className={`absolute inset-x-0 bottom-4 top-0 flex flex-col items-center justify-center text-center transition-all duration-700 ease-in-out ${index === currentSlide
+              ? "opacity-100 scale-100 pointer-events-auto z-10"
+              : "opacity-0 scale-[0.97] pointer-events-none z-0"
+              }`}
           >
             <div className="inline-block px-3 py-1 border-b border-amber-600/30 text-amber-500 text-xs md:text-sm uppercase tracking-[0.2em] mb-4 md:mb-6 font-semibold">
               {slide.subtitle}
             </div>
-            
+
             <h1 className="text-2xl md:text-5xl font-serif text-white leading-tight font-bold tracking-tight px-2">
               {slide.title}
             </h1>
-            
+
             <p className="text-xs md:text-base text-stone-300 max-w-xl md:max-w-2xl mx-auto leading-relaxed mt-3 md:mt-4 mb-6 md:mb-8 px-4">
               {slide.desc}
             </p>
 
             {/* Action Buttons - Compact horizontal layout on all screen sizes */}
             <div className="flex flex-row gap-3 md:gap-4 justify-center w-full px-4">
-              <Link 
-                href="/quote" 
+              <Link
+                href="/quote"
                 className="px-5 py-3 md:px-8 md:py-4 bg-amber-700 text-white font-semibold text-xs md:text-sm uppercase tracking-wider transition-all hover:bg-amber-800 shadow-md hover:shadow-amber-900/20 whitespace-nowrap"
               >
-                Teklif Al
+                Get A Quote
               </Link>
-              <Link 
-                href="/projects" 
+              <Link
+                href="/projects"
                 className="px-5 py-3 md:px-8 md:py-4 bg-transparent border border-stone-400 text-white font-semibold text-xs md:text-sm uppercase tracking-wider transition-all hover:bg-white hover:text-stone-900 hover:border-white whitespace-nowrap"
               >
-                Projelerimiz
+                Projects
               </Link>
             </div>
           </div>
@@ -144,9 +142,8 @@ export default function HeroSlider() {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-8 h-[3px] transition-all cursor-pointer rounded-full ${
-                index === currentSlide ? "bg-amber-500" : "bg-white/20 hover:bg-white/50"
-              }`}
+              className={`w-8 h-[3px] transition-all cursor-pointer rounded-full ${index === currentSlide ? "bg-amber-500" : "bg-white/20 hover:bg-white/50"
+                }`}
               aria-label={`Slide ${index + 1}`}
             />
           ))}

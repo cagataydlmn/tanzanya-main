@@ -29,27 +29,27 @@ export default function Navbar() {
   }
 
   const navLinks = [
-    { name: 'Ana Sayfa', href: '/' },
-    { name: 'Hakkımızda', href: '/about' },
-    { name: 'Hizmetler', href: '/services' },
-    { name: 'Ürünler', href: '/products' },
-    { name: 'Üretim', href: '/production' },
-    { name: 'Projeler', href: '/projects' },
-    { name: 'Galeri', href: '/gallery' },
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Services', href: '/services' },
+    { name: 'Products', href: '/products' },
+    { name: 'Production', href: '/production' },
+    { name: 'Projects', href: '/projects' },
+    { name: 'Gallery', href: '/gallery' },
     { name: 'Blog', href: '/blog' },
-    { name: 'İletişim', href: '/contact' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
     <header ref={navRef} className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md shadow-sm transition-all duration-500">
       <nav className="flex items-center justify-between px-6 lg:px-12 py-4 md:py-6 max-w-[1600px] mx-auto">
         {/* Logo */}
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           onClick={() => setIsMobileMenuOpen(false)}
           className="flex items-center shrink-0 mr-8"
         >
-          <Image 
+          <Image
             src="/logo/StarDecorLogo_page-0002.jpg"
             alt="Tanzanya Logo"
             width={160}
@@ -58,18 +58,17 @@ export default function Navbar() {
             className="h-10 w-auto object-contain"
           />
         </Link>
-        
+
         {/* Desktop Links */}
         <div className="hidden xl:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
-              <Link 
+              <Link
                 key={link.href}
-                href={link.href} 
-                className={`font-medium text-sm uppercase tracking-widest transition-colors whitespace-nowrap ${
-                  isActive ? 'text-amber-700' : 'text-stone-600 hover:text-amber-700'
-                }`}
+                href={link.href}
+                className={`font-medium text-sm uppercase tracking-widest transition-colors whitespace-nowrap ${isActive ? 'text-amber-700' : 'text-stone-600 hover:text-amber-700'
+                  }`}
               >
                 {link.name}
               </Link>
@@ -79,14 +78,14 @@ export default function Navbar() {
 
         {/* Action Button & Mobile Menu Toggle */}
         <div className="flex items-center gap-4 shrink-0">
-          <Link 
+          <Link
             href="/quote"
             className="hidden sm:inline-flex items-center justify-center px-8 py-3 bg-stone-900 text-white font-medium text-xs uppercase tracking-[0.15em] transition-all duration-300 hover:bg-amber-700 hover:shadow-luxury"
           >
-            Teklif Al
+            Get A Quote
           </Link>
-          
-          <button 
+
+          <button
             className="xl:hidden p-2 text-stone-900 hover:bg-stone-100 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle Menu"
@@ -108,20 +107,19 @@ export default function Navbar() {
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
-              <Link 
+              <Link
                 key={link.href}
-                href={link.href} 
+                href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`px-6 py-4 border-b border-stone-100 font-medium text-sm uppercase tracking-widest transition-colors ${
-                  isActive ? 'bg-stone-50 text-amber-700' : 'text-stone-700 hover:bg-stone-50'
-                }`}
+                className={`px-6 py-4 border-b border-stone-100 font-medium text-sm uppercase tracking-widest transition-colors ${isActive ? 'bg-stone-50 text-amber-700' : 'text-stone-700 hover:bg-stone-50'
+                  }`}
               >
                 {link.name}
               </Link>
             );
           })}
           <div className="p-6 sm:hidden">
-            <Link 
+            <Link
               href="/quote"
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex w-full items-center justify-center px-8 py-4 bg-stone-900 text-white font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-amber-700"

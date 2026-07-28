@@ -133,7 +133,9 @@ model AboutPage {
   storyDesc1 String @db.Text
   storyDesc2 String @db.Text
 
+  visionTitle String?
   visionText  String @db.Text
+  missionTitle String?
   missionText String @db.Text
 
   bridgeLabel String
@@ -147,6 +149,7 @@ model AboutPage {
   brochureDesc       String  @db.Text
   brochureUrl        String?
   brochureHighlights Json
+  materialsTitle     String?
   materials          String  @db.Text
 
   policyTitle String
@@ -196,4 +199,12 @@ model ContactSettings {
   socialLinks Json
   mapIframe   String   @db.Text
   updatedAt   DateTime @updatedAt
+}
+
+model PageHeader {
+  id             Int      @id @default(autoincrement())
+  pageIdentifier String   @unique // e.g. "products", "production", "services", "projects", "gallery", "blog", "contact"
+  title          String
+  description    String   @db.Text
+  updatedAt      DateTime @updatedAt
 }

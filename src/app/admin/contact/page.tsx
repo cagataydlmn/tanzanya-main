@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { getContactSettings, updateContactSettings } from '@/app/actions/contact';
 
+import PageHeaderForm from '@/components/admin/PageHeaderForm';
+
 export default function ContactSettingsAdmin() {
   const [formData, setFormData] = useState({
     address: '',
@@ -87,7 +89,9 @@ export default function ContactSettingsAdmin() {
   if (isLoading) return <div className="p-8 text-center text-stone-500">Yükleniyor...</div>;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
+    <div className="space-y-6">
+      <PageHeaderForm pageIdentifier="contact" />
+      <div className="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
       <div className="p-6 border-b border-stone-200 bg-stone-50 flex justify-between items-center">
         <h2 className="text-lg font-bold text-stone-800">İletişim & Sosyal Medya Ayarları</h2>
       </div>
@@ -243,5 +247,7 @@ export default function ContactSettingsAdmin() {
         </form>
       </div>
     </div>
+    </div>
   );
 }
+

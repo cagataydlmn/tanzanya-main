@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getAboutPage, updateAboutPage } from '@/app/actions/about';
 import { uploadImageAction } from '@/app/actions/upload';
+import PageHeaderForm from '@/components/admin/PageHeaderForm';
 
 export default function AboutAdmin() {
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,9 @@ export default function AboutAdmin() {
   const [storyDesc1, setStoryDesc1] = useState("");
   const [storyDesc2, setStoryDesc2] = useState("");
 
+  const [visionTitle, setVisionTitle] = useState("");
   const [visionText, setVisionText] = useState("");
+  const [missionTitle, setMissionTitle] = useState("");
   const [missionText, setMissionText] = useState("");
 
   const [bridgeLabel, setBridgeLabel] = useState("");
@@ -39,6 +42,7 @@ export default function AboutAdmin() {
   const [brochureUrl, setBrochureUrl] = useState("");
   
   const [brochureHighlights, setBrochureHighlights] = useState<any[]>([]);
+  const [materialsTitle, setMaterialsTitle] = useState("");
   const [materials, setMaterials] = useState("");
 
   const [policyTitle, setPolicyTitle] = useState("");
@@ -64,7 +68,9 @@ export default function AboutAdmin() {
       setStoryDesc1(d.storyDesc1 || "");
       setStoryDesc2(d.storyDesc2 || "");
 
+      setVisionTitle(d.visionTitle || "");
       setVisionText(d.visionText || "");
+      setMissionTitle(d.missionTitle || "");
       setMissionText(d.missionText || "");
 
       setBridgeLabel(d.bridgeLabel || "");
@@ -79,6 +85,7 @@ export default function AboutAdmin() {
       setBrochureUrl(d.brochureUrl || "");
       
       try { setBrochureHighlights(typeof d.brochureHighlights === 'string' ? JSON.parse(d.brochureHighlights) : d.brochureHighlights); } catch(e) {}
+      setMaterialsTitle(d.materialsTitle || "");
       setMaterials(d.materials || "");
 
       setPolicyTitle(d.policyTitle || "");
@@ -130,11 +137,11 @@ export default function AboutAdmin() {
     const res = await updateAboutPage(dataId, {
       metaTitle, metaDesc, metaKeys,
       storyImg, storyTitle, storyDesc1, storyDesc2,
-      visionText, missionText,
+      visionTitle, visionText, missionTitle, missionText,
       bridgeLabel, bridgeTitle, bridgeDesc1, bridgeDesc2, bridgeImg,
       brochureLabel, brochureTitle, brochureDesc, brochureUrl,
       brochureHighlights: JSON.stringify(brochureHighlights),
-      materials,
+      materialsTitle, materials,
       policyTitle,
       policies: JSON.stringify(policies)
     });
@@ -164,6 +171,7 @@ export default function AboutAdmin() {
 
   return (
     <div className="space-y-8">
+      <PageHeaderForm pageIdentifier="about" />
       <div className="flex justify-between items-end mb-8 border-b border-stone-200 pb-4">
         <div>
           <h1 className="text-2xl font-serif font-bold text-stone-900">Hakkımızda Sayfası İçeriği</h1>
@@ -235,13 +243,25 @@ export default function AboutAdmin() {
         <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200 space-y-6">
           <h2 className="text-xl font-serif font-bold text-stone-900 border-b border-stone-100 pb-2">Misyon & Vizyon</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Vizyon Metni</label>
-              <textarea value={visionText} onChange={(e) => setVisionText(e.target.value)} rows={4} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Vizyon Başlığı</label>
+                <input type="text" value={visionTitle} onChange={(e) => setVisionTitle(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" placeholder="Örn: Vizyonumuz" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Vizyon Metni</label>
+                <textarea value={visionText} onChange={(e) => setVisionText(e.target.value)} rows={4} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+              </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Misyon Metni</label>
-              <textarea value={missionText} onChange={(e) => setMissionText(e.target.value)} rows={4} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Misyon Başlığı</label>
+                <input type="text" value={missionTitle} onChange={(e) => setMissionTitle(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" placeholder="Örn: Misyonumuz" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Misyon Metni</label>
+                <textarea value={missionText} onChange={(e) => setMissionText(e.target.value)} rows={4} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" />
+              </div>
             </div>
           </div>
         </section>
@@ -346,9 +366,15 @@ export default function AboutAdmin() {
             </div>
           </div>
 
-          <div className="space-y-2 mt-6">
-            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kullanılan Malzemeler (Virgülle ayırın)</label>
-            <textarea value={materials} onChange={(e) => setMaterials(e.target.value)} rows={3} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" placeholder="MDF, Masif Ahşap, ..." />
+          <div className="space-y-4 mt-6">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kullanılan Malzemeler Başlığı</label>
+              <input type="text" value={materialsTitle} onChange={(e) => setMaterialsTitle(e.target.value)} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" placeholder="Örn: Kullandığımız Yüksek Kalite Ahşap & Paneller" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kullanılan Malzemeler (Virgülle ayırın)</label>
+              <textarea value={materials} onChange={(e) => setMaterials(e.target.value)} rows={3} className="w-full bg-stone-50 border border-stone-200 px-4 py-3 rounded" placeholder="MDF, Masif Ahşap, ..." />
+            </div>
           </div>
         </section>
 

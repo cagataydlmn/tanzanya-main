@@ -39,7 +39,7 @@ export default async function Home() {
   let whyUsItems = [];
   try {
     whyUsItems = typeof d?.whyUsItems === 'string' ? JSON.parse(d.whyUsItems) : d?.whyUsItems || [];
-  } catch (e) {}
+  } catch (e) { }
 
   return (
     <div className="flex flex-col font-sans">
@@ -61,8 +61,8 @@ export default async function Home() {
               </div>
             ) : (
               featuredServices.map((feature: any, i: number) => (
-                <Link 
-                  key={i} 
+                <Link
+                  key={i}
                   href={`/services/${feature.slug}`}
                   className="flex flex-col text-center group bg-white hover:bg-stone-50 rounded-xl overflow-hidden hover:shadow-luxury-hover transition-all duration-500 hover:-translate-y-2 p-8 border border-transparent hover:border-stone-100"
                 >
@@ -83,7 +83,7 @@ export default async function Home() {
                     {feature.desc}
                   </p>
                   <span className="text-amber-700 font-bold text-xs uppercase tracking-[0.2em] inline-flex items-center justify-center gap-2 group-hover:text-amber-800 transition-colors">
-                    Detaylı İncele 
+                    View Details
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                   </span>
                 </Link>
@@ -92,11 +92,11 @@ export default async function Home() {
           </div>
 
           <div className="text-center mt-20">
-            <Link 
-              href="/services" 
+            <Link
+              href="/services"
               className="inline-block px-10 py-4 bg-stone-900 text-white font-medium text-xs uppercase tracking-[0.2em] hover:bg-stone-800 transition-all duration-300 hover:shadow-luxury"
             >
-              Tüm Hizmetlerimizi İncele
+              Browse all our services.
             </Link>
           </div>
         </div>

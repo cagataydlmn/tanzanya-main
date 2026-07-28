@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getBlogPosts } from '@/app/actions/blog';
 import Image from 'next/image';
+import { getPageHeader } from '@/app/actions/page-headers';
 
 export const metadata: Metadata = {
   title: "Blog & Haberler",
@@ -12,16 +13,21 @@ export default async function Blog() {
   const response = await getBlogPosts(true); // Sadece yayınlanmış olanları getir
   const posts = response.success && response.data ? response.data : [];
 
+  const headerRes = await getPageHeader('blog');
+  const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
+  const pageTitle = headerData?.title || "Blog & Haberler";
+  const pageDesc = headerData?.description || "Sektördeki yenilikler, dekorasyon fikirleri, doğru malzeme seçimi ve fabrikamızdan en güncel haberler.";
+
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif text-stone-900 mb-4">Blog & Haberler</h1>
+          <h1 className="text-4xl md:text-5xl font-serif text-stone-900 mb-4">{pageTitle}</h1>
           <div className="w-20 h-1 bg-amber-700 mx-auto"></div>
-          <p className="text-stone-600 mt-6 max-w-2xl mx-auto">
-            Sektördeki yenilikler, dekorasyon fikirleri, doğru malzeme seçimi ve fabrikamızdan en güncel haberler.
+          <p className="text-stone-600 mt-6 max-w-2xl mx-auto whitespace-pre-wrap">
+            {pageDesc}
           </p>
         </div>
 

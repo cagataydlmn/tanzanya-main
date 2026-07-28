@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { getProductGroups, createProductGroup, deleteProductGroup, updateProductGroup } from '@/app/actions/products';
 import { uploadImageAction } from '@/app/actions/upload';
 import Image from 'next/image';
+import PageHeaderForm from '@/components/admin/PageHeaderForm';
 
 interface ProductGroup {
   id: number;
@@ -177,6 +178,8 @@ export default function AdminProducts() {
   return (
     <div className="space-y-6">
       
+      <PageHeaderForm pageIdentifier="products" />
+
       {/* Alert Message */}
       {message && (
         <div className={`p-4 border text-sm font-medium ${

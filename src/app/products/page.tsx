@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 
 import { getProductGroups } from '@/app/actions/products';
+import { getPageHeader } from '@/app/actions/page-headers';
 
 export const metadata: Metadata = {
   title: "Ürün Gruplarımız",
@@ -12,16 +13,21 @@ export default async function Products() {
   const res = await getProductGroups();
   const categories = res.success && res.data ? res.data : [];
 
+  const headerRes = await getPageHeader('products');
+  const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
+  const pageTitle = headerData?.title || "Ürünlerimiz";
+  const pageDesc = headerData?.description || "Kendi fabrikamızda, birinci sınıf malzemelerle ürettiğimiz geniş ürün yelpazemiz. Farklı sektörlerin ihtiyaçlarına uygun estetik, dayanıklı ve ergonomik çözümler.";
+
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Header */}
         <div className="text-center mb-20">
-          <h1 className="text-4xl md:text-5xl font-serif text-stone-900 mb-4">Ürünlerimiz</h1>
+          <h1 className="text-4xl md:text-5xl font-serif text-stone-900 mb-4">{pageTitle}</h1>
           <div className="w-20 h-1 bg-amber-700 mx-auto"></div>
-          <p className="text-stone-600 mt-6 max-w-2xl mx-auto leading-relaxed">
-            Kendi fabrikamızda, birinci sınıf malzemelerle ürettiğimiz geniş ürün yelpazemiz. Farklı sektörlerin ihtiyaçlarına uygun estetik, dayanıklı ve ergonomik çözümler.
+          <p className="text-stone-600 mt-6 max-w-2xl mx-auto leading-relaxed whitespace-pre-wrap">
+            {pageDesc}
           </p>
         </div>
 

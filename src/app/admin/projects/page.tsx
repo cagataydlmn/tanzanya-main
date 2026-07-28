@@ -5,37 +5,38 @@ import { getProjects, createProject, deleteProject, updateProject } from '@/app/
 import { getCategories, createCategory } from '@/app/actions/categories';
 import { uploadImageAction } from '@/app/actions/upload';
 import Image from 'next/image';
+import PageHeaderForm from '@/components/admin/PageHeaderForm';
 
-interface Project {
+interface ProjectItem {
   id: number;
   name: string;
   category: string;
-  description: string | null;
+  description?: string | null;
   img: string;
   metaTitle?: string | null;
   metaDesc?: string | null;
   metaKeys?: string | null;
-  isFeatured?: boolean;
+  isFeatured: boolean;
   createdAt: Date;
 }
 
 export default function AdminProjects() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<ProjectItem[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   
   // Form States
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('Konut');
+  const [category, setCategory] = useState('');
+  const [isNewCategory, setIsNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
   const [description, setDescription] = useState('');
   const [img, setImg] = useState('');
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDesc, setMetaDesc] = useState('');
   const [metaKeys, setMetaKeys] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
-  const [isNewCategory, setIsNewCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
   
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -43,50 +44,61 @@ export default function AdminProjects() {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const fetchProjects = async () => {
-    const [res, catRes] = await Promise.all([
-      getProjects(),
-      getCategories()
-    ]);
+    const res = await getProjects();
     if (res.success && res.data) {
-      setProjects(res.data as Project[]);
+      setProjects(res.data as ProjectItem[]);
     }
-    if (catRes.success && catRes.data) {
-      setAvailableCategories((catRes.data as any[]).map(c => c.name));
+  };
+
+  const fetchCategories = async () => {
+    const res = await getCategories();
+    if (res.success && res.data) {
+      setCategories(res.data);
+      if (res.data.length > 0 && !category && !isNewCategory) {
+        setCategory(res.data[0].name);
+      }
     }
   };
 
   useEffect(() => {
     fetchProjects();
+    fetchCategories();
   }, []);
 
   const handleAddNewClick = () => {
     setEditingId(null);
     setName('');
-    setCategory('Konut');
     setDescription('');
     setImg('');
     setMetaTitle('');
     setMetaDesc('');
     setMetaKeys('');
     setIsFeatured(false);
-    setIsNewCategory(false);
+    
+    if (categories.length > 0) {
+      setIsNewCategory(false);
+      setCategory(categories[0].name);
+    } else {
+      setIsNewCategory(true);
+    }
+    
     setNewCategoryName('');
     setShowForm(true);
     setMessage(null);
   };
 
-  const handleEditClick = (project: Project) => {
+  const handleEditClick = (project: ProjectItem) => {
     setEditingId(project.id);
     setName(project.name);
     setCategory(project.category);
+    setIsNewCategory(false);
+    setNewCategoryName('');
     setDescription(project.description || '');
     setImg(project.img);
     setMetaTitle(project.metaTitle || '');
     setMetaDesc(project.metaDesc || '');
     setMetaKeys(project.metaKeys || '');
-    setIsFeatured(project.isFeatured || false);
-    setIsNewCategory(false);
-    setNewCategoryName('');
+    setIsFeatured(project.isFeatured);
     setShowForm(true);
     setMessage(null);
   };
@@ -103,7 +115,7 @@ export default function AdminProjects() {
 
     if (res.success && res.url) {
       setImg(res.url);
-      setMessage({ type: 'success', text: 'Kapak görseli başarıyla yüklendi.' });
+      setMessage({ type: 'success', text: 'Görsel başarıyla yüklendi.' });
     } else {
       setMessage({ type: 'error', text: res.error || 'Görsel yüklenemedi.' });
     }
@@ -160,7 +172,7 @@ export default function AdminProjects() {
     let finalCategory = category;
     if (isNewCategory && newCategoryName.trim() !== '') {
       finalCategory = newCategoryName.trim();
-      await createCategory(finalCategory); // Arka planda DB'ye kategori olarak da kaydet
+      await createCategory(finalCategory); 
     }
 
     const data = {
@@ -181,6 +193,7 @@ export default function AdminProjects() {
       setShowForm(false);
       setEditingId(null);
       fetchProjects();
+      fetchCategories();
     } else {
       setMessage({ type: 'error', text: res.error || (editingId ? 'Proje güncellenirken bir hata oluştu.' : 'Proje eklenirken bir hata oluştu.') });
     }
@@ -188,7 +201,8 @@ export default function AdminProjects() {
 
   return (
     <div className="space-y-6">
-      
+      <PageHeaderForm pageIdentifier="projects" />
+
       {/* Alert Message */}
       {message && (
         <div className={`p-4 border text-sm font-medium ${

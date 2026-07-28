@@ -39,28 +39,28 @@ export async function generateStaticParams() {
 
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  
+
   const res = await getServiceBySlug(slug);
   const service = res.success && res.data ? res.data : null;
 
   if (!service) notFound();
 
   const allRes = await getServices();
-  const otherServices = allRes.success && allRes.data 
-    ? allRes.data.filter((s: any) => s.slug !== service.slug) 
+  const otherServices = allRes.success && allRes.data
+    ? allRes.data.filter((s: any) => s.slug !== service.slug)
     : [];
 
   return (
     <div className="min-h-screen bg-stone-50 pb-24">
-      
+
       {/* Hero Header */}
       <section className="relative bg-stone-950 text-white pt-28 md:pt-36 pb-20 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <Image 
-            src={service.img} 
-            alt={service.metaTitle || service.title} 
-            fill 
-            unoptimized 
+          <Image
+            src={service.img}
+            alt={service.metaTitle || service.title}
+            fill
+            unoptimized
             className="object-cover blur-3xl scale-125"
           />
         </div>
@@ -68,15 +68,15 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center md:text-left">
           <nav className="flex items-center justify-center md:justify-start gap-2 text-xs md:text-sm text-stone-400 mb-6">
-            <Link href="/" className="hover:text-white transition-colors">Anasayfa</Link>
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/services" className="hover:text-white transition-colors">Hizmetlerimiz</Link>
+            <Link href="/services" className="hover:text-white transition-colors">Services</Link>
             <span>/</span>
             <span className="text-amber-500 font-medium truncate">{service.title}</span>
           </nav>
 
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest block mb-3">
-            Hizmet Detayı
+            Service Details
           </span>
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight leading-tight max-w-3xl">
             {service.title}
@@ -89,10 +89,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
       {/* Main Container */}
       <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20">
-        
+
         {/* Showcase Image */}
         <div className="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-xl overflow-hidden border border-stone-800 shadow-2xl bg-stone-900 mb-12">
-          <Image 
+          <Image
             src={service.img}
             alt={service.metaTitle || service.title}
             fill
@@ -105,21 +105,21 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
         {/* Content & Floating CTA Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          
+
           {/* Left Column: Long Description, Features & Process */}
           <div className="lg:col-span-2 space-y-10">
-            
+
             {/* Overview Card */}
             <div className="bg-white border border-stone-200 p-8 md:p-10 shadow-sm rounded-lg space-y-6">
               <h2 className="text-2xl font-serif text-stone-900 font-bold border-b border-stone-100 pb-4">
-                Hizmet Kapsamı ve Genel Bakış
+                Scope of Services and Overview
               </h2>
               <p className="text-stone-700 text-base leading-relaxed">
                 {service.longDesc}
               </p>
 
               <div className="pt-6 border-t border-stone-100 space-y-4">
-                <h3 className="text-stone-900 font-bold text-base">Öne Çıkan Özellikler ve Avantajlar:</h3>
+                <h3 className="text-stone-900 font-bold text-base">Key Features and Benefits:</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {service.features ? service.features.split(',').map((feat: string, idx: number) => (
                     <div key={idx} className="flex items-start gap-3 bg-stone-50 p-3.5 rounded border border-stone-100">
@@ -136,7 +136,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             {/* Step-by-Step Workflow Card */}
             <div className="bg-white border border-stone-200 p-8 md:p-10 shadow-sm rounded-lg space-y-6">
               <h2 className="text-2xl font-serif text-stone-900 font-bold border-b border-stone-100 pb-4">
-                Çalışma ve Uygulama Sürecimiz
+                Our Work and Implementation Process
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
                 {service.steps ? service.steps.split(',').map((step: string, idx: number) => (
@@ -146,9 +146,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                     </div>
                     <div>
                       <h4 className="font-bold text-stone-900 text-base mb-1">{step.trim()}</h4>
-                      <p className="text-xs text-stone-500 leading-relaxed">
-                        Tesislerimizde hassasiyetle yönetilen adım.
-                      </p>
+
                     </div>
                   </div>
                 )) : null}
@@ -162,24 +160,24 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             <div className="bg-stone-900 text-white p-8 rounded-lg border border-stone-800 shadow-xl space-y-6 sticky top-28">
               <span className="text-amber-500 text-xs font-bold uppercase tracking-widest block">Profesyonel Destek</span>
               <h3 className="text-2xl font-serif font-bold text-white leading-tight">
-                {service.title} İçin Fiyat Alın
+                {service.title} Get a Quote
               </h3>
               <p className="text-stone-300 text-sm leading-relaxed">
-                Mekanınız ve projeniz için özel fiyatlandırma ve detaylı keşif talebinde bulunun.
+                Request custom pricing and a detailed site assessment for your space and project.
               </p>
 
               <div className="space-y-3 pt-2">
-                <Link 
+                <Link
                   href={`/quote?service=${encodeURIComponent(service.title)}`}
                   className="w-full py-4 bg-amber-700 hover:bg-amber-800 text-white font-bold text-sm uppercase tracking-wider transition-colors block text-center rounded shadow-md"
                 >
-                  Teklif Talebi Oluştur
+                  Request a Quote
                 </Link>
-                <Link 
+                <Link
                   href="/contact"
                   className="w-full py-3 bg-stone-800 hover:bg-stone-700 text-stone-200 font-bold text-xs uppercase tracking-wider transition-colors block text-center rounded border border-stone-700"
                 >
-                  Bize Ulaşın
+                  Contact Us
                 </Link>
               </div>
             </div>
@@ -189,10 +187,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
         {/* Other Services Bottom Navigation */}
         <div className="mt-20 border-t border-stone-200 pt-16">
-          <h2 className="text-2xl font-serif text-stone-900 font-bold mb-8">Diğer Hizmetlerimiz</h2>
+          <h2 className="text-2xl font-serif text-stone-900 font-bold mb-8">Other Services</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {otherServices.map((item: any) => (
-              <Link 
+              <Link
                 key={item.slug}
                 href={`/services/${item.slug}`}
                 className="group bg-white border border-stone-200 p-6 rounded-lg shadow-sm hover:shadow-md transition-all hover:-translate-y-1 block"
@@ -204,7 +202,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                   {item.desc}
                 </p>
                 <span className="text-amber-700 font-bold text-xs uppercase tracking-wider inline-flex items-center gap-1">
-                  Detaylı İncele →
+                  View Details →
                 </span>
               </Link>
             ))}
