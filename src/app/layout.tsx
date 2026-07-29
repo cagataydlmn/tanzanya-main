@@ -17,20 +17,28 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Tanzanya Mobilya & Dekorasyon",
-    template: "%s | Tanzanya Mobilya & Dekorasyon",
+    default: "Star Decor | Premium Furniture & Interior Design",
+    template: "%s | Star Decor Tanzania",
   },
-  description: "Kurumsal Mobilya Üretim ve İç Mimarlık Hizmetleri. Ev, ofis, okul ve ticari alanlar için yüksek kaliteli ve özel tasarım ahşap mobilya çözümleri.",
-  keywords: ["mobilya üretimi", "iç mimarlık", "özel tasarım mobilya", "kurumsal mobilya", "ahşap dekorasyon", "tanzanya mobilya", "anahtar teslim dekorasyon"],
-  authors: [{ name: "Tanzanya Mobilya" }],
-  creator: "Tanzanya Mobilya",
-  publisher: "Tanzanya Mobilya",
+  description: "Leading furniture manufacturing and interior design services in Dar es Salaam, Tanzania. High-quality, custom wooden furniture solutions for homes, offices, hotels, and commercial spaces.",
+  keywords: [
+    "furniture Tanzania",
+    "interior design Dar es Salaam",
+    "custom furniture Tanzania",
+    "office furniture Dar es Salaam",
+    "Star Decor Tanzania",
+    "luxury wooden furniture",
+    "hotel furniture Tanzania"
+  ],
+  authors: [{ name: "Star Decor" }],
+  creator: "Star Decor",
+  publisher: "Star Decor",
   openGraph: {
-    title: "Tanzanya Mobilya & Dekorasyon",
-    description: "Kurumsal Mobilya Üretim ve İç Mimarlık Hizmetleri",
-    url: "https://tanzanyamobilya.com",
-    siteName: "Tanzanya Mobilya",
-    locale: "tr_TR",
+    title: "Star Decor | Premium Furniture & Interior Design in Tanzania",
+    description: "Leading furniture manufacturing and interior design services in Dar es Salaam, Tanzania.",
+    url: "https://stardecortz.com",
+    siteName: "Star Decor",
+    locale: "en_TZ",
     type: "website",
   },
   robots: {

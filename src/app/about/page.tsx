@@ -9,14 +9,14 @@ export async function generateMetadata(): Promise<Metadata> {
   if (res.success && res.data) {
     const data = res.data;
     return {
-      title: data.metaTitle || "Hakkımızda",
-      description: data.metaDesc || "Tanzanya Mobilya Hakkımızda",
-      keywords: data.metaKeys || "mobilya, tanzanya, üretim",
+      title: data.metaTitle || "About Us | Star Decor",
+      description: data.metaDesc || "Learn more about Star Decor's premium furniture manufacturing in Tanzania.",
+      keywords: data.metaKeys || "about star decor, furniture manufacturer Tanzania",
     };
   }
   return {
-    title: "Hakkımızda",
-    description: "Tanzanya Mobilya Hakkımızda",
+    title: "About Us | Star Decor",
+    description: "Learn more about Star Decor's premium furniture manufacturing in Tanzania.",
   };
 }
 

@@ -11,14 +11,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const res = await getHomePage();
   if (res.success && res.data) {
     return {
-      title: res.data.metaTitle || "Tanzanya Mobilya & Dekorasyon",
-      description: res.data.metaDesc || "Tanzanya'nın önde gelen lüks mobilya markası.",
-      keywords: res.data.metaKeys || "mobilya, dekorasyon, ahşap",
+      title: res.data.metaTitle || "Star Decor | Premium Furniture & Interior Design",
+      description: res.data.metaDesc || "Leading furniture manufacturing and interior design services in Dar es Salaam, Tanzania.",
+      keywords: res.data.metaKeys || "furniture, interior design, custom furniture, Tanzania, Star Decor",
     };
   }
   return {
-    title: "Tanzanya Mobilya & Dekorasyon",
-    description: "Tanzanya'nın önde gelen lüks mobilya markası.",
+    title: "Star Decor | Premium Furniture & Interior Design",
+    description: "Leading furniture manufacturing and interior design services in Dar es Salaam, Tanzania.",
   };
 }
 

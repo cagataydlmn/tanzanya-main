@@ -9,9 +9,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const info = infoRes.success && infoRes.data ? infoRes.data : null;
 
   return {
-    title: info?.metaTitle || info?.title || "Üretim Süreçlerimiz",
-    description: info?.metaDesc || info?.desc || "Tasarım, malzeme seçimi, ebatlama, CNC kesim, boya, cila ve titiz kalite kontrol aşamalarıyla fabrikamızda uyguladığımız profesyonel üretim aşamaları.",
-    ...(info?.metaKeys ? { keywords: info.metaKeys } : {})
+    title: info?.metaTitle || info?.title || "Production Facility | Star Decor",
+    description: info?.metaDesc || info?.desc || "Our professional furniture production process, from material selection and CNC cutting to finishing and strict quality control in our factory.",
+    ...(info?.metaKeys ? { keywords: info.metaKeys } : { keywords: "furniture production Tanzania, CNC cutting Dar es Salaam, custom furniture manufacturing" })
   };
 }
 

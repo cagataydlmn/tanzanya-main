@@ -27,7 +27,7 @@ export default function Loading() {
           />
           <div className="w-12 h-[2px] bg-amber-700 mx-auto"></div>
           <p className="text-xs text-stone-500 font-medium uppercase tracking-widest animate-pulse mt-2">
-            Tasarımlar Hazırlanıyor...
+            Preparing Designs...
           </p>
         </div>
 

@@ -1,21 +1,17 @@
-"use client";
-
 import Link from 'next/link';
+import { getDashboardStats } from '@/app/actions/dashboard';
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
+  const data = await getDashboardStats();
+  
   const stats = [
-    { label: "Aktif Projeler", value: "12", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" },
-    { label: "Galeri Görseli", value: "48", icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" },
-    { label: "Yayımlanan Blog", value: "15", icon: "M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-.586-1.414l-4.5-4.5A2 2 0 0012.586 3H12" },
-    { label: "Okunmamış Mesaj", value: "3", icon: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" }
+    { label: "Active Projects", value: data.stats?.projects || "0", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" },
+    { label: "Gallery Images", value: data.stats?.gallery || "0", icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" },
+    { label: "Published Blogs", value: data.stats?.blogs || "0", icon: "M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-.586-1.414l-4.5-4.5A2 2 0 0012.586 3H12" },
+    { label: "Quote Requests", value: data.stats?.quotes || "0", icon: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" }
   ];
 
-  const recentActivity = [
-    { type: 'Proje eklendi', title: 'Zorlu Center Villa', time: '2 saat önce', color: 'text-blue-600 bg-blue-100' },
-    { type: 'Blog güncellendi', title: '2026 Mobilya Trendleri', time: '5 saat önce', color: 'text-amber-600 bg-amber-100' },
-    { type: 'Galeriye görsel yüklendi', title: 'Mutfak-Dolabi-1.jpg', time: '1 gün önce', color: 'text-green-600 bg-green-100' },
-    { type: 'Proje silindi', title: 'Eski Ofis Projesi', time: '2 gün önce', color: 'text-red-600 bg-red-100' },
-  ];
+  const recentActivity = data.recentActivity || [];
 
   return (
     <div className="space-y-8">
@@ -23,12 +19,12 @@ export default function AdminDashboard() {
       {/* Welcome Section */}
       <div className="bg-white p-8 border border-stone-200 shadow-sm flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-serif text-stone-900 mb-2">Hoş Geldiniz, Admin 👋</h1>
-          <p className="text-stone-500 text-sm">Tanzanya Mobilya web sitenizin içeriklerini buradan kolayca yönetebilirsiniz.</p>
+          <h1 className="text-2xl font-serif text-stone-900 mb-2">Welcome, Admin 👋</h1>
+          <p className="text-stone-500 text-sm">You can easily manage the content of your Star Decor website here.</p>
         </div>
         <div className="hidden md:block">
           <span className="px-4 py-2 bg-stone-100 text-stone-600 text-xs font-bold uppercase tracking-widest border border-stone-200">
-            Sürüm 1.0.0
+            Version 1.0.0
           </span>
         </div>
       </div>
@@ -55,20 +51,20 @@ export default function AdminDashboard() {
         {/* Quick Actions */}
         <div className="lg:col-span-1 bg-white border border-stone-200 shadow-sm">
           <div className="p-6 border-b border-stone-100">
-            <h3 className="font-bold text-stone-900">Hızlı İşlemler</h3>
+            <h3 className="font-bold text-stone-900">Quick Actions</h3>
           </div>
           <div className="p-6 space-y-4">
             <Link href="/admin/projects" className="flex items-center gap-3 p-4 bg-stone-50 border border-stone-100 hover:border-amber-700 hover:text-amber-700 transition-colors">
               <span className="text-xl">+</span>
-              <span className="font-medium text-sm">Yeni Proje Ekle</span>
+              <span className="font-medium text-sm">Add New Project</span>
             </Link>
             <Link href="/admin/gallery" className="flex items-center gap-3 p-4 bg-stone-50 border border-stone-100 hover:border-amber-700 hover:text-amber-700 transition-colors">
               <span className="text-xl">+</span>
-              <span className="font-medium text-sm">Galeriye Görsel Yükle</span>
+              <span className="font-medium text-sm">Upload to Gallery</span>
             </Link>
             <Link href="/admin/blog" className="flex items-center gap-3 p-4 bg-stone-50 border border-stone-100 hover:border-amber-700 hover:text-amber-700 transition-colors">
               <span className="text-xl">+</span>
-              <span className="font-medium text-sm">Yeni Blog Yazısı</span>
+              <span className="font-medium text-sm">New Blog Post</span>
             </Link>
           </div>
         </div>
@@ -76,22 +72,26 @@ export default function AdminDashboard() {
         {/* Recent Activity */}
         <div className="lg:col-span-2 bg-white border border-stone-200 shadow-sm">
           <div className="p-6 border-b border-stone-100 flex justify-between items-center">
-            <h3 className="font-bold text-stone-900">Son Aktiviteler</h3>
-            <span className="text-xs text-stone-500 cursor-pointer hover:text-stone-900">Tümünü Gör</span>
+            <h3 className="font-bold text-stone-900">Recent Activities</h3>
+            <span className="text-xs text-stone-500 cursor-pointer hover:text-stone-900">View All</span>
           </div>
           <div className="p-6">
-            <ul className="space-y-6">
-              {recentActivity.map((act, i) => (
-                <li key={i} className="flex items-start gap-4">
-                  <div className={`mt-1 w-2.5 h-2.5 rounded-full ${act.color.split(' ')[1]}`}></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-stone-900">{act.title}</p>
-                    <p className="text-xs text-stone-500 mt-1">{act.type}</p>
-                  </div>
-                  <span className="text-xs text-stone-400">{act.time}</span>
-                </li>
-              ))}
-            </ul>
+            {recentActivity.length > 0 ? (
+              <ul className="space-y-6">
+                {recentActivity.map((act: any, i: number) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <div className={`mt-1 w-2.5 h-2.5 rounded-full ${act.color.split(' ')[1]}`}></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-stone-900">{act.title}</p>
+                      <p className="text-xs text-stone-500 mt-1">{act.type}</p>
+                    </div>
+                    <span className="text-xs text-stone-400">{act.time}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-stone-500 text-sm">No activity found yet.</p>
+            )}
           </div>
         </div>
 
