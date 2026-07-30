@@ -17,18 +17,65 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function About() {
   const res = await getAboutPage();
   const defaultData = await getDefaultAboutData();
-  const d = res.success && res.data ? res.data : defaultData;
+  const raw = res.success && res.data ? res.data : defaultData;
+
+  const d = {
+    ...defaultData,
+    ...raw,
+    storyImg: raw.storyImg || defaultData.storyImg,
+    storyTitle: raw.storyTitle || defaultData.storyTitle,
+    storyDesc1: raw.storyDesc1 || defaultData.storyDesc1,
+    storyDesc2: raw.storyDesc2 || defaultData.storyDesc2,
+    visionTitle: raw.visionTitle || defaultData.visionTitle,
+    visionText: raw.visionText || defaultData.visionText,
+    missionTitle: raw.missionTitle || defaultData.missionTitle,
+    missionText: raw.missionText || defaultData.missionText,
+    bridgeLabel: raw.bridgeLabel || defaultData.bridgeLabel,
+    bridgeTitle: raw.bridgeTitle || defaultData.bridgeTitle,
+    bridgeDesc1: raw.bridgeDesc1 || defaultData.bridgeDesc1,
+    bridgeDesc2: raw.bridgeDesc2 || defaultData.bridgeDesc2,
+    bridgeImg: raw.bridgeImg || defaultData.bridgeImg,
+    brochureLabel: raw.brochureLabel || defaultData.brochureLabel,
+    brochureTitle: raw.brochureTitle || defaultData.brochureTitle,
+    brochureDesc: raw.brochureDesc || defaultData.brochureDesc,
+    brochureUrl: raw.brochureUrl || defaultData.brochureUrl,
+    materialsTitle: raw.materialsTitle || defaultData.materialsTitle,
+    materials: raw.materials || defaultData.materials,
+    policyTitle: raw.policyTitle || defaultData.policyTitle,
+  };
 
   const headerRes = await getPageHeader("about");
   const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
 
+  let brochureHighlights: any[] = [];
+  const rawHighlights = raw.brochureHighlights || defaultData.brochureHighlights;
+  if (rawHighlights) {
+    try {
+      brochureHighlights = typeof rawHighlights === 'string' ? JSON.parse(rawHighlights) : rawHighlights;
+    } catch (e) {}
+  }
+  if (!Array.isArray(brochureHighlights)) {
+    try {
+      brochureHighlights = JSON.parse(defaultData.brochureHighlights);
+    } catch (e) {
+      brochureHighlights = [];
+    }
+  }
 
-
-  let brochureHighlights = [];
-  try { brochureHighlights = typeof d.brochureHighlights === 'string' ? JSON.parse(d.brochureHighlights) : d.brochureHighlights; } catch (e) { }
-
-  let policies = [];
-  try { policies = typeof d.policies === 'string' ? JSON.parse(d.policies) : d.policies; } catch (e) { }
+  let policies: any[] = [];
+  const rawPolicies = raw.policies || defaultData.policies;
+  if (rawPolicies) {
+    try {
+      policies = typeof rawPolicies === 'string' ? JSON.parse(rawPolicies) : rawPolicies;
+    } catch (e) {}
+  }
+  if (!Array.isArray(policies)) {
+    try {
+      policies = JSON.parse(defaultData.policies);
+    } catch (e) {
+      policies = [];
+    }
+  }
 
   const materialsArr = d.materials ? d.materials.split(',').map((s: string) => s.trim()) : [];
 
