@@ -62,7 +62,7 @@ function RouteLoaderInner() {
         {/* Brand details */}
         <div className="space-y-2 flex flex-col items-center">
           <Image 
-            src="/logo/StarDecorLogo_page-0002.jpg"
+            src="/logo/StarDecorLogo_page-0002.png"
             alt="Tanzanya Logo"
             width={160}
             height={50}

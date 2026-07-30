@@ -81,7 +81,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="w-full max-w-md bg-white border border-stone-200 shadow-xl p-6 md:p-12 rounded">
           <div className="flex flex-col items-center mb-8">
             <Image
-              src="/logo/StarDecorLogo_page-0003.jpg"
+              src="/logo/StarDecorLogo_page-0003.png"
               alt="Tanzanya Logo"
               width={180}
               height={55}
@@ -147,13 +147,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <header className="md:hidden bg-stone-900 text-white px-4 py-3 flex items-center justify-between z-30 shadow-md sticky top-0">
         <Link href="/admin" className="flex items-center gap-2">
           <Image
-            src="/logo/StarDecorLogo_page-0003.jpg"
+            src="/logo/StarDecorLogo_page-0003.png"
             alt="Tanzanya Logo"
             width={110}
             height={32}
             className="h-7 w-auto object-contain rounded-sm"
           />
-          <span className="text-[10px] text-amber-500 font-bold uppercase tracking-widest ml-1">PANEL</span>
         </Link>
 
         <div className="flex items-center gap-2">
@@ -199,7 +198,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="p-6 border-b border-stone-800 flex items-center justify-between shrink-0">
             <Link href="/admin" className="flex flex-col gap-1">
               <Image
-                src="/logo/StarDecorLogo_page-0003.jpg"
+                src="/logo/StarDecorLogo_page-0003.png"
                 alt="Tanzanya Logo"
                 width={130}
                 height={40}

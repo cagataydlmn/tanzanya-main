@@ -19,10 +19,11 @@ export default function Loading() {
         {/* Brand details */}
         <div className="space-y-2 flex flex-col items-center">
           <Image 
-            src="/logo/logo.jpeg"
+            src="/logo/StarDecorLogo_page-0002.png"
             alt="Tanzanya Logo"
             width={160}
             height={50}
+            priority
             className="h-10 w-auto object-contain mb-1"
           />
           <div className="w-12 h-[2px] bg-amber-700 mx-auto"></div>
