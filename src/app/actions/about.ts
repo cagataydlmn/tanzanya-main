@@ -37,48 +37,59 @@ const defaultPolicies = [
   }
 ];
 
+const defaultAboutData = {
+  id: 1,
+  metaTitle: "About Us | Star Decor",
+  metaDesc: "With over 25 years of experience, modern vision, and our own furniture production facility, we design and bring your living spaces to life. A quality bridge extending from Turkey to Tanzania.",
+  metaKeys: "about star decor, furniture manufacturer Tanzania",
+
+  storyImg: "/dummygorsel/factory_workshop.png",
+  storyTitle: "Deep-Rooted Experience, Modern Vision",
+  storyDesc1: "With years of industry experience, we add value to your living and working spaces. By blending the fine details of traditional furniture craftsmanship with today's modern design approach, we create unique projects.",
+  storyDesc2: "In our own production facility, we process materials with mastery to produce high-standard furniture for homes, offices, schools, and commercial spaces. Our goal is to transform our clients' dream spaces into reality on time and without compromise.",
+
+  visionTitle: "Our Vision",
+  visionText: "To closely follow industry innovations and become a leading furniture manufacturer known for design and quality not only in Turkey but also internationally, crafting enduring projects.",
+  missionTitle: "Our Mission",
+  missionText: "To always prioritize customer satisfaction and design aesthetic, functional, and long-lasting spaces. To deliver projects at promised quality through our flawless manufacturing approach.",
+
+  bridgeLabel: "Global Design & Export Bridge",
+  bridgeTitle: "Turkish Craftsmanship,<br/>Tanzanian Vision",
+  bridgeDesc1: "As Star Decor Furniture & Interior Design, we bring the superior craftsmanship and quality raw material power of our modern production facilities in Turkey to the East African market. By building a strong commercial bridge between the two countries, we add value to distinguished projects in Tanzania.",
+  bridgeDesc2: "With luxury and durable furniture produced in our own factory, we represent international quality standards and deliver our projects with direct on-site assembly and installation assurance.",
+  bridgeImg: "/dummygorsel/tr-tz-flag.jpg",
+
+  brochureLabel: "Our Corporate Publications",
+  brochureTitle: "Star Decor Corporate Brochure",
+  brochureDesc: "Explore or download our corporate brochure detailing our production standards, high-quality wood materials used, and manufacturing processes online.",
+  brochureUrl: "/broshur.pdf",
+  brochureHighlights: JSON.stringify(defaultBrochureHighlights),
+  materialsTitle: "High Quality Wood & Panels We Use",
+  materials: "MDF & High Gloss, Solid Wood, Plywood, Particle Board, Decorative Panels, Composite Panels, Natural Veneer",
+
+  policyTitle: "Our Production & Quality Policy",
+  policies: JSON.stringify(defaultPolicies)
+};
+
+export async function getDefaultAboutData() {
+  return defaultAboutData;
+}
+
+
 export async function getAboutPage() {
   try {
     let page = await prisma.aboutPage.findFirst();
 
     if (!page) {
       page = await prisma.aboutPage.create({
-        data: {
-          metaTitle: "Hakkımızda",
-          metaDesc: "25 yılı aşkın tecrübemiz, modern vizyonumuz ve kendi mobilya üretim tesisimizle yaşam alanlarınızı tasarlıyor ve hayata geçiriyoruz. Türkiye'den Tanzanya'ya uzanan kalite köprüsü.",
-          metaKeys: "",
-
-          storyImg: "/dummygorsel/factory_workshop.png",
-          storyTitle: "Köklü Tecrübe, Modern Vizyon",
-          storyDesc1: "Sektördeki uzun yıllara dayanan deneyimimizle, yaşam ve çalışma alanlarınıza değer katıyoruz. Geleneksel mobilya işçiliğinin ince detaylarını, günümüz modern tasarım anlayışıyla harmanlayarak eşsiz projelere imza atıyoruz.",
-          storyDesc2: "Kendi bünyemizdeki üretim tesisimizde, malzemeyi ustalıkla işleyerek ev, ofis, okul ve ticari mekanlar için yüksek standartlarda mobilyalar üretiyoruz. Amacımız, müşterilerimizin hayallerindeki mekanları tam zamanında ve eksiksiz bir şekilde gerçeğe dönüştürmektir.",
-
-          visionText: "Sektörel yenilikleri yakından takip ederek, sadece Türkiye'de değil uluslararası alanda da tasarım ve kalite denilince ilk akla gelen, kalıcı projelere imza atan lider mobilya üreticisi olmak.",
-          missionText: "Müşteri memnuniyetini her zaman ön planda tutarak; estetik, fonksiyonel ve uzun ömürlü mekanlar tasarlamak. Kusursuz üretim anlayışımızla projeleri söz verdiğimiz kalitede teslim etmek.",
-
-          bridgeLabel: "Küresel Tasarım & İhracat Köprüsü",
-          bridgeTitle: "Türkiye'nin İşçiliği,<br/>Tanzanya'nın Vizyonu",
-          bridgeDesc1: "Tanzanya Mobilya & Dekorasyon olarak, Türkiye'deki modern üretim tesislerimizin üstün el işçiliğini ve kaliteli hammadde gücünü Doğu Afrika pazarıyla buluşturuyoruz. İki ülke arasında güçlü bir ticari köprü kurarak, Tanzanya'daki seçkin projelere değer katıyoruz.",
-          bridgeDesc2: "Kendi fabrikamızda ürettiğimiz lüks ve dayanıklı mobilyalarla uluslararası kalite standartlarını temsil ediyor, projelerimizi doğrudan yerinde montaj ve kurulum güvencesiyle teslim ediyoruz.",
-          bridgeImg: "/dummygorsel/tr-tz-flag.jpg",
-
-          brochureLabel: "Kurumsal Yayınlarımız",
-          brochureTitle: "Star Decor Kurumsal Broşürümüz",
-          brochureDesc: "Üretim standartlarımızı, kullandığımız yüksek kaliteli ahşap malzemeleri ve imalat süreçlerimizi detaylandıran kurumsal broşürümüzü online inceleyin veya indirin.",
-          brochureUrl: "/broshur.pdf",
-          brochureHighlights: JSON.stringify(defaultBrochureHighlights),
-          materials: "MDF & High Gloss, Masif Ahşap, Kontrplak (Plywood), Sunta & Yonga Levha, Dekoratif Paneller, Kompozit Paneller, Doğal Kaplama",
-
-          policyTitle: "Üretim ve Kalite Politikamız",
-          policies: JSON.stringify(defaultPolicies)
-        }
+        data: defaultAboutData
       });
     }
 
     return { success: true, data: page };
   } catch (error: any) {
-    console.error(error);
-    return { success: false, error: error.message };
+    console.error("Prisma error in getAboutPage:", error);
+    return { success: true, data: defaultAboutData };
   }
 }
 
@@ -98,3 +109,4 @@ export async function updateAboutPage(id: number, data: any) {
     return { success: false, error: error.message };
   }
 }
+

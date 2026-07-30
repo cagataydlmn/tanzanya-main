@@ -1,33 +1,28 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { getAboutPage } from '@/app/actions/about';
+import { getAboutPage, getDefaultAboutData } from '@/app/actions/about';
 import { getPageHeader } from '@/app/actions/page-headers';
-import Link from 'next/link';
 
 export async function generateMetadata(): Promise<Metadata> {
   const res = await getAboutPage();
-  if (res.success && res.data) {
-    const data = res.data;
-    return {
-      title: data.metaTitle || "About Us | Star Decor",
-      description: data.metaDesc || "Learn more about Star Decor's premium furniture manufacturing in Tanzania.",
-      keywords: data.metaKeys || "about star decor, furniture manufacturer Tanzania",
-    };
-  }
+  const defaultData = await getDefaultAboutData();
+  const data = res.success && res.data ? res.data : defaultData;
   return {
-    title: "About Us | Star Decor",
-    description: "Learn more about Star Decor's premium furniture manufacturing in Tanzania.",
+    title: data.metaTitle || "About Us | Star Decor",
+    description: data.metaDesc || "Learn more about Star Decor's premium furniture manufacturing in Tanzania.",
+    keywords: data.metaKeys || "about star decor, furniture manufacturer Tanzania",
   };
 }
 
 export default async function About() {
   const res = await getAboutPage();
-  const d = res.success && res.data ? res.data : null;
+  const defaultData = await getDefaultAboutData();
+  const d = res.success && res.data ? res.data : defaultData;
 
   const headerRes = await getPageHeader("about");
   const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
 
-  if (!d) return null; // or loading/error state
+
 
   let brochureHighlights = [];
   try { brochureHighlights = typeof d.brochureHighlights === 'string' ? JSON.parse(d.brochureHighlights) : d.brochureHighlights; } catch (e) { }
