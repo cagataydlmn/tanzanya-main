@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!response.success || !response.data) {
     return {
-      title: "Yazı Bulunamadı",
-      description: "Aradığınız blog yazısı bulunamadı."
+      title: "Post Not Found | Star Decor",
+      description: "The requested blog post could not be found."
     };
   }
 
@@ -45,7 +45,7 @@ export default async function BlogPostDetail({ params }: Props) {
   }
 
   const post = response.data;
-  const formattedDate = new Date(post.createdAt).toLocaleDateString('tr-TR', {
+  const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'

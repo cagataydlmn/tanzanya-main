@@ -124,7 +124,7 @@ export default function Navbar() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex w-full items-center justify-center px-8 py-4 bg-stone-900 text-white font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-amber-700"
             >
-              Teklif Al
+              Get A Quote
             </Link>
           </div>
         </div>

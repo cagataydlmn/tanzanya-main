@@ -42,6 +42,8 @@ export default function AdminGallery() {
   const [isDragging, setIsDragging] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
+  const availableCategories = categories.map(cat => typeof cat === 'string' ? cat : cat.name);
+
   const fetchItems = async () => {
     const res = await getGalleryItems();
     if (res.success && res.data) {
@@ -112,9 +114,9 @@ export default function AdminGallery() {
 
     if (res.success && res.url) {
       setImg(res.url);
-      setMessage({ type: 'success', text: 'Görsel başarıyla yüklendi.' });
+      setMessage({ type: 'success', text: 'Image uploaded successfully.' });
     } else {
-      setMessage({ type: 'error', text: res.error || 'Görsel yüklenemedi.' });
+      setMessage({ type: 'error', text: res.error || 'Failed to upload image.' });
     }
   };
 
@@ -142,24 +144,24 @@ export default function AdminGallery() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Bu görseli silmek istediğinize emin misiniz?")) return;
+    if (!window.confirm("Are you sure you want to delete this image?")) return;
 
     setLoading(true);
     const res = await deleteGalleryItem(id);
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: 'Görsel başarıyla silindi.' });
+      setMessage({ type: 'success', text: 'Image deleted successfully.' });
       fetchItems();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Görsel silinemedi.' });
+      setMessage({ type: 'error', text: res.error || 'Failed to delete image.' });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !img) {
-      setMessage({ type: 'error', text: 'Lütfen görsel başlığını girin ve bir görsel yükleyin.' });
+      setMessage({ type: 'error', text: 'Please enter an image title and upload an image.' });
       return;
     }
 
@@ -198,13 +200,13 @@ export default function AdminGallery() {
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: editingId ? 'Görsel başarıyla güncellendi.' : 'Görsel başarıyla galeriye eklendi.' });
+      setMessage({ type: 'success', text: editingId ? 'Image updated successfully.' : 'Image added to gallery successfully.' });
       setShowForm(false);
       setEditingId(null);
       fetchItems();
       fetchCategories();
     } else {
-      setMessage({ type: 'error', text: res.error || (editingId ? 'Görsel güncellenirken bir hata oluştu.' : 'Görsel eklenirken bir hata oluştu.') });
+      setMessage({ type: 'error', text: res.error || (editingId ? 'An error occurred while updating the image.' : 'An error occurred while adding the image.') });
     }
   };
 
@@ -223,86 +225,86 @@ export default function AdminGallery() {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-serif text-stone-900 font-bold">Galeri Yönetimi</h1>
-          <p className="text-xs text-stone-500 mt-1">Galeri fotoğraflarını yükleyin ve düzenleyin.</p>
+          <h1 className="text-2xl font-serif text-stone-900 font-bold">Gallery Management</h1>
+          <p className="text-xs text-stone-500 mt-1">Upload and manage gallery photos.</p>
         </div>
         <button 
           onClick={showForm ? () => setShowForm(false) : handleAddNewClick}
           className="px-6 py-2.5 bg-stone-900 text-white font-medium text-xs md:text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer rounded shrink-0"
         >
-          {showForm ? 'Galeriye Dön' : '+ Yeni Görsel Ekle'}
+          {showForm ? 'Back to Gallery' : '+ Add New Image'}
         </button>
       </div>
 
       {showForm ? (
         <div className="bg-white p-8 border border-stone-200 shadow-sm mb-8">
           <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
-            {editingId ? 'Görseli Düzenle' : 'Yeni Görsel Ekle'}
+            {editingId ? 'Edit Image' : 'Add New Image'}
           </h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Görsel Başlığı *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Image Title *</label>
                 <input 
                   type="text" 
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
-                  placeholder="Örn: Modern Mutfak Dolabı" 
+                  placeholder="e.g. Modern Kitchen Cabinet" 
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-                  <span>Meta Başlık (SEO)</span>
-                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                  <span>Meta Title (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
                 </label>
                 <input 
                   type="text" 
                   value={metaTitle}
                   onChange={(e) => setMetaTitle(e.target.value)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
-                  placeholder="Alt etiket veya detaylı başlık yazın..." 
+                  placeholder="Enter subtitle or detailed title..." 
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-                  <span>Meta Açıklama (SEO)</span>
-                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                  <span>Meta Description (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
                 </label>
                 <textarea 
                   value={metaDesc}
                   onChange={(e) => setMetaDesc(e.target.value)}
                   rows={2}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
-                  placeholder="Google'da çıkacak özet açıklama..." 
+                  placeholder="Summary description for search engines..." 
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-                  <span>Anahtar Kelimeler (SEO)</span>
-                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                  <span>Keywords (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
                 </label>
                 <input 
                   type="text" 
                   value={metaKeys}
                   onChange={(e) => setMetaKeys(e.target.value)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700" 
-                  placeholder="Örn: ahşap masa, ofis tasarımı" 
+                  placeholder="e.g. wooden table, office design" 
                 />
               </div>
               <div className="space-y-2 md:col-span-1">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Sıralama (Opsiyonel)</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Sorting (Optional)</label>
                 <input 
                   type="number" 
                   value={order}
                   onChange={(e) => setOrder(parseInt(e.target.value) || 999)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                  placeholder="1, 2, 3... (Örn: 1 en üstte)" 
+                  placeholder="1, 2, 3... (e.g. 1 on top)" 
                 />
               </div>
               <div className="space-y-2 md:col-span-1">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kategori *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Category *</label>
                 {isNewCategory ? (
                   <div className="flex gap-2">
                     <input
@@ -311,7 +313,7 @@ export default function AdminGallery() {
                       value={newCategoryName}
                       onChange={(e) => setNewCategoryName(e.target.value)}
                       className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
-                      placeholder="Yeni kategori adı..."
+                      placeholder="New category name..."
                       autoFocus
                     />
                     <button
@@ -322,7 +324,7 @@ export default function AdminGallery() {
                       }}
                       className="px-4 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-xs hover:bg-stone-300 transition-colors rounded whitespace-nowrap"
                     >
-                      İptal
+                      Cancel
                     </button>
                   </div>
                 ) : (
@@ -340,20 +342,20 @@ export default function AdminGallery() {
                     {availableCategories.map(cat => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
-                    <option value="YENI_EKLE" className="font-bold text-amber-700">+ Yeni Kategori Ekle...</option>
+                    <option value="YENI_EKLE" className="font-bold text-amber-700">+ Add New Category...</option>
                   </select>
                 )}
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Görsel Seçin / Yükleyin *</label>
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Select / Upload Image *</label>
               
               {img ? (
                 <div className="relative aspect-[4/3] w-full max-w-sm bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
                   <Image 
                     src={img} 
-                    alt="Yüklenen Görsel Önizleme" 
+                    alt="Uploaded Image Preview" 
                     fill 
                     sizes="(max-width: 768px) 100vw, 384px"
                     className="object-cover" 
@@ -364,7 +366,7 @@ export default function AdminGallery() {
                       onClick={() => setImg('')}
                       className="px-6 py-2 bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded shadow hover:bg-red-700 transition-colors cursor-pointer"
                     >
-                      Resmi Değiştir / Kaldır
+                      Change / Remove Image
                     </button>
                   </div>
                 </div>
@@ -400,10 +402,10 @@ export default function AdminGallery() {
                     </svg>
                   )}
                   <p className="text-stone-700 font-bold text-sm">
-                    {uploading ? 'Görsel Hazırlanıyor... Çekiçler Çalışıyor!' : isDragging ? 'Bırakın ve Yükleyin' : 'Resim Seçmek İçin Tıklayın veya Sürükleyin'}
+                    {uploading ? 'Preparing Image... Hammers at Work!' : isDragging ? 'Drop to Upload' : 'Click or Drag to Select Image'}
                   </p>
-                  <p className="text-stone-400 text-xs mt-2">Maks. boyut 5MB (JPG, PNG, WEBP, SVG)</p>
-                  <p className="text-amber-700 font-medium text-xs mt-1">Önerilen Görsel Ölçüsü: 800 x 600px (veya benzeri yatay format)</p>
+                  <p className="text-stone-400 text-xs mt-2">Max size 5MB (JPG, PNG, WEBP, SVG)</p>
+                  <p className="text-amber-700 font-medium text-xs mt-1">Recommended Image Size: 800 x 600px (or similar landscape format)</p>
                 </label>
               )}
             </div>
@@ -414,14 +416,14 @@ export default function AdminGallery() {
                 onClick={() => setShowForm(false)} 
                 className="px-8 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-sm hover:bg-stone-300 transition-colors cursor-pointer"
               >
-                İptal
+                Cancel
               </button>
               <button 
                 type="submit" 
                 disabled={loading || uploading || !img}
                 className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Kaydediliyor...' : (editingId ? 'Değişiklikleri Kaydet' : 'Görseli Kaydet')}
+                {loading ? 'Saving...' : (editingId ? 'Save Changes' : 'Save Image')}
               </button>
             </div>
           </form>
@@ -430,7 +432,7 @@ export default function AdminGallery() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {items.length === 0 ? (
             <div className="col-span-full text-center py-10 bg-white border border-stone-200 text-stone-500">
-              Galeride henüz görsel bulunmuyor.
+              No images in gallery yet.
             </div>
           ) : (
             items.map((img) => (
@@ -448,7 +450,7 @@ export default function AdminGallery() {
                     <button 
                       onClick={() => handleEditClick(img)} 
                       className="p-3 bg-white text-amber-600 rounded-full hover:bg-amber-600 hover:text-white transition-colors cursor-pointer shadow-md" 
-                      title="Düzenle"
+                      title="Edit"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -457,7 +459,7 @@ export default function AdminGallery() {
                     <button 
                       onClick={() => handleDelete(img.id)} 
                       className="p-3 bg-white text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors cursor-pointer shadow-md" 
-                      title="Sil"
+                      title="Delete"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -469,7 +471,7 @@ export default function AdminGallery() {
                   <h3 className="font-bold text-stone-900 text-sm truncate">{img.title}</h3>
                   <div className="flex justify-between items-center mt-1">
                     <p className="text-xs text-stone-500 uppercase tracking-wider">{img.category}</p>
-                    <span className="text-[10px] bg-stone-100 text-stone-500 px-2 py-0.5 rounded-full font-bold">Sıra: {img.order}</span>
+                    <span className="text-[10px] bg-stone-100 text-stone-500 px-2 py-0.5 rounded-full font-bold">Sorting: {img.order}</span>
                   </div>
                 </div>
               </div>
@@ -480,3 +482,4 @@ export default function AdminGallery() {
     </div>
   );
 }
+

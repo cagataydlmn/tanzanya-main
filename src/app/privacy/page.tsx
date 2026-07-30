@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Gizlilik Politikası",
-  description: "Web sitemizi ziyaret ettiğinizde verilerinizin gizliliğinin nasıl sağlandığına dair politikamız.",
+  title: "Privacy Policy | Tanzanya Furniture",
+  description: "Learn how Tanzanya Furniture collects, processes, and protects your personal information and project data.",
 };
 
 export default function Privacy() {
@@ -11,42 +11,52 @@ export default function Privacy() {
       <div className="max-w-4xl mx-auto px-6">
         
         <div className="mb-12">
-          <h1 className="text-3xl md:text-4xl font-serif text-stone-900 mb-4">Gizlilik Politikası</h1>
+          <h1 className="text-3xl md:text-4xl font-serif text-stone-900 mb-4">Privacy Policy</h1>
           <div className="w-16 h-1 bg-amber-700"></div>
         </div>
 
         <div className="bg-white p-8 md:p-12 border border-stone-200 shadow-sm space-y-6 text-stone-600 leading-relaxed text-sm md:text-base">
           <p>
-            <strong>Tanzanya Mobilya & Dekorasyon</strong> ("Şirket", "Biz" veya "Tanzanya Mobilya") olarak, www.tanzanyamobilya.com ("Web Sitesi") adresindeki ziyaretçilerimizin ve müşterilerimizin gizliliğine büyük önem vermekteyiz. Bu Gizlilik Politikası, web sitemizi kullanırken toplanan verilerin nasıl işlendiğini, korunduğunu ve kullanıldığını açıklar.
+            At <strong>Tanzanya Furniture & Decoration</strong> ("Company", "We", or "Tanzanya Furniture"), we are committed to safeguarding the privacy and personal data of our website visitors and clients. This Privacy Policy explains how information is collected, processed, used, and protected when you visit our website or interact with our custom furniture manufacturing and interior architecture services.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">1. Toplanan Bilgiler</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">1. Information We Collect</h3>
           <p>
-            Web sitemiz üzerinden bizimle iletişime geçtiğinizde veya teklif formunu doldurduğunuzda; adınız, soyadınız, telefon numaranız, e-posta adresiniz ve projenizle ilgili gönüllü olarak paylaştığınız (dosya yüklemeleri dahil) bilgileri toplarız. Ayrıca, sitemizi ziyaretiniz sırasında IP adresiniz, tarayıcı türünüz ve gezinme verileriniz çerezler (cookies) aracılığıyla anonim olarak kaydedilebilir.
+            When you contact us, fill out a quote request form, or consult with us regarding custom design projects, we collect personal information that you voluntarily provide. This includes your full name, email address, phone number, company details, and project specifications (including uploaded files or floor plans). Additionally, technical data such as IP address, browser type, device information, and navigation analytics may be recorded anonymously via cookies.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">2. Bilgilerin Kullanımı</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">2. How We Use Your Information</h3>
           <p>
-            Topladığımız bilgiler, sizlere daha iyi hizmet verebilmek, teklif taleplerinize doğru ve hızlı yanıt oluşturabilmek, iç mimari proje ve mobilya üretim süreçlerimizi sizin ihtiyaçlarınıza göre şekillendirebilmek amacıyla kullanılmaktadır. Kesinlikle hiçbir ticari bilginiz, izniniz olmadan üçüncü şahıslara satılamaz.
+            We use the collected information to provide tailored interior design solutions, prepare accurate cost quotes, manage custom furniture production processes, communicate project updates, and enhance website performance. Your personal and project data will never be sold, rented, or commercialized without your explicit consent.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">3. Bilgilerin Korunması</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">3. Data Protection & Security</h3>
           <p>
-            Tanzanya Mobilya, kişisel verilerinizin güvenliğini sağlamak için endüstri standardı güvenlik önlemlerini kullanır. Sistemlerimizde toplanan müşteri dataları ve mimari proje taslakları güvenli sunucularda saklanmakta ve yalnızca yetkili personel tarafından erişilebilmektedir.
+            Tanzanya Furniture implements industry-standard administrative, physical, and technical security protocols to protect your personal data and architectural project drafts. Collected client records are stored on secure servers with restricted access granted only to authorized team members directly handling your project.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">4. Üçüncü Taraflarla Paylaşım</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">4. Third-Party Sharing</h3>
           <p>
-            Verileriniz, yalnızca yasal zorunluluklar halinde resmi kurumlarla veya anahtar teslim projelerde sizin onayınızla birlikte çalıştığımız güvenilir alt taşeronlarla (lojistik, özel hammadde tedarikçileri) projenin ilerlemesi için gereken minimum düzeyde paylaşılabilir.
+            Your information is shared only when necessary to fulfill turnkey projects—such as with trusted logistics partners or specialized material suppliers—and strictly to the extent required for project completion. We may also share information if required by law or legal proceedings.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">5. İletişim</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">5. Cookies & Tracking Technologies</h3>
           <p>
-            Gizlilik politikamız veya kişisel verilerinizin işlenmesiyle ilgili sorularınız için bizimle <strong>stardecortz@gmail.com</strong> adresi üzerinden iletişime geçebilirsiniz.
+            We use cookies to improve user experience, analyze site traffic, and optimize site navigation. You can manage or disable cookie preferences at any time through your browser settings.
+          </p>
+
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">6. Your Rights</h3>
+          <p>
+            You have the right to request access to your personal data, request updates or corrections, request deletion of your information subject to legal retention obligations, and inquire about how your data is handled.
+          </p>
+
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">7. Contact Us</h3>
+          <p>
+            If you have any questions or requests regarding this Privacy Policy or your personal information, please feel free to reach out to us at <strong>stardecortz@gmail.com</strong>.
           </p>
           
           <p className="pt-8 text-sm text-stone-400 border-t border-stone-200 mt-8">
-            Son Güncelleme: Ekim 2026
+            Last Updated: July 2026
           </p>
         </div>
 
@@ -54,3 +64,4 @@ export default function Privacy() {
     </div>
   );
 }
+

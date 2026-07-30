@@ -4,8 +4,8 @@ import { getServices } from '@/app/actions/services';
 import { getPageHeader } from '@/app/actions/page-headers';
 
 export const metadata: Metadata = {
-  title: "Hizmetlerimiz",
-  description: "İç mimari ve tasarım, özel mobilya üretimi, anahtar teslim uygulama ve montaj hizmetlerimizle projelerinizi eksiksiz hayata geçiriyoruz.",
+  title: "Services | Star Decor",
+  description: "Interior design, custom furniture manufacturing, turnkey installation, and space planning services engineered for excellence in Tanzania.",
 };
 
 export default async function Services() {
@@ -14,8 +14,8 @@ export default async function Services() {
 
   const headerRes = await getPageHeader('services');
   const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
-  const pageTitle = headerData?.title || "Hizmetlerimiz";
-  const pageDesc = headerData?.description || "Tasarım aşamasından üretim ve montaja kadar, projenizin her adımında profesyonel çözümler sunuyoruz.";
+  const pageTitle = headerData?.title || "Our Services";
+  const pageDesc = headerData?.description || "Professional solutions tailored for your space, from architectural drafting and custom wood production to site installation.";
 
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">

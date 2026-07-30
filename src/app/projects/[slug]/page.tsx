@@ -28,12 +28,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
-  if (!project) return { title: "Proje Bulunamadı | Tanzanya Mobilya" };
+  if (!project) return { title: "Project Not Found | Star Decor" };
 
-  const pageTitle = project.metaTitle || `${project.name} - ${project.category} Projesi | Tanzanya Mobilya`;
+  const pageTitle = project.metaTitle || `${project.name} - ${project.category} Project | Star Decor`;
   const pageDesc = project.metaDesc || (project.description 
     ? project.description.slice(0, 160) 
-    : `${project.name} özel tasarım ahşap mobilya ve iç mimarlık projesi.`);
+    : `${project.name} custom furniture and interior design project.`);
 
   return {
     title: pageTitle,
@@ -73,7 +73,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
   if (!project) notFound();
 
-  // Önerilen diğer projeler
+  // Related projects recommendation
   const allProjectsRes = await getProjects();
   const relatedProjects = allProjectsRes.success && allProjectsRes.data 
     ? allProjectsRes.data.filter(p => p.id !== project.id).slice(0, 3) 
@@ -99,9 +99,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-center md:text-left">
           {/* Breadcrumb */}
           <nav className="flex items-center justify-center md:justify-start gap-2 text-xs md:text-sm text-stone-400 mb-6">
-            <Link href="/" className="hover:text-white transition-colors">Anasayfa</Link>
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/projects" className="hover:text-white transition-colors">Projelerimiz</Link>
+            <Link href="/projects" className="hover:text-white transition-colors">Projects</Link>
             <span>/</span>
             <span className="text-amber-500 font-medium truncate">{project.name}</span>
           </nav>
@@ -136,20 +136,20 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         {/* 3. Technical Specifications Grid */}
         <div className="bg-white border border-stone-200 shadow-sm p-6 md:p-8 rounded-lg grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           <div className="space-y-1">
-            <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Kategori</span>
+            <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Category</span>
             <p className="text-stone-900 font-bold text-base md:text-lg">{project.category}</p>
           </div>
           <div className="space-y-1">
-            <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Üretici Tesis</span>
-            <p className="text-stone-900 font-bold text-base md:text-lg">Tanzanya Mobilya</p>
+            <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Manufacturer</span>
+            <p className="text-stone-900 font-bold text-base md:text-lg">Star Decor</p>
           </div>
           <div className="space-y-1">
-            <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Malzeme Standartı</span>
-            <p className="text-stone-900 font-bold text-base md:text-lg">Birinci Sınıf Ahşap</p>
+            <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Material Standard</span>
+            <p className="text-stone-900 font-bold text-base md:text-lg">Premium Wood & Panels</p>
           </div>
           <div className="space-y-1">
-            <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Teslimat Türü</span>
-            <p className="text-stone-900 font-bold text-base md:text-lg">Anahtar Teslim Montaj</p>
+            <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Delivery & Assembly</span>
+            <p className="text-stone-900 font-bold text-base md:text-lg">Turnkey Assembly</p>
           </div>
         </div>
 
@@ -160,39 +160,39 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           <div className="lg:col-span-2 bg-white border border-stone-200 p-8 md:p-12 shadow-sm rounded-lg space-y-6">
             <div className="flex items-center gap-3 border-b border-stone-100 pb-4">
               <div className="w-1.5 h-8 bg-amber-700 rounded-full" />
-              <h2 className="text-2xl font-serif text-stone-900 font-bold">Proje Detayları ve Özellikler</h2>
+              <h2 className="text-2xl font-serif text-stone-900 font-bold">Project Details & Specifications</h2>
             </div>
 
             <p className="text-stone-700 text-base md:text-lg leading-relaxed whitespace-pre-line">
-              {project.description || "Bu proje kendi 5000 m² üretim tesislerimizde, milimetrik ölçü hassasiyeti ve birinci sınıf doğal malzemeler kullanılarak hayata geçirilmiştir."}
+              {project.description || "Manufactured in our state-of-the-art production facilities using precision crafting and premium materials."}
             </p>
 
             <div className="pt-6 border-t border-stone-100 space-y-4">
-              <h3 className="text-stone-900 font-bold text-base">Üretim ve Kalite Standartlarımız:</h3>
+              <h3 className="text-stone-900 font-bold text-base">Manufacturing & Quality Standards:</h3>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-stone-600">
                 <li className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-amber-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Çizilmeye dayanıklı kaplama</span>
+                  <span>Scratch-resistant finish & veneers</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-amber-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Sessiz yavaşlatıcılı ray sistemleri</span>
+                  <span>Soft-close sliding & hinge hardware</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-amber-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Özel ölçü imalat garantisi</span>
+                  <span>Custom dimension manufacturing guarantee</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-amber-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Uzman saha montaj desteği</span>
+                  <span>Expert technical installation support</span>
                 </li>
               </ul>
             </div>
@@ -201,12 +201,12 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           {/* Right Column: Floating CTA Card */}
           <div className="space-y-6">
             <div className="bg-stone-900 text-white p-8 rounded-lg border border-stone-800 shadow-xl space-y-6 sticky top-28">
-              <span className="text-amber-500 text-xs font-bold uppercase tracking-widest block">Özel Tasarım Teklifi</span>
+              <span className="text-amber-500 text-xs font-bold uppercase tracking-widest block">Custom Design Proposal</span>
               <h3 className="text-2xl font-serif font-bold text-white leading-tight">
-                Mekanınıza Özel Projelendirme İsteyin
+                Request Custom Project Design for Your Space
               </h3>
               <p className="text-stone-300 text-sm leading-relaxed">
-                Bu projedeki detayları kendi eviniz, ofisiniz veya ticari alanınız için uygulamak ister misiniz? Ücretsiz keşif ve teklif alın.
+                Would you like to implement similar custom designs for your home, office, or commercial space? Get a free consultation and quote.
               </p>
 
               <div className="space-y-3 pt-2">
@@ -214,13 +214,13 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   href={`/quote?service=${encodeURIComponent(project.name)}`}
                   className="w-full py-4 bg-amber-700 hover:bg-amber-800 text-white font-bold text-sm uppercase tracking-wider transition-colors block text-center rounded shadow-md"
                 >
-                  Hemen Fiyat Teklifi Al
+                  Get Quote Now
                 </Link>
                 <Link 
                   href="/contact"
                   className="w-full py-3 bg-stone-800 hover:bg-stone-700 text-stone-200 font-bold text-xs uppercase tracking-wider transition-colors block text-center rounded border border-stone-700"
                 >
-                  İletişime Geçin
+                  Contact Us
                 </Link>
               </div>
             </div>
@@ -233,11 +233,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           <div className="mt-24 border-t border-stone-200 pt-16">
             <div className="flex justify-between items-end mb-8">
               <div>
-                <span className="text-amber-700 text-xs font-bold uppercase tracking-widest block mb-2">Benzer Çalışmalar</span>
-                <h2 className="text-2xl md:text-3xl font-serif text-stone-900 font-bold">Diğer Projelerimiz</h2>
+                <span className="text-amber-700 text-xs font-bold uppercase tracking-widest block mb-2">Similar Projects</span>
+                <h2 className="text-2xl md:text-3xl font-serif text-stone-900 font-bold">Other Reference Projects</h2>
               </div>
               <Link href="/projects" className="text-amber-700 hover:text-amber-800 font-semibold text-xs uppercase tracking-wider">
-                Tümünü Gör →
+                View All →
               </Link>
             </div>
 
@@ -275,3 +275,4 @@ export default async function ProjectDetailPage({ params }: PageProps) {
     </div>
   );
 }
+

@@ -43,6 +43,8 @@ export default function AdminProjects() {
   const [isDragging, setIsDragging] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
+  const availableCategories = categories.map(cat => typeof cat === 'string' ? cat : cat.name);
+
   const fetchProjects = async () => {
     const res = await getProjects();
     if (res.success && res.data) {
@@ -115,9 +117,9 @@ export default function AdminProjects() {
 
     if (res.success && res.url) {
       setImg(res.url);
-      setMessage({ type: 'success', text: 'Görsel başarıyla yüklendi.' });
+      setMessage({ type: 'success', text: 'Image uploaded successfully.' });
     } else {
-      setMessage({ type: 'error', text: res.error || 'Görsel yüklenemedi.' });
+      setMessage({ type: 'error', text: res.error || 'Failed to upload image.' });
     }
   };
 
@@ -145,24 +147,24 @@ export default function AdminProjects() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Bu projeyi silmek istediğinize emin misiniz?")) return;
+    if (!window.confirm("Are you sure you want to delete this project?")) return;
     
     setLoading(true);
     const res = await deleteProject(id);
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: 'Proje başarıyla silindi.' });
+      setMessage({ type: 'success', text: 'Project deleted successfully.' });
       fetchProjects();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Proje silinemedi.' });
+      setMessage({ type: 'error', text: res.error || 'Failed to delete project.' });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !img) {
-      setMessage({ type: 'error', text: 'Lütfen proje adını girin ve bir kapak görseli yükleyin.' });
+      setMessage({ type: 'error', text: 'Please enter a project name and upload a cover image.' });
       return;
     }
 
@@ -189,13 +191,13 @@ export default function AdminProjects() {
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: editingId ? 'Proje başarıyla güncellendi.' : 'Proje başarıyla eklendi.' });
+      setMessage({ type: 'success', text: editingId ? 'Project updated successfully.' : 'Project added successfully.' });
       setShowForm(false);
       setEditingId(null);
       fetchProjects();
       fetchCategories();
     } else {
-      setMessage({ type: 'error', text: res.error || (editingId ? 'Proje güncellenirken bir hata oluştu.' : 'Proje eklenirken bir hata oluştu.') });
+      setMessage({ type: 'error', text: res.error || (editingId ? 'An error occurred while updating the project.' : 'An error occurred while adding the project.') });
     }
   };
 
@@ -214,37 +216,37 @@ export default function AdminProjects() {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-serif text-stone-900 font-bold">Projeler Yönetimi</h1>
-          <p className="text-xs text-stone-500 mt-1">Sitenizdeki projeleri ekleyin ve yönetin.</p>
+          <h1 className="text-2xl font-serif text-stone-900 font-bold">Projects Management</h1>
+          <p className="text-xs text-stone-500 mt-1">Add and manage projects for your site.</p>
         </div>
         <button 
           onClick={showForm ? () => setShowForm(false) : handleAddNewClick}
           className="px-6 py-2.5 bg-stone-900 text-white font-medium text-xs md:text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer rounded shrink-0"
         >
-          {showForm ? 'Listeye Dön' : '+ Yeni Proje Ekle'}
+          {showForm ? 'Back to List' : '+ Add New Project'}
         </button>
       </div>
 
       {showForm ? (
         <div className="bg-white p-6 sm:p-8 border border-stone-200 shadow-sm rounded">
           <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
-            {editingId ? 'Projeyi Düzenle' : 'Yeni Proje Ekle'}
+            {editingId ? 'Edit Project' : 'Add New Project'}
           </h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Proje Adı *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Project Name *</label>
                 <input 
                   type="text" 
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                  placeholder="Örn: Vadi İstanbul Konutları" 
+                  placeholder="e.g. Vadi Istanbul Residences" 
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kategori *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Category *</label>
                 {isNewCategory ? (
                   <div className="flex gap-2">
                     <input
@@ -253,7 +255,7 @@ export default function AdminProjects() {
                       value={newCategoryName}
                       onChange={(e) => setNewCategoryName(e.target.value)}
                       className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
-                      placeholder="Yeni kategori adı..."
+                      placeholder="New category name..."
                       autoFocus
                     />
                     <button
@@ -264,7 +266,7 @@ export default function AdminProjects() {
                       }}
                       className="px-4 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-xs hover:bg-stone-300 transition-colors rounded whitespace-nowrap"
                     >
-                      İptal
+                      Cancel
                     </button>
                   </div>
                 ) : (
@@ -282,7 +284,7 @@ export default function AdminProjects() {
                     {availableCategories.map(cat => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
-                    <option value="YENI_EKLE" className="font-bold text-amber-700">+ Yeni Kategori Ekle...</option>
+                    <option value="YENI_EKLE" className="font-bold text-amber-700">+ Add New Category...</option>
                   </select>
                 )}
               </div>
@@ -297,73 +299,73 @@ export default function AdminProjects() {
                 className="w-4 h-4 text-amber-800 border-stone-300 rounded focus:ring-amber-700"
               />
               <label htmlFor="isFeatured" className="text-sm font-bold text-stone-900 uppercase tracking-wider cursor-pointer">
-                Öne Çıkan Proje mi?
+                Is Featured Project?
               </label>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-                  <span>Meta Başlık (SEO)</span>
-                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                  <span>Meta Title (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
                 </label>
                 <input 
                   type="text" 
                   value={metaTitle}
                   onChange={(e) => setMetaTitle(e.target.value)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                  placeholder="Alt etiket veya detaylı başlık yazın..." 
+                  placeholder="Enter subtitle or detailed title..." 
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-                  <span>Anahtar Kelimeler (SEO)</span>
-                  <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                  <span>Keywords (SEO)</span>
+                  <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
                 </label>
                 <input 
                   type="text" 
                   value={metaKeys}
                   onChange={(e) => setMetaKeys(e.target.value)}
                   className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                  placeholder="Örn: ahşap ev, modern tasarım" 
+                  placeholder="e.g. wooden house, modern design" 
                 />
               </div>
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-                <span>Meta Açıklama (SEO)</span>
-                <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                <span>Meta Description (SEO)</span>
+                <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
               </label>
               <textarea 
                 value={metaDesc}
                 onChange={(e) => setMetaDesc(e.target.value)}
                 rows={2}
                 className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                placeholder="Google'da çıkacak özet açıklama..." 
+                placeholder="Summary description for search engines..." 
               />
             </div>
 
             {/* Description Textarea */}
             <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Proje Açıklaması</label>
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Project Description</label>
               <textarea 
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
                 className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-                placeholder="Proje detaylarını, kullanılan malzemeleri ve özellikleri yazın..." 
+                placeholder="Enter project details, materials used, and features..." 
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kapak Görseli Seçin / Yükleyin *</label>
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Select / Upload Cover Image *</label>
               
               {img ? (
                 <div className="relative aspect-[16/9] w-full max-w-md bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
                   <Image 
                     src={img} 
-                    alt="Yüklenen Görsel Önizleme" 
+                    alt="Uploaded Image Preview" 
                     fill 
                     unoptimized
                     sizes="(max-width: 768px) 100vw, 448px"
@@ -375,7 +377,7 @@ export default function AdminProjects() {
                       onClick={() => setImg('')}
                       className="px-6 py-2 bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded shadow hover:bg-red-700 transition-colors cursor-pointer"
                     >
-                      Resmi Değiştir / Kaldır
+                      Change / Remove Image
                     </button>
                   </div>
                 </div>
@@ -411,10 +413,10 @@ export default function AdminProjects() {
                     </svg>
                   )}
                   <p className="text-stone-700 font-bold text-sm">
-                    {uploading ? 'Görsel Hazırlanıyor... Çekiçler Çalışıyor!' : isDragging ? 'Bırakın ve Yükleyin' : 'Kapak Görseli Seçmek İçin Tıklayın veya Sürükleyin'}
+                    {uploading ? 'Preparing Image... Hammers at Work!' : isDragging ? 'Drop to Upload' : 'Click or Drag to Select Cover Image'}
                   </p>
-                  <p className="text-stone-400 text-xs mt-2">Maks. boyut 5MB (JPG, PNG, WEBP, SVG)</p>
-                  <p className="text-amber-700 font-medium text-xs mt-1">Önerilen Görsel Ölçüsü: 800 x 600px (veya benzeri yatay format)</p>
+                  <p className="text-stone-400 text-xs mt-2">Max size 5MB (JPG, PNG, WEBP, SVG)</p>
+                  <p className="text-amber-700 font-medium text-xs mt-1">Recommended Image Size: 800 x 600px (or similar landscape format)</p>
                 </label>
               )}
             </div>
@@ -425,14 +427,14 @@ export default function AdminProjects() {
                 onClick={() => setShowForm(false)} 
                 className="px-8 py-3 bg-stone-200 text-stone-700 font-bold uppercase tracking-wider text-sm hover:bg-stone-300 transition-colors cursor-pointer rounded"
               >
-                İptal
+                Cancel
               </button>
               <button 
                 type="submit" 
                 disabled={loading || uploading || !img}
                 className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Kaydediliyor...' : (editingId ? 'Değişiklikleri Kaydet' : 'Projeyi Kaydet')}
+                {loading ? 'Saving...' : (editingId ? 'Save Changes' : 'Save Project')}
               </button>
             </div>
           </form>
@@ -441,22 +443,22 @@ export default function AdminProjects() {
         <div className="bg-white border border-stone-200 shadow-sm overflow-x-auto rounded">
           {projects.length === 0 ? (
             <div className="text-center py-10 text-stone-500">
-              Henüz eklenmiş proje bulunmuyor.
+              No projects added yet.
             </div>
           ) : (
             <table className="w-full text-left text-sm text-stone-600">
               <thead className="bg-stone-50 text-stone-900 uppercase tracking-wider font-bold border-b border-stone-200">
                 <tr>
-                  <th className="px-6 py-4">Proje Adı</th>
-                  <th className="px-6 py-4">Kategori</th>
-                  <th className="px-6 py-4">Tarih</th>
-                  <th className="px-6 py-4">Durum</th>
-                  <th className="px-6 py-4 text-right">İşlemler</th>
+                  <th className="px-6 py-4">Project Name</th>
+                  <th className="px-6 py-4">Category</th>
+                  <th className="px-6 py-4">Date</th>
+                  <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100">
                 {projects.map((project) => {
-                  const formattedDate = new Date(project.createdAt).toLocaleDateString('tr-TR', {
+                  const formattedDate = new Date(project.createdAt).toLocaleDateString('en-US', {
                     day: 'numeric',
                     month: 'numeric',
                     year: 'numeric'
@@ -469,7 +471,7 @@ export default function AdminProjects() {
                       <td className="px-6 py-4">{formattedDate}</td>
                       <td className="px-6 py-4">
                         {project.isFeatured && (
-                          <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-1 rounded font-bold uppercase">Öne Çıkan</span>
+                          <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-1 rounded font-bold uppercase">Featured</span>
                         )}
                       </td>
                       <td className="px-6 py-4 text-right whitespace-nowrap space-x-3">
@@ -477,13 +479,13 @@ export default function AdminProjects() {
                           onClick={() => handleEditClick(project)}
                           className="text-amber-700 hover:text-amber-900 font-medium cursor-pointer"
                         >
-                          Düzenle
+                          Edit
                         </button>
                         <button 
                           onClick={() => handleDelete(project.id)}
                           className="text-red-600 hover:text-red-800 font-medium cursor-pointer"
                         >
-                          Sil
+                          Delete
                         </button>
                       </td>
                     </tr>
@@ -497,3 +499,4 @@ export default function AdminProjects() {
     </div>
   );
 }
+

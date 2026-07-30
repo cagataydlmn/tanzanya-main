@@ -33,6 +33,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Star Decor" }],
   creator: "Star Decor",
   publisher: "Star Decor",
+  icons: {
+    icon: '/logo/StarDecorLogo_page-0009.jpg',
+    shortcut: '/logo/StarDecorLogo_page-0009.jpg',
+    apple: '/logo/StarDecorLogo_page-0009.jpg',
+  },
   openGraph: {
     title: "Star Decor | Premium Furniture & Interior Design in Tanzania",
     description: "Leading furniture manufacturing and interior design services in Dar es Salaam, Tanzania.",
@@ -40,6 +45,7 @@ export const metadata: Metadata = {
     siteName: "Star Decor",
     locale: "en_TZ",
     type: "website",
+    images: [{ url: '/logo/StarDecorLogo_page-0009.jpg' }],
   },
   robots: {
     index: true,

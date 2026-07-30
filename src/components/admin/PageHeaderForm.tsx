@@ -32,9 +32,9 @@ export default function PageHeaderForm({ pageIdentifier }: PageHeaderFormProps) 
     const res = await updatePageHeader(pageIdentifier, title, description);
     
     if (res.success) {
-      setMessage({ text: "Sayfa başlığı başarıyla güncellendi.", type: "success" });
+      setMessage({ text: "Page header updated successfully.", type: "success" });
     } else {
-      setMessage({ text: res.message || "Bir hata oluştu.", type: "error" });
+      setMessage({ text: res.message || "An error occurred.", type: "error" });
     }
     
     setIsLoading(false);
@@ -44,29 +44,29 @@ export default function PageHeaderForm({ pageIdentifier }: PageHeaderFormProps) 
   return (
     <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200 mb-12">
       <h2 className="text-xl font-serif font-bold text-stone-900 mb-6 pb-2 border-b border-stone-100 uppercase">
-        Genel Sayfa Bilgileri (Hero)
+        General Page Information (Hero)
       </h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Başlık *</label>
+          <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Title *</label>
           <input 
             type="text" 
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Örn: Ürünlerimiz"
+            placeholder="e.g. Our Products"
             className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Açıklama (İsteğe Bağlı)</label>
+          <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Description (Optional)</label>
           <textarea 
             rows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Başlığın altında yer alacak açıklama metni..."
+            placeholder="Description text displayed below the title..."
             className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded resize-y" 
           />
         </div>
@@ -83,10 +83,11 @@ export default function PageHeaderForm({ pageIdentifier }: PageHeaderFormProps) 
             disabled={isLoading}
             className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded shadow hover:bg-amber-700 transition-colors disabled:opacity-50"
           >
-            {isLoading ? "Kaydediliyor..." : "Kaydet"}
+            {isLoading ? "Saving..." : "Save"}
           </button>
         </div>
       </form>
     </section>
   );
 }
+

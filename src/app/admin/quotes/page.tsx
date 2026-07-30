@@ -25,7 +25,7 @@ export default function AdminQuotes() {
     if (res.success && res.data) {
       setQuotes(res.data as Quote[]);
       
-      // Eğer seçili quote varsa onu da listeden güncelle
+      // If there's a selected quote, update it from the fresh data list
       if (selectedQuote) {
         const updated = (res.data as Quote[]).find(q => q.id === selectedQuote.id);
         if (updated) setSelectedQuote(updated);
@@ -37,10 +37,17 @@ export default function AdminQuotes() {
     fetchQuotes();
   }, []);
 
+  const getStatusDisplay = (status: string) => {
+    if (status === 'Yeni') return 'New';
+    if (status === 'Yanıtlandı') return 'Responded';
+    if (status === 'Okundu') return 'Read';
+    return status;
+  };
+
   const handleSelectQuote = async (quote: Quote) => {
     setSelectedQuote(quote);
     
-    // Eğer durum "Yeni" ise otomatik "Okundu" yap
+    // Automatically mark as "Okundu" if status is "Yeni"
     if (quote.status === "Yeni") {
       const res = await updateQuoteStatus(quote.id, "Okundu");
       if (res.success) {
@@ -55,26 +62,26 @@ export default function AdminQuotes() {
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: `Talep durumu '${status}' olarak güncellendi.` });
+      setMessage({ type: 'success', text: `Quote status updated to '${getStatusDisplay(status)}'.` });
       fetchQuotes();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Durum güncellenemedi.' });
+      setMessage({ type: 'error', text: res.error || 'Failed to update status.' });
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Bu teklif talebini silmek istediğinize emin misiniz?")) return;
+    if (!window.confirm("Are you sure you want to delete this quote request?")) return;
 
     setLoading(true);
     const res = await deleteQuote(id);
     setLoading(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: 'Teklif talebi başarıyla silindi.' });
+      setMessage({ type: 'success', text: 'Quote request deleted successfully.' });
       setSelectedQuote(null);
       fetchQuotes();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Talep silinemedi.' });
+      setMessage({ type: 'error', text: res.error || 'Failed to delete request.' });
     }
   };
 
@@ -91,7 +98,7 @@ export default function AdminQuotes() {
       )}
 
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-serif text-stone-900">Gelen Teklif Talepleri</h1>
+        <h1 className="text-2xl font-serif text-stone-900">Incoming Quote Requests</h1>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -99,22 +106,22 @@ export default function AdminQuotes() {
         <div className="w-full lg:w-1/2 bg-white border border-stone-200 shadow-sm overflow-x-auto rounded">
           {quotes.length === 0 ? (
             <div className="text-center py-12 text-stone-500">
-              Henüz teklif talebi bulunmuyor.
+              No quote requests yet.
             </div>
           ) : (
             <table className="w-full text-left text-sm text-stone-600">
               <thead className="bg-stone-50 text-stone-900 uppercase tracking-wider font-bold border-b border-stone-200">
                 <tr>
-                  <th className="px-6 py-4">Gönderen</th>
-                  <th className="px-6 py-4">Talep Türü</th>
-                  <th className="px-6 py-4">Durum</th>
+                  <th className="px-6 py-4">Sender</th>
+                  <th className="px-6 py-4">Request Type</th>
+                  <th className="px-6 py-4">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100">
                 {quotes.map((quote) => {
-                  const formattedDate = new Date(quote.createdAt).toLocaleDateString('tr-TR', {
+                  const formattedDate = new Date(quote.createdAt).toLocaleDateString('en-US', {
                     day: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     hour: '2-digit',
                     minute: '2-digit'
                   });
@@ -138,7 +145,7 @@ export default function AdminQuotes() {
                           quote.status === 'Yanıtlandı' ? 'bg-green-100 text-green-700' : 
                           'bg-stone-200 text-stone-600'
                         }`}>
-                          {quote.status}
+                          {getStatusDisplay(quote.status)}
                         </span>
                       </td>
                     </tr>
@@ -157,9 +164,9 @@ export default function AdminQuotes() {
                 <div>
                   <h2 className="text-xl font-bold text-stone-900 mb-1">{selectedQuote.service}</h2>
                   <p className="text-sm text-stone-500">
-                    {new Date(selectedQuote.createdAt).toLocaleDateString('tr-TR', {
+                    {new Date(selectedQuote.createdAt).toLocaleDateString('en-US', {
                       day: 'numeric',
-                      month: 'long',
+                      month: 'short',
                       year: 'numeric',
                       hour: '2-digit',
                       minute: '2-digit'
@@ -171,29 +178,29 @@ export default function AdminQuotes() {
                   selectedQuote.status === 'Yanıtlandı' ? 'bg-green-100 text-green-700' : 
                   'bg-stone-200 text-stone-600'
                 }`}>
-                  {selectedQuote.status}
+                  {getStatusDisplay(selectedQuote.status)}
                 </span>
               </div>
 
               <div className="space-y-4 mb-8">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="block text-stone-400 text-xs uppercase tracking-wider mb-1">Ad Soyad / Firma</span>
+                    <span className="block text-stone-400 text-xs uppercase tracking-wider mb-1">Name / Company</span>
                     <span className="font-medium text-stone-900">{selectedQuote.name}</span>
                   </div>
                   <div>
-                    <span className="block text-stone-400 text-xs uppercase tracking-wider mb-1">Telefon</span>
+                    <span className="block text-stone-400 text-xs uppercase tracking-wider mb-1">Phone</span>
                     <a href={`tel:${selectedQuote.phone}`} className="font-medium text-amber-700 hover:underline">{selectedQuote.phone}</a>
                   </div>
                   <div className="col-span-2">
-                    <span className="block text-stone-400 text-xs uppercase tracking-wider mb-1">E-Posta</span>
+                    <span className="block text-stone-400 text-xs uppercase tracking-wider mb-1">Email</span>
                     <a href={`mailto:${selectedQuote.email}`} className="font-medium text-amber-700 hover:underline">{selectedQuote.email}</a>
                   </div>
                 </div>
               </div>
 
               <div className="bg-stone-50 p-6 border border-stone-100 mb-8">
-                <span className="block text-stone-400 text-xs uppercase tracking-wider mb-3">Mesaj Detayı</span>
+                <span className="block text-stone-400 text-xs uppercase tracking-wider mb-3">Message Details</span>
                 <p className="text-stone-700 leading-relaxed whitespace-pre-wrap">
                   {selectedQuote.message}
                 </p>
@@ -202,17 +209,17 @@ export default function AdminQuotes() {
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <a 
-                    href={`mailto:${selectedQuote.email}?subject=Tanzanya Mobilya Teklif Talebi`}
+                    href={`mailto:${selectedQuote.email}?subject=Tanzanya Furniture Quote Request`}
                     className="flex-1 text-center px-6 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors cursor-pointer rounded"
                   >
-                    E-Posta İle Yanıtla
+                    Reply via Email
                   </a>
                   <button 
                     onClick={() => handleDelete(selectedQuote.id)}
                     disabled={loading}
                     className="px-6 py-3 bg-white border border-stone-200 text-red-600 font-bold text-sm uppercase tracking-wider hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
                   >
-                    Sil
+                    Delete
                   </button>
                 </div>
                 
@@ -222,7 +229,7 @@ export default function AdminQuotes() {
                     disabled={loading}
                     className="w-full text-center px-6 py-3 bg-green-700 text-white font-bold text-sm uppercase tracking-wider hover:bg-green-800 transition-colors cursor-pointer disabled:opacity-50"
                   >
-                    Yanıtlandı Olarak İşaretle
+                    Mark as Responded
                   </button>
                 )}
               </div>
@@ -232,7 +239,7 @@ export default function AdminQuotes() {
               <svg className="w-16 h-16 mb-4 text-stone-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <p>Mesaj içeriğini görmek için<br/>soldaki listeden bir teklif seçin.</p>
+              <p>Select a quote from the list on the left<br/>to view message details.</p>
             </div>
           )}
         </div>
@@ -240,3 +247,4 @@ export default function AdminQuotes() {
     </div>
   );
 }
+

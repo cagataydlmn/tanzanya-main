@@ -19,8 +19,8 @@ export default function ProductionAdmin() {
   
   // Production Info State
   const [infoId, setInfoId] = useState<number | null>(null);
-  const [infoTitle, setInfoTitle] = useState("Üretim");
-  const [infoDesc, setInfoDesc] = useState("Tasarımdan teslimata kadar tüm süreçlerin fabrikamızda yürütüldüğü, kalite standartlarından ödün vermeyen entegre üretim hattımız.");
+  const [infoTitle, setInfoTitle] = useState("Production");
+  const [infoDesc, setInfoDesc] = useState("Our integrated production line where all processes from design to delivery are carried out in our factory, without compromising quality standards.");
   const [infoImg, setInfoImg] = useState("/dummygorsel/factory_workshop.png");
   const [infoMetaTitle, setInfoMetaTitle] = useState("");
   const [infoMetaDesc, setInfoMetaDesc] = useState("");
@@ -74,9 +74,9 @@ export default function ProductionAdmin() {
 
     if (res.success && res.url) {
       setInfoImg(res.url);
-      alert('Görsel başarıyla yüklendi.');
+      alert('Image uploaded successfully.');
     } else {
-      alert(res.error || 'Görsel yüklenemedi.');
+      alert(res.error || 'Failed to upload image.');
     }
   };
 
@@ -116,10 +116,10 @@ export default function ProductionAdmin() {
     });
     
     if (res.success) {
-      alert("Genel bilgiler başarıyla kaydedildi.");
+      alert("General info saved successfully.");
       fetchData();
     } else {
-      alert("Hata: " + res.error);
+      alert("Error: " + res.error);
     }
     setInfoSaving(false);
   }
@@ -160,39 +160,39 @@ export default function ProductionAdmin() {
     }
 
     if (res.success) {
-      alert("Aşama başarıyla kaydedildi.");
+      alert("Step saved successfully.");
       setIsEditingStep(false);
       fetchData();
     } else {
-      alert("Hata: " + res.error);
+      alert("Error: " + res.error);
     }
     setStepSaving(false);
   }
 
   async function handleDeleteStep(id: number) {
-    if (confirm("Bu aşamayı silmek istediğinize emin misiniz?")) {
+    if (confirm("Are you sure you want to delete this step?")) {
       const res = await deleteProductionStep(id);
       if (res.success) {
         fetchData();
       } else {
-        alert("Hata: " + res.error);
+        alert("Error: " + res.error);
       }
     }
   }
 
-  if (loading) return <div className="p-8 text-stone-500">Yükleniyor...</div>;
+  if (loading) return <div className="p-8 text-stone-500">Loading...</div>;
 
   return (
     <div className="space-y-12">
       {/* Production Info Form */}
       <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200">
         <h2 className="text-xl font-serif font-bold text-stone-900 mb-6 pb-2 border-b border-stone-100">
-          Genel Sayfa Bilgileri (Hero)
+          General Page Information (Hero)
         </h2>
         
         <form onSubmit={handleSaveInfo} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Başlık *</label>
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Title *</label>
             <input 
               type="text" 
               required
@@ -203,7 +203,7 @@ export default function ProductionAdmin() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Açıklama *</label>
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Description *</label>
             <textarea 
               required
               rows={3}
@@ -214,13 +214,13 @@ export default function ProductionAdmin() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Kapak Görseli Yükleyin *</label>
+            <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Upload Cover Image *</label>
             
             {infoImg ? (
               <div className="relative aspect-[16/9] w-full max-w-lg bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
                 <Image 
                   src={infoImg} 
-                  alt="Yüklenen Görsel Önizleme" 
+                  alt="Uploaded Image Preview" 
                   fill 
                   sizes="(max-width: 768px) 100vw, 512px"
                   className="object-cover" 
@@ -232,7 +232,7 @@ export default function ProductionAdmin() {
                     onClick={() => setInfoImg('')}
                     className="px-6 py-2 bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded shadow hover:bg-red-700 transition-colors cursor-pointer"
                   >
-                    Resmi Değiştir / Kaldır
+                    Change / Remove Image
                   </button>
                 </div>
               </div>
@@ -269,10 +269,10 @@ export default function ProductionAdmin() {
                   </svg>
                 )}
                 <span className="text-sm font-bold text-stone-700">
-                  {uploading ? 'Görsel Yükleniyor...' : 'Görsel Yüklemek İçin Tıklayın veya Sürükleyin'}
+                  {uploading ? 'Uploading Image...' : 'Click or Drag to Upload Image'}
                 </span>
                 <span className="text-xs text-stone-500 mt-1">PNG, JPG, WEBP (Max. 5MB)</span>
-                <p className="text-amber-700 font-medium text-xs mt-1">Önerilen Görsel Ölçüsü: 1920 x 1080px (veya benzeri geniş yatay format)</p>
+                <p className="text-amber-700 font-medium text-xs mt-1">Recommended Image Size: 1920 x 1080px (or similar wide landscape format)</p>
               </label>
             )}
           </div>
@@ -280,8 +280,8 @@ export default function ProductionAdmin() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-                <span>Meta Başlık (SEO)</span>
-                <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                <span>Meta Title (SEO)</span>
+                <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
               </label>
               <input 
                 type="text" 
@@ -292,8 +292,8 @@ export default function ProductionAdmin() {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-                <span>Anahtar Kelimeler (SEO)</span>
-                <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+                <span>Keywords (SEO)</span>
+                <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
               </label>
               <input 
                 type="text" 
@@ -305,8 +305,8 @@ export default function ProductionAdmin() {
           </div>
           <div className="space-y-2">
             <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block flex items-center justify-between">
-              <span>Meta Açıklama (SEO)</span>
-              <span className="text-[10px] text-stone-400 normal-case font-normal">İsteğe Bağlı</span>
+              <span>Meta Description (SEO)</span>
+              <span className="text-[10px] text-stone-400 normal-case font-normal">Optional</span>
             </label>
             <textarea 
               value={infoMetaDesc}
@@ -322,7 +322,7 @@ export default function ProductionAdmin() {
               disabled={infoSaving}
               className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {infoSaving ? 'Kaydediliyor...' : 'Genel Bilgileri Kaydet'}
+              {infoSaving ? 'Saving...' : 'Save General Info'}
             </button>
           </div>
         </form>
@@ -332,7 +332,7 @@ export default function ProductionAdmin() {
       <section className="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-stone-200">
         <div className="flex justify-between items-center mb-6 pb-2 border-b border-stone-100">
           <h2 className="text-xl font-serif font-bold text-stone-900">
-            Üretim Aşamaları
+            Production Steps
           </h2>
           {!isEditingStep && (
             <button 
@@ -342,7 +342,7 @@ export default function ProductionAdmin() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Yeni Aşama Ekle
+              Add New Step
             </button>
           )}
         </div>
@@ -350,12 +350,12 @@ export default function ProductionAdmin() {
         {isEditingStep ? (
           <form onSubmit={handleSaveStep} className="bg-stone-50 p-6 rounded border border-stone-200 space-y-6">
             <h3 className="font-bold text-stone-900 uppercase tracking-widest text-sm mb-4">
-              {stepId ? 'Aşamayı Düzenle' : 'Yeni Aşama Ekle'}
+              {stepId ? 'Edit Step' : 'Add New Step'}
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Başlık *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Title *</label>
                 <input 
                   type="text" 
                   required
@@ -365,7 +365,7 @@ export default function ProductionAdmin() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Sıra No *</label>
+                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Order No *</label>
                 <input 
                   type="number" 
                   required
@@ -377,7 +377,7 @@ export default function ProductionAdmin() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Açıklama *</label>
+              <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Description *</label>
               <textarea 
                 required
                 rows={3}
@@ -393,27 +393,27 @@ export default function ProductionAdmin() {
                 onClick={() => setIsEditingStep(false)}
                 className="px-6 py-3 bg-stone-200 text-stone-700 font-bold text-sm uppercase tracking-wider hover:bg-stone-300 transition-colors rounded"
               >
-                İptal
+                Cancel
               </button>
               <button 
                 type="submit" 
                 disabled={stepSaving}
                 className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {stepSaving ? 'Kaydediliyor...' : 'Kaydet'}
+                {stepSaving ? 'Saving...' : 'Save'}
               </button>
             </div>
           </form>
         ) : (
           <div className="space-y-4">
             {steps.length === 0 ? (
-              <p className="text-stone-500 text-center py-8">Henüz aşama eklenmemiş.</p>
+              <p className="text-stone-500 text-center py-8">No steps added yet.</p>
             ) : (
               steps.map((step, idx) => (
                 <div key={step.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-stone-50 border border-stone-200 rounded gap-4 hover:border-amber-700/50 transition-colors">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-amber-700/10 text-amber-800 font-bold flex flex-col items-center justify-center shrink-0 rounded">
-                      <span className="text-[10px] uppercase leading-none opacity-60">Sıra</span>
+                      <span className="text-[10px] uppercase leading-none opacity-60">Order</span>
                       <span className="text-lg leading-none mt-0.5">{step.order}</span>
                     </div>
                     <div>
@@ -426,13 +426,13 @@ export default function ProductionAdmin() {
                       onClick={() => handleEditStep(step)}
                       className="px-3 py-1.5 bg-stone-200 text-stone-700 text-xs font-bold uppercase tracking-wider rounded hover:bg-stone-300 transition-colors"
                     >
-                      Düzenle
+                      Edit
                     </button>
                     <button 
                       onClick={() => handleDeleteStep(step.id)}
                       className="px-3 py-1.5 bg-red-100 text-red-600 text-xs font-bold uppercase tracking-wider rounded hover:bg-red-200 transition-colors"
                     >
-                      Sil
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -444,3 +444,4 @@ export default function ProductionAdmin() {
     </div>
   );
 }
+

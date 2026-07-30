@@ -5,8 +5,8 @@ import { getProductGroups } from '@/app/actions/products';
 import { getPageHeader } from '@/app/actions/page-headers';
 
 export const metadata: Metadata = {
-  title: "Ürün Gruplarımız",
-  description: "Ev mobilyaları, ofis mobilyaları, okul & kütüphane donanımları ve ticari projeleriniz için ürettiğimiz özel ahşap ve dekorasyon ürünleri.",
+  title: "Products | Star Decor",
+  description: "Explore our manufactured custom furniture categories: home furniture, executive office suites, school & library systems, and commercial project solutions.",
 };
 
 export default async function Products() {
@@ -15,8 +15,8 @@ export default async function Products() {
 
   const headerRes = await getPageHeader('products');
   const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
-  const pageTitle = headerData?.title || "Ürünlerimiz";
-  const pageDesc = headerData?.description || "Kendi fabrikamızda, birinci sınıf malzemelerle ürettiğimiz geniş ürün yelpazemiz. Farklı sektörlerin ihtiyaçlarına uygun estetik, dayanıklı ve ergonomik çözümler.";
+  const pageTitle = headerData?.title || "Our Product Range";
+  const pageDesc = headerData?.description || "Our comprehensive product collection manufactured in our factory with premium materials. Aesthetic, durable, and ergonomic furniture solutions designed for various sectors.";
 
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">

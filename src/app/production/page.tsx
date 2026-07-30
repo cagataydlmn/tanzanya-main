@@ -23,8 +23,8 @@ export default async function Production() {
   ]);
 
   const defaultInfo: any = {
-    title: "Üretim",
-    desc: "Tasarımdan teslimata kadar tüm süreçlerin fabrikamızda yürütüldüğü, kalite standartlarından ödün vermeyen entegre üretim hattımız.",
+    title: "Production",
+    desc: "Our integrated production line where all processes from design to delivery are carried out in our factory, without compromising quality standards.",
     img: "/dummygorsel/factory_workshop.png"
   };
 
@@ -36,8 +36,8 @@ export default async function Production() {
 
   const defaultSteps = [
     {
-      title: "Tasarım ve Projelendirme",
-      desc: "İhtiyaç analizi sonrasında iç mimarlarımız tarafından ölçülendirme yapılır ve 3D çizim programları ile mobilyanın son hali projelendirilir."
+      title: "Design & Project Planning",
+      desc: "Following needs analysis, our interior architects measure the space and draft final 3D furniture models."
     }
   ];
 

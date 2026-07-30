@@ -50,14 +50,14 @@ export default async function Home() {
       <section className="py-32 md:py-40 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
-            <h2 className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">{d?.servicesTitle || "Öne Çıkan Hizmetlerimiz"}</h2>
+            <h2 className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">{d?.servicesTitle || "Our Featured Services"}</h2>
             <div className="w-12 h-[2px] bg-amber-700 mx-auto"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {featuredServices.length === 0 ? (
               <div className="col-span-3 text-center text-stone-500 py-12 border-2 border-dashed border-stone-200">
-                Admin panelinden öne çıkan hizmet ekleyebilirsiniz.
+                You can add featured services from the admin panel.
               </div>
             ) : (
               featuredServices.map((feature: any, i: number) => (
@@ -107,7 +107,7 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center">
           <div className="lg:w-1/2 flex flex-col justify-center space-y-12">
             <div>
-              <h2 className="text-4xl md:text-5xl font-serif text-white mb-6 leading-tight">{d?.whyUsTitle || "Neden Bizi Seçmelisiniz?"}</h2>
+              <h2 className="text-4xl md:text-5xl font-serif text-white mb-6 leading-tight">{d?.whyUsTitle || "Why Choose Us?"}</h2>
               <div className="w-12 h-[2px] bg-amber-600"></div>
             </div>
 
@@ -128,7 +128,7 @@ export default async function Home() {
             <div className="absolute inset-0 bg-stone-900/20 group-hover:bg-transparent transition-colors duration-1000 z-10"></div>
             <Image
               src={d?.whyUsImg || "/dummygorsel/factory_workshop.png"}
-              alt={d?.whyUsTitle || "Neden Biz"}
+              alt={d?.whyUsTitle || "Why Choose Us"}
               fill
               unoptimized
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -143,16 +143,16 @@ export default async function Home() {
       <section className="py-32 md:py-40 px-6 bg-stone-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">{d?.projectsTitle || "Öne Çıkan Projelerimiz"}</h2>
+            <h2 className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">{d?.projectsTitle || "Our Featured Projects"}</h2>
             <div className="w-12 h-[2px] bg-amber-700 mx-auto"></div>
             <p className="text-stone-500 mt-6 max-w-2xl mx-auto text-sm leading-relaxed">
-              {d?.projectsDesc || "Sizin için tasarlayıp hayata geçirdiğimiz nitelikli anahtar teslim ahşap uygulamalarımız."}
+              {d?.projectsDesc || "High quality turnkey woodwork applications designed and manufactured for you."}
             </p>
           </div>
 
           {featuredProjects.length === 0 ? (
             <div className="text-center py-12 text-stone-400 font-light">
-              Henüz eklenmiş proje bulunmuyor.
+              No projects added yet.
             </div>
           ) : (
             <ProjectsGrid projects={featuredProjects as any} />
@@ -163,22 +163,22 @@ export default async function Home() {
       {/* CTA Section */}
       <section className="py-32 px-6 bg-white text-center">
         <div className="max-w-3xl mx-auto space-y-10">
-          <h2 className="text-4xl md:text-6xl font-serif text-stone-900 leading-tight" dangerouslySetInnerHTML={{ __html: d?.ctaTitle || "Hayalinizdeki Mekanı <br className='hidden md:block'/>Birlikte Tasarlayalım" }} />
+          <h2 className="text-4xl md:text-6xl font-serif text-stone-900 leading-tight" dangerouslySetInnerHTML={{ __html: d?.ctaTitle || "Let's Design Your Dream <br className='hidden md:block'/>Space Together" }} />
           <p className="text-stone-500 text-base md:text-lg leading-relaxed font-light">
-            {d?.ctaDesc || "Eviniz, ofisiniz veya ticari alanınız için kaliteli, estetik ve size özel mobilya çözümleri arıyorsanız; fabrikamız ve iç mimar ekibimizle hizmetinizdeyiz."}
+            {d?.ctaDesc || "If you are looking for quality, aesthetic, and customized furniture solutions for your home, office, or commercial space, our factory and interior design team are at your service."}
           </p>
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link
               href={d?.ctaBtn1Link || "/quote"}
               className="w-full sm:w-auto px-12 py-5 bg-stone-900 text-white font-medium text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:bg-stone-800 hover:shadow-luxury"
             >
-              {d?.ctaBtn1Text || "Hemen Teklif Al"}
+              {d?.ctaBtn1Text || "Get Quote Now"}
             </Link>
             <Link
               href={d?.ctaBtn2Link || "/contact"}
               className="w-full sm:w-auto px-12 py-5 bg-transparent border-b-2 border-stone-300 text-stone-900 font-medium text-xs uppercase tracking-[0.2em] transition-all hover:border-stone-900"
             >
-              {d?.ctaBtn2Text || "Bize Ulaşın"}
+              {d?.ctaBtn2Text || "Contact Us"}
             </Link>
           </div>
         </div>

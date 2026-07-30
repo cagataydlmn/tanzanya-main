@@ -53,7 +53,7 @@ export default function ContactSettingsAdmin() {
   };
 
   const addSocialLink = () => {
-    setSocialLinks([...socialLinks, { platform: 'Yeni Platform', url: 'https://' }]);
+    setSocialLinks([...socialLinks, { platform: 'New Platform', url: 'https://' }]);
   };
 
   const removeSocialLink = (index: number) => {
@@ -79,21 +79,21 @@ export default function ContactSettingsAdmin() {
     });
 
     if (res.success) {
-      setMessage({ text: 'Ayarlar başarıyla kaydedildi.', type: 'success' });
+      setMessage({ text: 'Settings saved successfully.', type: 'success' });
     } else {
-      setMessage({ text: res.error || 'Bir hata oluştu.', type: 'error' });
+      setMessage({ text: res.error || 'An error occurred.', type: 'error' });
     }
     setIsSaving(false);
   };
 
-  if (isLoading) return <div className="p-8 text-center text-stone-500">Yükleniyor...</div>;
+  if (isLoading) return <div className="p-8 text-center text-stone-500">Loading...</div>;
 
   return (
     <div className="space-y-6">
       <PageHeaderForm pageIdentifier="contact" />
       <div className="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
       <div className="p-6 border-b border-stone-200 bg-stone-50 flex justify-between items-center">
-        <h2 className="text-lg font-bold text-stone-800">İletişim & Sosyal Medya Ayarları</h2>
+        <h2 className="text-lg font-bold text-stone-800">Contact & Social Media Settings</h2>
       </div>
 
       <div className="p-6">
@@ -106,7 +106,7 @@ export default function ContactSettingsAdmin() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">E-Posta Adresi</label>
+              <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Email Address</label>
               <input
                 type="email"
                 name="email"
@@ -118,7 +118,7 @@ export default function ContactSettingsAdmin() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Ana Telefon</label>
+              <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Main Phone</label>
               <input
                 type="text"
                 name="phone1"
@@ -130,7 +130,7 @@ export default function ContactSettingsAdmin() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Alternatif Telefon / WhatsApp</label>
+              <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Alternative Phone / WhatsApp</label>
               <input
                 type="text"
                 name="phone2"
@@ -142,7 +142,7 @@ export default function ContactSettingsAdmin() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Adres</label>
+            <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Address</label>
             <textarea
               name="address"
               value={formData.address}
@@ -154,8 +154,8 @@ export default function ContactSettingsAdmin() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Google Haritalar Iframe Linki (src)</label>
-            <p className="text-xs text-stone-400 mb-2">Google Maps'ten aldığınız "Haritayı Yerleştir" kodunun sadece src=" " içindeki adresini yapıştırın.</p>
+            <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">Google Maps Iframe Link (src)</label>
+            <p className="text-xs text-stone-400 mb-2">Paste only the address inside src=" " from the "Embed a map" code obtained from Google Maps.</p>
             <textarea
               name="mapIframe"
               value={formData.mapIframe}
@@ -166,22 +166,22 @@ export default function ContactSettingsAdmin() {
             />
           </div>
 
-          {/* Dinamik Sosyal Medya */}
+          {/* Dynamic Social Media */}
           <div className="pt-6 border-t border-stone-200">
             <div className="flex justify-between items-center mb-4">
-              <label className="text-sm font-bold text-stone-800 uppercase tracking-wider block">Sosyal Medya Hesapları</label>
+              <label className="text-sm font-bold text-stone-800 uppercase tracking-wider block">Social Media Accounts</label>
               <button
                 type="button"
                 onClick={addSocialLink}
                 className="px-3 py-1 bg-stone-200 text-stone-700 text-xs font-bold rounded hover:bg-stone-300 transition-colors"
               >
-                + Yeni Ekle
+                + Add New
               </button>
             </div>
 
             {socialLinks.length === 0 ? (
               <div className="text-sm text-stone-500 italic p-4 bg-stone-50 rounded text-center border border-dashed border-stone-300">
-                Hiç sosyal medya hesabı eklenmemiş.
+                No social media accounts added yet.
               </div>
             ) : (
               <div className="space-y-3">
@@ -195,17 +195,16 @@ export default function ContactSettingsAdmin() {
                     "TikTok",
                     "WhatsApp",
                     "Pinterest",
-                    "Diğer"
+                    "Other"
                   ];
                   
-                  // Mevcut platform listede yoksa, geçici olarak ekle
-                  const isCustom = !SOCIAL_PLATFORMS.includes(link.platform) && link.platform !== 'Yeni Platform';
-                  const options = isCustom ? [...SOCIAL_PLATFORMS.slice(0, -1), link.platform, "Diğer"] : SOCIAL_PLATFORMS;
+                  const isCustom = !SOCIAL_PLATFORMS.includes(link.platform) && link.platform !== 'New Platform';
+                  const options = isCustom ? [...SOCIAL_PLATFORMS.slice(0, -1), link.platform, "Other"] : SOCIAL_PLATFORMS;
 
                   return (
                     <div key={index} className="flex gap-3 items-center bg-stone-50 p-3 rounded border border-stone-200">
                       <select
-                        value={link.platform === 'Yeni Platform' ? "Diğer" : link.platform}
+                        value={link.platform === 'New Platform' || link.platform === 'Yeni Platform' ? "Other" : link.platform}
                         onChange={(e) => updateSocialLink(index, 'platform', e.target.value)}
                         className="w-1/3 bg-white border border-stone-200 px-3 py-2 text-sm rounded focus:outline-none focus:border-amber-700 transition-colors"
                       >
@@ -224,7 +223,7 @@ export default function ContactSettingsAdmin() {
                         type="button"
                         onClick={() => removeSocialLink(index)}
                         className="p-2 text-red-500 hover:bg-red-50 rounded"
-                        title="Sil"
+                        title="Delete"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                       </button>
@@ -241,7 +240,7 @@ export default function ContactSettingsAdmin() {
               disabled={isSaving}
               className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSaving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+              {isSaving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>
@@ -250,4 +249,5 @@ export default function ContactSettingsAdmin() {
     </div>
   );
 }
+
 

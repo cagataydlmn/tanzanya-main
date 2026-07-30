@@ -43,10 +43,10 @@ export default function AdminCategories() {
 
     if (res.success) {
       setNewCategory("");
-      setMessage({ type: 'success', text: 'Kategori başarıyla eklendi.' });
+      setMessage({ type: 'success', text: 'Category added successfully.' });
       fetchCategories();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Hata oluştu.' });
+      setMessage({ type: 'error', text: res.error || 'An error occurred.' });
     }
   };
 
@@ -62,15 +62,15 @@ export default function AdminCategories() {
     if (res.success) {
       setEditingId(null);
       setEditingName("");
-      setMessage({ type: 'success', text: 'Kategori güncellendi.' });
+      setMessage({ type: 'success', text: 'Category updated successfully.' });
       fetchCategories();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Hata oluştu.' });
+      setMessage({ type: 'error', text: res.error || 'An error occurred.' });
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Bu kategoriyi silmek istediğinize emin misiniz? (Bu işlemi yaparsanız projelere daha önce bu kategori atanmış olsa bile açılır listelerden kalkar)")) return;
+    if (!window.confirm("Are you sure you want to delete this category? (Even if previously assigned to projects, it will be removed from dropdown lists)")) return;
     
     setSaving(true);
     setMessage(null);
@@ -78,10 +78,10 @@ export default function AdminCategories() {
     setSaving(false);
 
     if (res.success) {
-      setMessage({ type: 'success', text: 'Kategori başarıyla silindi.' });
+      setMessage({ type: 'success', text: 'Category deleted successfully.' });
       fetchCategories();
     } else {
-      setMessage({ type: 'error', text: res.error || 'Kategori silinemedi.' });
+      setMessage({ type: 'error', text: res.error || 'Failed to delete category.' });
     }
   };
 
@@ -97,14 +97,14 @@ export default function AdminCategories() {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-serif text-stone-900 font-bold">Kategori Yönetimi</h1>
-          <p className="text-xs text-stone-500 mt-1">Sitenizdeki projelerin ve galerilerin kategorilerini düzenleyin.</p>
+          <h1 className="text-2xl font-serif text-stone-900 font-bold">Category Management</h1>
+          <p className="text-xs text-stone-500 mt-1">Manage categories for your projects and gallery.</p>
         </div>
       </div>
 
       <div className="bg-white p-6 sm:p-8 border border-stone-200 shadow-sm rounded">
         <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
-          Yeni Kategori Ekle
+          Add New Category
         </h2>
         <form className="flex gap-4" onSubmit={handleAdd}>
           <input 
@@ -113,7 +113,7 @@ export default function AdminCategories() {
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
             className="flex-1 bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 rounded" 
-            placeholder="Örn: Ahşap Evler" 
+            placeholder="e.g. Wooden Houses" 
             disabled={saving}
           />
           <button 
@@ -121,22 +121,22 @@ export default function AdminCategories() {
             disabled={saving || !newCategory.trim()}
             className="px-8 py-3 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           >
-            {saving ? 'Ekleniyor...' : 'Ekle'}
+            {saving ? 'Adding...' : 'Add'}
           </button>
         </form>
       </div>
 
       <div className="bg-white border border-stone-200 shadow-sm overflow-x-auto rounded">
         {loading ? (
-          <div className="text-center py-10 text-stone-500">Yükleniyor...</div>
+          <div className="text-center py-10 text-stone-500">Loading...</div>
         ) : categories.length === 0 ? (
-          <div className="text-center py-10 text-stone-500">Henüz kategori bulunmuyor.</div>
+          <div className="text-center py-10 text-stone-500">No categories found yet.</div>
         ) : (
           <table className="w-full text-left text-sm text-stone-600">
             <thead className="bg-stone-50 text-stone-900 uppercase tracking-wider font-bold border-b border-stone-200">
               <tr>
-                <th className="px-6 py-4 w-2/3">Kategori Adı</th>
-                <th className="px-6 py-4 text-right">İşlemler</th>
+                <th className="px-6 py-4 w-2/3">Category Name</th>
+                <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
@@ -153,8 +153,8 @@ export default function AdminCategories() {
                           onChange={(e) => setEditingName(e.target.value)}
                           className="flex-1 bg-white border border-stone-300 px-3 py-2 text-stone-900 focus:outline-none focus:border-amber-700 rounded"
                         />
-                        <button type="submit" disabled={saving} className="px-4 py-2 bg-stone-900 text-white font-bold text-xs uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">Kaydet</button>
-                        <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 bg-stone-200 text-stone-700 text-xs rounded hover:bg-stone-300">İptal</button>
+                        <button type="submit" disabled={saving} className="px-4 py-2 bg-stone-900 text-white font-bold text-xs uppercase tracking-wider rounded hover:bg-amber-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">Save</button>
+                        <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 bg-stone-200 text-stone-700 text-xs rounded hover:bg-stone-300">Cancel</button>
                       </form>
                     ) : (
                       cat.name
@@ -168,14 +168,14 @@ export default function AdminCategories() {
                           className="text-amber-700 hover:text-amber-900 font-medium cursor-pointer"
                           disabled={saving}
                         >
-                          Düzenle
+                          Edit
                         </button>
                         <button 
                           onClick={() => handleDelete(cat.id)}
                           className="text-red-600 hover:text-red-800 font-medium cursor-pointer"
                           disabled={saving}
                         >
-                          Sil
+                          Delete
                         </button>
                       </>
                     )}
@@ -189,3 +189,4 @@ export default function AdminCategories() {
     </div>
   );
 }
+

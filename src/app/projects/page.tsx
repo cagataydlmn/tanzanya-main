@@ -4,8 +4,8 @@ import ProjectsGrid from '@/components/ProjectsGrid';
 import { getPageHeader } from '@/app/actions/page-headers';
 
 export const metadata: Metadata = {
-  title: "Projelerimiz",
-  description: "Otel, konut, ofis, eğitim, sağlık ve restoran mobilyaları başta olmak üzere tamamladığımız nitelikli anahtar teslim projelerimiz.",
+  title: "Projects | Star Decor",
+  description: "Explore our completed reference projects including hotel, residential, office, educational, healthcare, and restaurant custom furniture.",
 };
 
 export default async function Projects() {
@@ -14,8 +14,8 @@ export default async function Projects() {
 
   const headerRes = await getPageHeader('projects');
   const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
-  const pageTitle = headerData?.title || "Referans Projelerimiz";
-  const pageDesc = headerData?.description || "Ev, ofis, otel, eğitim ve ticari alanlar için tasarlayıp ürettiğimiz, estetik ve kaliteyi bir araya getiren örnek uygulamalarımız.";
+  const pageTitle = headerData?.title || "Our Reference Projects";
+  const pageDesc = headerData?.description || "A selection of our custom furniture and interior design applications engineered for homes, offices, hotels, educational, and commercial spaces.";
 
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
@@ -33,7 +33,7 @@ export default async function Projects() {
         {/* Projects Grid Component */}
         {projects.length === 0 ? (
           <div className="text-center py-20 bg-white border border-stone-200">
-            <p className="text-stone-500">Henüz eklenmiş bir referans proje bulunamadı.</p>
+            <p className="text-stone-500">No reference projects found yet.</p>
           </div>
         ) : (
           <ProjectsGrid projects={projects as any} />
@@ -43,3 +43,4 @@ export default async function Projects() {
     </div>
   );
 }
+

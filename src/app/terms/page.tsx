@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Kullanım Şartları",
-  description: "Web sitemizin kullanımına ilişkin genel kural ve koşullar hakkında bilgilendirme metni.",
+  title: "Terms of Use | Tanzanya Furniture",
+  description: "Terms and conditions governing the use of Tanzanya Furniture's website and services.",
 };
 
 export default function Terms() {
@@ -11,37 +11,37 @@ export default function Terms() {
       <div className="max-w-4xl mx-auto px-6">
         
         <div className="mb-12">
-          <h1 className="text-3xl md:text-4xl font-serif text-stone-900 mb-4">Kullanım Şartları</h1>
+          <h1 className="text-3xl md:text-4xl font-serif text-stone-900 mb-4">Terms of Use</h1>
           <div className="w-16 h-1 bg-amber-700"></div>
         </div>
 
         <div className="bg-white p-8 md:p-12 border border-stone-200 shadow-sm space-y-6 text-stone-600 leading-relaxed text-sm md:text-base">
           <p>
-            Bu web sitesine (www.tanzanyamobilya.com) erişim sağlayarak veya sitemizi kullanarak, aşağıda belirtilen Kullanım Şartları'nı okuduğunuzu, anladığınızı ve kabul ettiğinizi beyan etmiş olursunuz.
+            By accessing and using this website (www.tanzanyamobilya.com), you acknowledge that you have read, understood, and agreed to be bound by the following Terms of Use.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">1. Fikri Mülkiyet Hakları</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">1. Intellectual Property Rights</h3>
           <p>
-            Web sitesinde yer alan tüm tasarım, metin, grafik, logo, görseller (projelerimize ait 3D renderlar ve fotoğraflar dahil) ve içeriklerin tüm fikri mülkiyet hakları <strong>Tanzanya Mobilya & Dekorasyon</strong>'a aittir. Şirketimizin yazılı izni olmaksızın bu içerikler kopyalanamaz, çoğaltılamaz, dağıtılamaz veya ticari amaçlarla kullanılamaz.
+            All designs, text, graphics, logos, images (including 3D renders and project photographs), and content displayed on this website are the intellectual property of <strong>Tanzanya Furniture & Decoration</strong>. Reproduction, distribution, or commercial use without prior written authorization from the Company is strictly prohibited.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">2. Ürün ve Hizmet Bilgileri</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">2. Product and Service Specifications</h3>
           <p>
-            Web sitemizde sergilenen ürünler, hizmetler ve referans projeler bilgilendirme amaçlıdır. Ahşap damar yapısı, boya tonları ve kumaş renkleri, ekran kalibrasyonuna bağlı olarak gerçek ürünlerle ufak farklılıklar gösterebilir. Tanzanya Mobilya, ürün özelliklerinde veya hizmet içeriklerinde önceden haber vermeksizin değişiklik yapma hakkını saklı tutar.
+            Products, services, and reference projects displayed on our website are for informational purposes. Natural wood grain patterns, stain tones, and fabric colors may vary slightly from real products due to display calibration. Tanzanya Furniture reserves the right to modify product specifications or service details without prior notice.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">3. Üretim ve Fiyatlandırma Bağlayıcılığı</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">3. Quotations and Order Confirmations</h3>
           <p>
-            "Teklif Al" formu veya iletişim kanalları üzerinden talep edilen fiyat çalışmaları, yalnızca bilgilendirme amaçlı olup yasal bir bağlayıcılığı (sözleşme imzalanana kadar) bulunmamaktadır. Siparişin kesinleşmesi, projenin rölövesi alındıktan ve karşılıklı resmi üretim sözleşmesi imzalandıktan sonra gerçekleşir.
+            Price estimates provided via the "Get a Quote" form or contact channels are non-binding informational estimates. An order is finalized only after site measurements/surveying are completed and a formal written manufacturing contract is signed by both parties.
           </p>
 
-          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">4. Sorumluluğun Sınırlandırılması</h3>
+          <h3 className="text-xl font-bold text-stone-900 mt-8 mb-4">4. Limitation of Liability</h3>
           <p>
-            Sitemizin kullanımı sırasında doğabilecek doğrudan veya dolaylı maddi/manevi zararlardan Tanzanya Mobilya sorumlu tutulamaz. Dış bağlantılar (varsa) üzerinden yönlendirilen sitelerin içerikleri tamamen o sitelerin sorumluluğundadır.
+            Tanzanya Furniture shall not be held liable for any direct or indirect damages resulting from the use of this website. External links provided on the website are the sole responsibility of their respective site operators.
           </p>
 
           <p className="pt-8 text-sm text-stone-400 border-t border-stone-200 mt-8">
-            Son Güncelleme: Ekim 2026
+            Last Updated: July 2026
           </p>
         </div>
 
@@ -49,3 +49,4 @@ export default function Terms() {
     </div>
   );
 }
+

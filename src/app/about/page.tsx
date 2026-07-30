@@ -44,7 +44,7 @@ export default async function About() {
         {/* Header */}
         <div className="text-center mb-24">
           <h1 className="text-5xl md:text-6xl font-serif text-stone-900 mb-6 leading-tight">
-            {headerData?.title || "Hakkımızda"}
+            {headerData?.title || "About Us"}
           </h1>
           <div className="w-12 h-[2px] bg-amber-700 mx-auto"></div>
           {headerData?.description && (
@@ -83,14 +83,14 @@ export default async function About() {
         {/* Mission & Vision */}
         <div className="grid md:grid-cols-2 gap-12 mb-32">
           <div className="bg-white p-12 lg:p-16 shadow-luxury hover:shadow-luxury-hover transition-shadow duration-500 border border-transparent hover:border-stone-100">
-            <h3 className="text-3xl font-serif text-stone-900 mb-6">{d.visionTitle || "Vizyonumuz"}</h3>
+            <h3 className="text-3xl font-serif text-stone-900 mb-6">{d.visionTitle || "Our Vision"}</h3>
             <div className="w-8 h-[1px] bg-amber-700 mb-6"></div>
             <p className="text-stone-500 leading-relaxed font-light text-lg">
               {d.visionText}
             </p>
           </div>
           <div className="bg-white p-12 lg:p-16 shadow-luxury hover:shadow-luxury-hover transition-shadow duration-500 border border-transparent hover:border-stone-100">
-            <h3 className="text-3xl font-serif text-stone-900 mb-6">{d.missionTitle || "Misyonumuz"}</h3>
+            <h3 className="text-3xl font-serif text-stone-900 mb-6">{d.missionTitle || "Our Mission"}</h3>
             <div className="w-8 h-[1px] bg-amber-700 mb-6"></div>
             <p className="text-stone-500 leading-relaxed font-light text-lg">
               {d.missionText}
@@ -181,7 +181,7 @@ export default async function About() {
           {/* Materials We Use (From Brochure) */}
           {materialsArr.length > 0 && (
             <div className="mt-16 pt-12 border-t border-stone-100">
-              <h3 className="font-serif text-stone-900 text-xl mb-6">{d.materialsTitle || "Kullandığımız Yüksek Kalite Ahşap & Paneller"}</h3>
+              <h3 className="font-serif text-stone-900 text-xl mb-6">{d.materialsTitle || "High Quality Wood & Panels We Use"}</h3>
               <div className="flex flex-wrap gap-3">
                 {materialsArr.map((mat: string, i: number) => (
                   <span key={i} className="px-5 py-2 bg-stone-50 hover:bg-stone-100 transition-colors text-stone-600 text-xs uppercase tracking-widest font-medium border border-stone-100">

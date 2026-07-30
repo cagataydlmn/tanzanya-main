@@ -5,18 +5,18 @@ import Image from 'next/image';
 import { getPageHeader } from '@/app/actions/page-headers';
 
 export const metadata: Metadata = {
-  title: "Blog & Haberler",
-  description: "Mobilya trendleri, ofis ergonomisi, doğru malzeme seçimi ve dekorasyon fikirleri hakkında güncel yazılarımız ve rehberlerimiz.",
+  title: "Blog & News | Star Decor",
+  description: "Our latest articles and guides on furniture trends, office ergonomics, material selection, and interior decoration ideas.",
 };
 
 export default async function Blog() {
-  const response = await getBlogPosts(true); // Sadece yayınlanmış olanları getir
+  const response = await getBlogPosts(true); // Fetch published posts only
   const posts = response.success && response.data ? response.data : [];
 
   const headerRes = await getPageHeader('blog');
   const headerData = headerRes.success && headerRes.data ? headerRes.data : null;
-  const pageTitle = headerData?.title || "Blog & Haberler";
-  const pageDesc = headerData?.description || "Sektördeki yenilikler, dekorasyon fikirleri, doğru malzeme seçimi ve fabrikamızdan en güncel haberler.";
+  const pageTitle = headerData?.title || "Blog & News";
+  const pageDesc = headerData?.description || "Industry innovations, decoration ideas, material guides, and latest updates from our factory.";
 
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
@@ -34,12 +34,12 @@ export default async function Blog() {
         {/* Blog Grid */}
         {posts.length === 0 ? (
           <div className="text-center py-20 bg-white border border-stone-200">
-            <p className="text-stone-500">Henüz yayınlanmış bir blog yazısı bulunamadı.</p>
+            <p className="text-stone-500">No published blog posts found yet.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {posts.map((post) => {
-              const formattedDate = new Date(post.createdAt).toLocaleDateString('tr-TR', {
+              const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric'
@@ -83,7 +83,7 @@ export default async function Blog() {
                       {post.excerpt}
                     </p>
                     <span className="text-amber-700 font-semibold text-sm uppercase tracking-wider inline-flex items-center gap-2 group-hover:text-amber-800 transition-colors">
-                      Devamını Oku 
+                      Read More 
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>
@@ -99,3 +99,4 @@ export default async function Blog() {
     </div>
   );
 }
+
