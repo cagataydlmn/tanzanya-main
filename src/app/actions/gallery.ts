@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 export async function getGalleryItems() {
   try {
     const items = await prisma.galleryItem.findMany({
-      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }]
+      orderBy: { createdAt: 'desc' }
     });
     return { success: true, data: items };
   } catch (error: any) {

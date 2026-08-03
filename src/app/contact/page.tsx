@@ -25,6 +25,31 @@ export default async function Contact() {
       : [];
   } catch(e) {}
 
+  // Parse dynamic phone numbers with labels
+  let phones: any[] = [];
+  try {
+    phones = settings?.phones 
+      ? (typeof settings.phones === 'string' ? JSON.parse(settings.phones) : settings.phones) 
+      : [];
+  } catch(e) {}
+  if (!Array.isArray(phones) || phones.length === 0) {
+    phones = [];
+    if (settings?.phone1) phones.push({ label: 'Main Phone', value: settings.phone1 });
+    if (settings?.phone2) phones.push({ label: 'Alternative Phone', value: settings.phone2 });
+  }
+
+  // Parse dynamic emails with labels
+  let emails: any[] = [];
+  try {
+    emails = settings?.emails 
+      ? (typeof settings.emails === 'string' ? JSON.parse(settings.emails) : settings.emails) 
+      : [];
+  } catch(e) {}
+  if (!Array.isArray(emails) || emails.length === 0) {
+    emails = [];
+    if (settings?.email) emails.push({ label: 'Email', value: settings.email });
+  }
+
   return (
     <div className="min-h-screen bg-stone-50 pt-24 md:pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-6">
@@ -66,8 +91,14 @@ export default async function Contact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900 mb-1">Phone</h3>
-                  <p className="text-stone-600">{settings?.phone1 || '0 651 137 287'}</p>
-                  {settings?.phone2 && <p className="text-stone-600">{settings?.phone2}</p>}
+                  <div className="space-y-1">
+                    {phones.map((p: any, idx: number) => (
+                      <p key={idx} className="text-stone-600">
+                        <span className="font-medium text-stone-800">{p.label}: </span>
+                        {p.value}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -79,7 +110,14 @@ export default async function Contact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900 mb-1">Email</h3>
-                  <p className="text-stone-600">{settings?.email || 'stardecortz@gmail.com'}</p>
+                  <div className="space-y-1">
+                    {emails.map((e: any, idx: number) => (
+                      <p key={idx} className="text-stone-600">
+                        <span className="font-medium text-stone-800">{e.label}: </span>
+                        {e.value}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </div>
 

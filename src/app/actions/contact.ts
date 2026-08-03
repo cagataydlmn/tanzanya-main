@@ -15,6 +15,13 @@ export async function getContactSettings() {
           phone1: "0 651 137 287",
           phone2: "0 651 137 287 (WhatsApp)",
           email: "stardecortz@gmail.com",
+          phones: [
+            { label: "Main Phone", value: "0 651 137 287" },
+            { label: "WhatsApp", value: "0 651 137 287 (WhatsApp)" }
+          ],
+          emails: [
+            { label: "General Inquiry", value: "stardecortz@gmail.com" }
+          ],
           socialLinks: [
             { platform: "Facebook", url: "https://facebook.com" },
             { platform: "Instagram", url: "https://instagram.com" }
@@ -37,6 +44,8 @@ export async function updateContactSettings(formData: {
   phone1: string;
   phone2?: string;
   email: string;
+  phones?: any;
+  emails?: any;
   socialLinks: any;
   mapIframe: string;
 }) {
@@ -51,6 +60,8 @@ export async function updateContactSettings(formData: {
           phone1: formData.phone1,
           phone2: formData.phone2,
           email: formData.email,
+          phones: formData.phones,
+          emails: formData.emails,
           socialLinks: formData.socialLinks,
           mapIframe: formData.mapIframe
         }
@@ -62,6 +73,8 @@ export async function updateContactSettings(formData: {
           phone1: formData.phone1,
           phone2: formData.phone2,
           email: formData.email,
+          phones: formData.phones,
+          emails: formData.emails,
           socialLinks: formData.socialLinks,
           mapIframe: formData.mapIframe
         }

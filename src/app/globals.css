@@ -29,3 +29,11 @@
   animation: hammer 1s ease-in-out infinite;
   transform-origin: 30% 80%; /* Çekicin sap ucunu dönme merkezi yapar */
 }
+
+/* Global button cursor rules */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  cursor: pointer;
+}

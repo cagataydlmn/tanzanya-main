@@ -196,6 +196,8 @@ model ContactSettings {
   phone1      String
   phone2      String?
   email       String
+  phones      Json?
+  emails      Json?
   socialLinks Json
   mapIframe   String   @db.Text
   updatedAt   DateTime @updatedAt
