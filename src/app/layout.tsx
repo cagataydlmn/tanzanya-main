@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import RouteLoader from "@/components/RouteLoader";
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 const cinzel = Cinzel({
   variable: "--font-cinzel",
   subsets: ["latin"],
