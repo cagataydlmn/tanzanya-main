@@ -68,8 +68,8 @@ export async function uploadImageAction(formData: FormData) {
       }
     }
 
-    // Veritabanına ve frontend'e verilecek temiz relatif URL yolu
-    const fileUrl = `/uploads/${uniqueName}`;
+    // Veritabanına ve frontend'e verilecek dinamiği yüksek URL yolu
+    const fileUrl = `/api/uploads/${uniqueName}`;
     return { success: true, url: fileUrl };
   } catch (error: any) {
     console.error("uploadImageAction error:", error);
