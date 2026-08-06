@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { getContactSettings, updateContactSettings } from '@/app/actions/contact';
-
+import { uploadImageAction } from '@/app/actions/upload';
 import PageHeaderForm from '@/components/admin/PageHeaderForm';
 
 export default function ContactSettingsAdmin() {
@@ -12,6 +13,8 @@ export default function ContactSettingsAdmin() {
     phone2: '',
     email: '',
     mapIframe: '',
+    logo: '/logo/StarDecorLogo_page-0002.png',
+    logoFooter: '/logo/StarDecorLogo_page-0003.png',
   });
 
   const [phones, setPhones] = useState<{ label: string, value: string }[]>([]);
@@ -19,6 +22,7 @@ export default function ContactSettingsAdmin() {
   const [socialLinks, setSocialLinks] = useState<{ platform: string, url: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [uploadingField, setUploadingField] = useState<'logo' | 'logoFooter' | null>(null);
   const [message, setMessage] = useState({ text: '', type: '' });
 
   useEffect(() => {
@@ -34,6 +38,8 @@ export default function ContactSettingsAdmin() {
         phone2: res.data.phone2 || '',
         email: res.data.email || '',
         mapIframe: res.data.mapIframe || '',
+        logo: res.data.logo || '/logo/StarDecorLogo_page-0002.png',
+        logoFooter: res.data.logoFooter || '/logo/StarDecorLogo_page-0003.png',
       });
 
       // Fetch dynamic phones
@@ -83,6 +89,24 @@ export default function ContactSettingsAdmin() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: 'logo' | 'logoFooter') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingField(fieldName);
+    const uploadFormData = new FormData();
+    uploadFormData.append('file', file);
+
+    const res = await uploadImageAction(uploadFormData);
+    if (res.success && res.url) {
+      setFormData(prev => ({ ...prev, [fieldName]: res.url }));
+      setMessage({ text: 'Logo image uploaded successfully. Click "Save Changes" to apply.', type: 'success' });
+    } else {
+      setMessage({ text: res.error || 'Failed to upload logo image.', type: 'error' });
+    }
+    setUploadingField(null);
   };
 
   const addPhone = () => {
@@ -168,7 +192,7 @@ export default function ContactSettingsAdmin() {
       <PageHeaderForm pageIdentifier="contact" />
       <div className="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
         <div className="p-6 border-b border-stone-200 bg-stone-50 flex justify-between items-center">
-          <h2 className="text-lg font-bold text-stone-800">Contact & Social Media Settings</h2>
+          <h2 className="text-lg font-bold text-stone-800">Site Branding & Contact Settings</h2>
         </div>
 
         <div className="p-6">
@@ -178,8 +202,132 @@ export default function ContactSettingsAdmin() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
             
+            {/* Site Logo Section */}
+            <div className="space-y-6 bg-stone-50 p-6 rounded-lg border border-stone-200">
+              <div>
+                <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider">Site Logos (Dynamic Logo Management)</h3>
+                <p className="text-xs text-stone-500 mt-1">
+                  Update site logos used across Navbar, Loading Screen, Footer, and Admin Panel.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* Header & Loading Screen Logo */}
+                <div className="bg-white p-4 rounded border border-stone-200 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-stone-800 uppercase">
+                      Navbar & Loading Screen Logo (Light Background)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, logo: '/logo/StarDecorLogo_page-0002.png' }))}
+                      className="text-[11px] text-amber-700 hover:underline font-semibold"
+                    >
+                      Reset to Default
+                    </button>
+                  </div>
+
+                  {/* Preview */}
+                  <div className="h-20 bg-stone-100 rounded border border-dashed border-stone-300 flex items-center justify-center p-3 relative overflow-hidden">
+                    {formData.logo ? (
+                      <Image
+                        src={formData.logo}
+                        alt="Header Logo Preview"
+                        width={180}
+                        height={60}
+                        className="max-h-full w-auto object-contain"
+                      />
+                    ) : (
+                      <span className="text-xs text-stone-400">No logo found</span>
+                    )}
+                  </div>
+
+                  {/* Controls */}
+                  <div className="space-y-2">
+                    <div className="flex gap-2 items-center">
+                      <label className="cursor-pointer px-4 py-2 bg-stone-900 text-white text-xs font-bold rounded hover:bg-amber-800 transition-colors shrink-0">
+                        {uploadingField === 'logo' ? 'Uploading...' : 'Upload Image'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleLogoUpload(e, 'logo')}
+                          disabled={uploadingField === 'logo'}
+                          className="hidden"
+                        />
+                      </label>
+                      <input
+                        type="text"
+                        name="logo"
+                        value={formData.logo}
+                        onChange={handleInputChange}
+                        placeholder="/logo/..."
+                        className="w-full bg-stone-50 border border-stone-200 px-3 py-2 text-xs rounded focus:outline-none focus:border-amber-700"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer & Admin Logo */}
+                <div className="bg-stone-900 text-white p-4 rounded border border-stone-800 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-stone-200 uppercase">
+                      Footer & Admin Panel Logo (Dark Background)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, logoFooter: '/logo/StarDecorLogo_page-0003.png' }))}
+                      className="text-[11px] text-amber-400 hover:underline font-semibold"
+                    >
+                      Reset to Default
+                    </button>
+                  </div>
+
+                  {/* Preview */}
+                  <div className="h-20 bg-stone-950 rounded border border-dashed border-stone-800 flex items-center justify-center p-3 relative overflow-hidden">
+                    {formData.logoFooter ? (
+                      <Image
+                        src={formData.logoFooter}
+                        alt="Footer Logo Preview"
+                        width={180}
+                        height={60}
+                        className="max-h-full w-auto object-contain"
+                      />
+                    ) : (
+                      <span className="text-xs text-stone-600">No logo found</span>
+                    )}
+                  </div>
+
+                  {/* Controls */}
+                  <div className="space-y-2">
+                    <div className="flex gap-2 items-center">
+                      <label className="cursor-pointer px-4 py-2 bg-amber-700 text-white text-xs font-bold rounded hover:bg-amber-600 transition-colors shrink-0">
+                        {uploadingField === 'logoFooter' ? 'Uploading...' : 'Upload Image'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleLogoUpload(e, 'logoFooter')}
+                          disabled={uploadingField === 'logoFooter'}
+                          className="hidden"
+                        />
+                      </label>
+                      <input
+                        type="text"
+                        name="logoFooter"
+                        value={formData.logoFooter}
+                        onChange={handleInputChange}
+                        placeholder="/logo/..."
+                        className="w-full bg-stone-800 border border-stone-700 text-stone-100 px-3 py-2 text-xs rounded focus:outline-none focus:border-amber-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
             {/* Dynamic Phone Numbers */}
             <div className="space-y-3">
               <div className="flex justify-between items-center">

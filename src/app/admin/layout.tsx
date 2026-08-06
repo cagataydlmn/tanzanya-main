@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getContactSettings } from '@/app/actions/contact';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -11,6 +12,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   // Auth State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  // Site Settings / Logo State
+  const [siteSettings, setSiteSettings] = useState<any>(null);
 
   // Mobile Drawer State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -28,7 +32,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     } else {
       setIsAuthenticated(false);
     }
+
+    getContactSettings().then(res => {
+      if (res.success && res.data) {
+        setSiteSettings(res.data);
+      }
+    });
   }, []);
+
+  const adminLogo = siteSettings?.logoFooter || siteSettings?.logo || '/logo/StarDecorLogo_page-0003.png';
+  const adminHeaderIcon = siteSettings?.logo || siteSettings?.logoFooter || '/logo/StarDecorLogo_page-0006.jpg';
 
   // Close mobile drawer on route change
   useEffect(() => {
@@ -44,7 +57,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       setIsAuthenticated(true);
       router.push('/admin');
     } else {
-      setError('Hatalı e-posta veya şifre girdiniz.');
+      setError('Invalid email or password.');
     }
   };
 
@@ -71,7 +84,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   // Prevent flash of content while checking auth
   if (isAuthenticated === null) {
-    return <div className="min-h-screen bg-stone-50 flex items-center justify-center font-medium text-stone-600">Yükleniyor...</div>;
+    return <div className="min-h-screen bg-stone-50 flex items-center justify-center font-medium text-stone-600">Loading...</div>;
   }
 
   // Show Login Screen if not authenticated
@@ -81,13 +94,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="w-full max-w-md bg-white border border-stone-200 shadow-xl p-6 md:p-12 rounded">
           <div className="flex flex-col items-center mb-8">
             <Image
-              src="/logo/StarDecorLogo_page-0003.png"
+              src={adminLogo}
               alt="Tanzanya Logo"
               width={180}
               height={55}
               className="h-12 w-auto object-contain mb-3 rounded-md"
             />
-            <p className="text-stone-500 text-xs uppercase tracking-widest font-semibold">Yönetim Paneli Girişi</p>
+            <p className="text-stone-500 text-xs uppercase tracking-widest font-semibold">Admin Panel Login</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -98,7 +111,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             )}
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider block">E-Posta Adresi</label>
+              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider block">Email Address</label>
               <input
                 type="email"
                 value={email}
@@ -110,7 +123,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider block">Şifre</label>
+              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider block">Password</label>
               <input
                 type="password"
                 value={password}
@@ -147,7 +160,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <header className="md:hidden bg-stone-900 text-white px-4 py-3 flex items-center justify-between z-30 shadow-md sticky top-0">
         <Link href="/admin" className="flex items-center gap-2">
           <Image
-            src="/logo/StarDecorLogo_page-0003.png"
+            src={adminLogo}
             alt="Tanzanya Logo"
             width={110}
             height={32}
@@ -156,7 +169,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </Link>
 
         <div className="flex items-center gap-2">
-          <Link href="/" className="p-2 text-stone-400 hover:text-white" title="Siteye Dön">
+          <Link href="/" className="p-2 text-stone-400 hover:text-white" title="Return to site">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -165,7 +178,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="p-2 text-stone-300 hover:text-white focus:outline-none cursor-pointer"
-            aria-label="Menü"
+            aria-label="Menu"
           >
             {isMobileMenuOpen ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,7 +211,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="p-6 border-b border-stone-800 flex items-center justify-between shrink-0">
             <Link href="/admin" className="flex flex-col gap-1">
               <Image
-                src="/logo/StarDecorLogo_page-0003.png"
+                src={adminLogo}
                 alt="Tanzanya Logo"
                 width={130}
                 height={40}
@@ -287,12 +300,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              Çıkış Yap
+              Log Out
             </button>
 
-            <div className="w-9 h-9 rounded-full overflow-hidden border border-stone-200 shadow-sm flex items-center justify-center bg-stone-100" title="Yönetici Arayüzü">
+            <div className="w-9 h-9 rounded-full overflow-hidden border border-stone-200 shadow-sm flex items-center justify-center bg-stone-100" title="Admin Dashboard">
               <Image
-                src="/logo/StarDecorLogo_page-0006.jpg"
+                src={adminHeaderIcon}
                 alt="Admin Logo"
                 width={36}
                 height={36}

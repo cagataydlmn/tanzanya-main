@@ -3,6 +3,7 @@ import HeroSlider from '@/components/HeroSlider';
 import { getProjects } from '@/app/actions/projects';
 import { getServices } from '@/app/actions/services';
 import { getHomePage } from '@/app/actions/home';
+import { getSlides } from '@/app/actions/slides';
 import ProjectsGrid from '@/components/ProjectsGrid';
 import Image from 'next/image';
 import type { Metadata } from 'next';
@@ -23,15 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [homeRes, projectsRes, servicesRes] = await Promise.all([
+  const [homeRes, projectsRes, servicesRes, slidesRes] = await Promise.all([
     getHomePage(),
     getProjects(),
-    getServices()
+    getServices(),
+    getSlides()
   ]);
 
   const d = homeRes.success && homeRes.data ? homeRes.data : null;
   const allProjects = projectsRes.success && projectsRes.data ? projectsRes.data : [];
   const allServices = servicesRes.success && servicesRes.data ? servicesRes.data : [];
+  const slides = slidesRes.success && slidesRes.data ? slidesRes.data : [];
 
   const featuredProjects = allProjects.filter((p: any) => p.isFeatured);
   const featuredServices = allServices.filter((s: any) => s.isFeatured);
@@ -44,7 +47,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col font-sans">
       {/* Hero Section - Dynamic Slideshow */}
-      <HeroSlider />
+      <HeroSlider initialSlides={slides} />
 
       {/* Services Section */}
       <section className="py-32 md:py-40 px-6 bg-white">

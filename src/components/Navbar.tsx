@@ -5,10 +5,12 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
-export default function Navbar() {
+export default function Navbar({ settings }: { settings?: any }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+
+  const logoUrl = settings?.logo || '/logo/StarDecorLogo_page-0002.png';
 
   // Close mobile menu when clicking outside of the navbar
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function Navbar() {
           className="flex items-center shrink-0 mr-8"
         >
           <Image
-            src="/logo/StarDecorLogo_page-0002.png"
+            src={logoUrl}
             alt="Tanzanya Logo"
             width={160}
             height={50}

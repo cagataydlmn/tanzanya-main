@@ -1,6 +1,10 @@
 import Image from 'next/image';
+import { getContactSettings } from '@/app/actions/contact';
 
-export default function Loading() {
+export default async function Loading() {
+  const res = await getContactSettings();
+  const logoUrl = res.success && res.data?.logo ? res.data.logo : "/logo/StarDecorLogo_page-0002.png";
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-stone-50/90 backdrop-blur-sm text-stone-900">
       <div className="flex flex-col items-center text-center space-y-6">
@@ -19,7 +23,7 @@ export default function Loading() {
         {/* Brand details */}
         <div className="space-y-2 flex flex-col items-center">
           <Image 
-            src="/logo/StarDecorLogo_page-0002.png"
+            src={logoUrl}
             alt="Tanzanya Logo"
             width={160}
             height={50}

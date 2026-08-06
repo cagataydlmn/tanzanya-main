@@ -4,10 +4,12 @@ import { useEffect, useState, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
-function RouteLoaderInner() {
+function RouteLoaderInner({ logoUrl }: { logoUrl?: string }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+
+  const displayLogo = logoUrl || '/logo/StarDecorLogo_page-0002.png';
 
   // Pathname veya query parametreleri değiştiğinde yükleme ekranını kapat
   useEffect(() => {
@@ -62,7 +64,7 @@ function RouteLoaderInner() {
         {/* Brand details */}
         <div className="space-y-2 flex flex-col items-center">
           <Image 
-            src="/logo/StarDecorLogo_page-0002.png"
+            src={displayLogo}
             alt="Tanzanya Logo"
             width={160}
             height={50}
@@ -80,10 +82,10 @@ function RouteLoaderInner() {
   );
 }
 
-export default function RouteLoader() {
+export default function RouteLoader({ logoUrl }: { logoUrl?: string }) {
   return (
     <Suspense fallback={null}>
-      <RouteLoaderInner />
+      <RouteLoaderInner logoUrl={logoUrl} />
     </Suspense>
   );
 }

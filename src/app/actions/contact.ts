@@ -26,7 +26,9 @@ export async function getContactSettings() {
             { platform: "Facebook", url: "https://facebook.com" },
             { platform: "Instagram", url: "https://instagram.com" }
           ],
-          mapIframe: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3962.077108117358!2d39.252118!3d-6.7604522!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4d8a2a606a3d%3A0xa9ce81db02869dac!2sStarDecor%20Furniture%20and%20Interior%20Design!5e0!3m2!1str!2str!4v1785182002797!5m2!1str!2str"
+          mapIframe: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3962.077108117358!2d39.252118!3d-6.7604522!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4d8a2a606a3d%3A0xa9ce81db02869dac!2sStarDecor%20Furniture%20and%20Interior%20Design!5e0!3m2!1str!2str!4v1785182002797!5m2!1str!2str",
+          logo: "/logo/StarDecorLogo_page-0002.png",
+          logoFooter: "/logo/StarDecorLogo_page-0003.png"
         }
       });
     }
@@ -48,6 +50,8 @@ export async function updateContactSettings(formData: {
   emails?: any;
   socialLinks: any;
   mapIframe: string;
+  logo?: string;
+  logoFooter?: string;
 }) {
   try {
     const settings = await prisma.contactSettings.findFirst();
@@ -63,7 +67,9 @@ export async function updateContactSettings(formData: {
           phones: formData.phones,
           emails: formData.emails,
           socialLinks: formData.socialLinks,
-          mapIframe: formData.mapIframe
+          mapIframe: formData.mapIframe,
+          logo: formData.logo,
+          logoFooter: formData.logoFooter,
         }
       });
     } else {
@@ -76,7 +82,9 @@ export async function updateContactSettings(formData: {
           phones: formData.phones,
           emails: formData.emails,
           socialLinks: formData.socialLinks,
-          mapIframe: formData.mapIframe
+          mapIframe: formData.mapIframe,
+          logo: formData.logo,
+          logoFooter: formData.logoFooter,
         }
       });
     }

@@ -68,8 +68,8 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${cinzel.variable} ${montserrat.variable}`}>
       <body className="bg-stone-50 text-stone-900 antialiased">
-        <RouteLoader />
-        <Navbar />
+        <RouteLoader logoUrl={contactSettings?.logo ?? undefined} />
+        <Navbar settings={contactSettings} />
         {children}
         <Footer settings={contactSettings} />
       </body>

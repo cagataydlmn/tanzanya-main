@@ -20,6 +20,8 @@ export default function Footer({ settings }: { settings?: any }) {
       : [];
   } catch (e) { }
 
+  const logoFooterUrl = settings?.logoFooter || settings?.logo || '/logo/StarDecorLogo_page-0003.png';
+
   return (
     <footer className="bg-stone-900 text-stone-300 pt-20 pb-10 border-t border-stone-800">
       <div className="max-w-7xl mx-auto px-6">
@@ -29,7 +31,7 @@ export default function Footer({ settings }: { settings?: any }) {
           <div className="space-y-6 lg:col-span-3">
             <Link href="/" className="flex items-center block">
               <Image
-                src="/logo/StarDecorLogo_page-0003.png"
+                src={logoFooterUrl}
                 alt="Tanzanya Logo"
                 width={160}
                 height={50}

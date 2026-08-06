@@ -200,6 +200,8 @@ model ContactSettings {
   emails      Json?
   socialLinks Json
   mapIframe   String   @db.Text
+  logo        String?  @db.Text
+  logoFooter  String?  @db.Text
   updatedAt   DateTime @updatedAt
 }
 

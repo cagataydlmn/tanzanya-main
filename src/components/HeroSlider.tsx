@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getSlides } from '@/app/actions/slides';
 
-interface Slide {
+export interface Slide {
   id?: number;
   subtitle: string;
   title: string;
@@ -14,40 +14,27 @@ interface Slide {
   metaTitle?: string | null;
 }
 
-const fallbackSlides: Slide[] = [
-  {
-    subtitle: "Kurumsal Üretici & İç Mimarlık",
-    title: "Geleneksel Ustalık, Modern Tasarım",
-    desc: "Ev, ofis, okul ve ticari projeleriniz için kendi tesislerimizde ürettiğimiz; estetiği ve kaliteyi bir araya getiren anahtar teslim ahşap ve mobilya çözümleri.",
-    bg: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.07.jpeg"
-  },
-  {
-    subtitle: "Kendi Fabrikamızdan",
-    title: "Sıfır Hata, Yüksek Kalite",
-    desc: "5000 m² üretim tesisimizde, son teknoloji makine parkurumuz ve deneyimli ustalarımızla hayallerinizi ahşaba işliyoruz.",
-    bg: "/dummygorsel/WhatsApp Image 2026-07-13 at 15.01.10.jpeg"
-  },
-  {
-    subtitle: "Anahtar Teslim Projeler",
-    title: "Tasarımından Montajına Kadar",
-    desc: "Otel, restoran ve ofis projelerinizde iç mimari tasarım, üretim ve saha montajını tek elden kusursuzca yönetiyoruz.",
-    bg: "/dummygorsel/factory_workshop.png"
-  }
-];
+interface HeroSliderProps {
+  initialSlides?: Slide[];
+}
 
-export default function HeroSlider() {
+export default function HeroSlider({ initialSlides = [] }: HeroSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [slides, setSlides] = useState<Slide[]>(fallbackSlides);
+  const [slides, setSlides] = useState<Slide[]>(initialSlides);
 
   useEffect(() => {
-    async function loadSlides() {
-      const res = await getSlides();
-      if (res.success && res.data && res.data.length > 0) {
-        setSlides(res.data);
+    if (initialSlides.length > 0) {
+      setSlides(initialSlides);
+    } else {
+      async function loadSlides() {
+        const res = await getSlides();
+        if (res.success && res.data && res.data.length > 0) {
+          setSlides(res.data);
+        }
       }
+      loadSlides();
     }
-    loadSlides();
-  }, []);
+  }, [initialSlides]);
 
   useEffect(() => {
     if (slides.length <= 1) return;
@@ -56,6 +43,18 @@ export default function HeroSlider() {
     }, 6000);
     return () => clearInterval(timer);
   }, [slides.length]);
+
+  if (slides.length === 0) {
+    return (
+      <section className="relative h-[460px] md:h-[540px] lg:h-[580px] max-h-[640px] w-full max-w-[1920px] mx-auto flex flex-col justify-center items-center px-6 overflow-hidden bg-stone-950">
+        <div className="relative z-10 max-w-4xl w-full flex flex-col items-center justify-center text-center animate-pulse space-y-4">
+          <div className="h-4 w-32 bg-stone-800 rounded"></div>
+          <div className="h-10 w-3/4 bg-stone-800 rounded"></div>
+          <div className="h-4 w-1/2 bg-stone-800 rounded"></div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative h-[460px] md:h-[540px] lg:h-[580px] max-h-[640px] w-full max-w-[1920px] mx-auto flex flex-col justify-center items-center px-6 overflow-hidden bg-stone-950">
