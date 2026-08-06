@@ -1,6 +1,6 @@
 "use server";
 
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 
 export async function uploadImageAction(formData: FormData) {
@@ -13,7 +13,7 @@ export async function uploadImageAction(formData: FormData) {
     // Dosya uzantısı ve türü kontrolü
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml', 'application/pdf'];
     if (!allowedTypes.includes(file.type)) {
-      return { success: false, error: 'Yalnızca görsel dosyaları (JPG, PNG, vb.) veya PDF yükleyebilirsiniz.' };
+      return { success: false, error: 'Yalnızca görsel dosyaları (JPG, PNG, WEBP, GIF, SVG) veya PDF yükleyebilirsiniz.' };
     }
 
     const isPdf = file.type === 'application/pdf';
@@ -29,23 +29,46 @@ export async function uploadImageAction(formData: FormData) {
     const buffer = Buffer.from(bytes);
 
     // Kaydetme dizinini ayarla: public/uploads
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
+    const mainUploadDir = join(process.cwd(), 'public', 'uploads');
     
-    // Klasörün varlığından emin ol, yoksa oluştur
-    mkdirSync(uploadDir, { recursive: true });
+    try {
+      mkdirSync(mainUploadDir, { recursive: true });
+    } catch (e: any) {
+      if (e.code === 'EACCES') {
+        return { success: false, error: 'Sunucuda public/uploads klasörünün yazma izni (CHMOD 755/777) yok.' };
+      }
+    }
 
-    // Benzersiz ve güvenli bir dosya adı oluştur
+    // Benzersiz ve temiz dosya adı oluştur
     const ext = file.name.split('.').pop() || '';
     const cleanName = file.name
       .replace(`.${ext}`, '')
       .replace(/[^a-zA-Z0-9]/g, '_');
     const uniqueName = `${Date.now()}_${cleanName}.${ext}`;
-    const filePath = join(uploadDir, uniqueName);
+    const filePath = join(mainUploadDir, uniqueName);
 
     // Diske yaz
-    writeFileSync(filePath, buffer);
+    try {
+      writeFileSync(filePath, buffer);
+    } catch (e: any) {
+      if (e.code === 'EACCES') {
+        return { success: false, error: 'Sunucuya görsel yazılırken izin hatası alındı (CHMOD 755 gereklidir).' };
+      }
+      throw e;
+    }
 
-    // Public üzerinden erişilecek url yolunu dön
+    // Eğer standalone modu aktifse standalone klasörüne de eşzamanlı kopyala
+    const standaloneDir = join(process.cwd(), '.next', 'standalone', 'public', 'uploads');
+    if (existsSync(join(process.cwd(), '.next', 'standalone'))) {
+      try {
+        mkdirSync(standaloneDir, { recursive: true });
+        writeFileSync(join(standaloneDir, uniqueName), buffer);
+      } catch (e) {
+        console.warn("Standalone upload sync warning:", e);
+      }
+    }
+
+    // Veritabanına ve frontend'e verilecek temiz relatif URL yolu
     const fileUrl = `/uploads/${uniqueName}`;
     return { success: true, url: fileUrl };
   } catch (error: any) {
