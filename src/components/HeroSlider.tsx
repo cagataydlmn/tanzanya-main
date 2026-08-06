@@ -21,6 +21,11 @@ interface HeroSliderProps {
 export default function HeroSlider({ initialSlides = [] }: HeroSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<Slide[]>(initialSlides);
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
+
+  const handleImageError = (src: string) => {
+    setImageErrors((prev) => ({ ...prev, [src]: true }));
+  };
 
   useEffect(() => {
     if (initialSlides.length > 0) {
@@ -60,38 +65,43 @@ export default function HeroSlider({ initialSlides = [] }: HeroSliderProps) {
     <section className="relative h-[460px] md:h-[540px] lg:h-[580px] max-h-[640px] w-full max-w-[1920px] mx-auto flex flex-col justify-center items-center px-6 overflow-hidden bg-stone-950">
 
       {/* Background Slides with Dual-Layer Optimization */}
-      {slides.map((slide, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100 z-0" : "opacity-0 -z-10"
-            }`}
-        >
-          {/* Layer 1: Blurred background fill to prevent edge gaps */}
-          <Image
-            src={slide.bg}
-            alt=""
-            fill
-            priority={index === 0}
-            unoptimized
-            aria-hidden="true"
-            className="object-cover blur-2xl scale-110 opacity-50"
-          />
+      {slides.map((slide, index) => {
+        const bgSrc = imageErrors[slide.bg] ? "/dummygorsel/factory_workshop.png" : slide.bg;
+        return (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100 z-0" : "opacity-0 -z-10"
+              }`}
+          >
+            {/* Layer 1: Blurred background fill to prevent edge gaps */}
+            <Image
+              src={bgSrc}
+              alt=""
+              fill
+              priority={index === 0}
+              unoptimized
+              aria-hidden="true"
+              onError={() => handleImageError(slide.bg)}
+              className="object-cover blur-2xl scale-110 opacity-50"
+            />
 
-          {/* Layer 2: Main crisp image centered */}
-          <Image
-            src={slide.bg}
-            alt={slide.metaTitle || slide.title}
-            fill
-            priority={index === 0}
-            unoptimized
-            sizes="100vw"
-            className="object-cover object-center"
-          />
+            {/* Layer 2: Main crisp image centered */}
+            <Image
+              src={bgSrc}
+              alt={slide.metaTitle || slide.title}
+              fill
+              priority={index === 0}
+              unoptimized
+              sizes="100vw"
+              onError={() => handleImageError(slide.bg)}
+              className="object-cover object-center"
+            />
 
-          {/* Layer 3: Multi-stage gradient mask for premium dark contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-stone-950/40" />
-        </div>
-      ))}
+            {/* Layer 3: Multi-stage gradient mask for premium dark contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-stone-950/40" />
+          </div>
+        );
+      })}
 
       {/* Content Container */}
       <div className="relative z-10 max-w-4xl w-full h-[380px] md:h-[320px] flex items-center justify-center">
