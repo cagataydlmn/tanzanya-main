@@ -352,61 +352,87 @@ export default function AdminGallery() {
               <label className="text-sm font-bold text-stone-900 uppercase tracking-wider block">Select / Upload Image *</label>
               
               {img ? (
-                <div className="relative aspect-[4/3] w-full max-w-sm bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
-                  <Image 
-                    src={img} 
-                    alt="Uploaded Image Preview" 
-                    fill 
-                    sizes="(max-width: 768px) 100vw, 384px"
-                    className="object-cover" 
-                  />
-                  <div className="absolute inset-0 bg-stone-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button 
-                      type="button"
-                      onClick={() => setImg('')}
-                      className="px-6 py-2 bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded shadow hover:bg-red-700 transition-colors cursor-pointer"
-                    >
-                      Change / Remove Image
-                    </button>
+                <div className="space-y-3">
+                  <div className="relative aspect-[4/3] w-full max-w-sm bg-stone-100 border border-stone-200 shadow-sm overflow-hidden group rounded">
+                    <Image 
+                      src={img} 
+                      alt="Uploaded Image Preview" 
+                      fill 
+                      unoptimized
+                      sizes="(max-width: 768px) 100vw, 384px"
+                      className="object-cover" 
+                    />
+                    <div className="absolute inset-0 bg-stone-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button 
+                        type="button"
+                        onClick={() => setImg('')}
+                        className="px-6 py-2 bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded shadow hover:bg-red-700 transition-colors cursor-pointer"
+                      >
+                        Change / Remove Image
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-1 max-w-sm">
+                    <label className="text-[11px] text-stone-500 font-bold uppercase tracking-wider">Image URL / Direct Path:</label>
+                    <input
+                      type="text"
+                      value={img}
+                      onChange={(e) => setImg(e.target.value)}
+                      className="w-full bg-stone-50 border border-stone-200 px-3 py-2 text-xs text-stone-800 rounded focus:outline-none focus:border-amber-700"
+                      placeholder="/uploads/... or https://..."
+                    />
                   </div>
                 </div>
               ) : (
-                <label 
-                  htmlFor="gallery-file-input"
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  className={`block w-full border-2 border-dashed px-4 py-12 flex flex-col items-center justify-center text-center cursor-pointer transition-all rounded ${
-                    isDragging 
-                      ? 'border-amber-700 bg-amber-50/50 scale-[1.01]' 
-                      : 'border-stone-300 bg-stone-50 hover:bg-stone-100 hover:border-amber-700'
-                  }`}
-                >
-                  <input 
-                    id="gallery-file-input"
-                    type="file" 
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    disabled={uploading}
-                    className="hidden" 
-                  />
-                  {uploading ? (
-                    <svg className="w-12 h-12 text-amber-700 mb-3 animate-hammer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m15 5 4 4" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21.5 4.5 19.5 2.5a1 1 0 0 0-1.4 0l-6.5 6.5 4 4 6.5-6.5a1 1 0 0 0 0-1.4z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m11.5 9.5-8.5 8.5v3h3l8.5-8.5" />
-                    </svg>
-                  ) : (
-                    <svg className={`w-12 h-12 mb-3 transition-transform ${isDragging ? 'text-amber-700 scale-110' : 'text-stone-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  )}
-                  <p className="text-stone-700 font-bold text-sm">
-                    {uploading ? 'Preparing Image... Hammers at Work!' : isDragging ? 'Drop to Upload' : 'Click or Drag to Select Image'}
-                  </p>
-                  <p className="text-stone-400 text-xs mt-2">Max size 5MB (JPG, PNG, WEBP, SVG)</p>
-                  <p className="text-amber-700 font-medium text-xs mt-1">Recommended Image Size: 800 x 600px (or similar landscape format)</p>
-                </label>
+                <div className="space-y-3">
+                  <label 
+                    htmlFor="gallery-file-input"
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={`block w-full border-2 border-dashed px-4 py-12 flex flex-col items-center justify-center text-center cursor-pointer transition-all rounded ${
+                      isDragging 
+                        ? 'border-amber-700 bg-amber-50/50 scale-[1.01]' 
+                        : 'border-stone-300 bg-stone-50 hover:bg-stone-100 hover:border-amber-700'
+                    }`}
+                  >
+                    <input 
+                      id="gallery-file-input"
+                      type="file" 
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      disabled={uploading}
+                      className="hidden" 
+                    />
+                    {uploading ? (
+                      <svg className="w-12 h-12 text-amber-700 mb-3 animate-hammer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m15 5 4 4" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21.5 4.5 19.5 2.5a1 1 0 0 0-1.4 0l-6.5 6.5 4 4 6.5-6.5a1 1 0 0 0 0-1.4z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m11.5 9.5-8.5 8.5v3h3l8.5-8.5" />
+                      </svg>
+                    ) : (
+                      <svg className={`w-12 h-12 mb-3 transition-transform ${isDragging ? 'text-amber-700 scale-110' : 'text-stone-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                    <p className="text-stone-700 font-bold text-sm">
+                      {uploading ? 'Preparing Image... Hammers at Work!' : isDragging ? 'Drop to Upload' : 'Click or Drag to Select Image'}
+                    </p>
+                    <p className="text-stone-400 text-xs mt-2">Max size 5MB (JPG, PNG, WEBP, SVG)</p>
+                    <p className="text-amber-700 font-medium text-xs mt-1">Recommended Image Size: 800 x 600px (or similar landscape format)</p>
+                  </label>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] text-stone-500 font-bold uppercase tracking-wider">Or Enter Image URL Directly:</label>
+                    <input
+                      type="text"
+                      value={img}
+                      onChange={(e) => setImg(e.target.value)}
+                      className="w-full bg-stone-50 border border-stone-200 px-3 py-2 text-xs text-stone-800 rounded focus:outline-none focus:border-amber-700"
+                      placeholder="e.g. /uploads/image.png or https://..."
+                    />
+                  </div>
+                </div>
               )}
             </div>
 
