@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     e.preventDefault();
     setError('');
 
-    if (email === 'admin@tanzanya.com' && password === '12345678') {
+    if (email === 'stardecortz@gmail.com' && password === '2026sD#') {
       localStorage.setItem('tanzanyaAdminAuth', 'true');
       setIsAuthenticated(true);
       router.push('/admin');
@@ -84,14 +84,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   // Prevent flash of content while checking auth
   if (isAuthenticated === null) {
-    return <div className="min-h-screen bg-stone-50 flex items-center justify-center font-medium text-stone-600">Loading...</div>;
+    return <div className="min-h-screen bg-black flex items-center justify-center font-medium text-stone-400">Loading...</div>;
   }
 
   // Show Login Screen if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-stone-100 flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md bg-white border border-stone-200 shadow-xl p-6 md:p-12 rounded">
+      <div className="min-h-screen bg-black flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-md bg-black border border-stone-800 shadow-2xl p-6 md:p-12 rounded">
           <div className="flex flex-col items-center mb-8">
             <Image
               src={adminLogo}
@@ -100,49 +100,49 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               height={55}
               className="h-12 w-auto object-contain mb-3 rounded-md"
             />
-            <p className="text-stone-500 text-xs uppercase tracking-widest font-semibold">Admin Panel Login</p>
+            <p className="text-stone-400 text-xs uppercase tracking-widest font-semibold">Admin Panel Login</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 text-red-600 text-sm font-medium text-center rounded">
+              <div className="p-4 bg-red-950/60 border border-red-800 text-red-300 text-sm font-medium text-center rounded">
                 {error}
               </div>
             )}
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider block">Email Address</label>
+              <label className="text-xs font-bold text-stone-300 uppercase tracking-wider block">Email Address</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 transition-colors rounded"
-                placeholder="admin@tanzanya.com"
+                className="w-full bg-stone-900 border border-stone-800 px-4 py-3 text-stone-100 placeholder-stone-500 focus:outline-none focus:border-amber-600 transition-colors rounded"
+                placeholder="info@admin.com"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider block">Password</label>
+              <label className="text-xs font-bold text-stone-300 uppercase tracking-wider block">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-900 focus:outline-none focus:border-amber-700 transition-colors rounded"
+                className="w-full bg-stone-900 border border-stone-800 px-4 py-3 text-stone-100 placeholder-stone-500 focus:outline-none focus:border-amber-600 transition-colors rounded"
                 placeholder="••••••••"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-4 bg-stone-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-800 transition-colors mt-4 rounded cursor-pointer"
+              className="w-full py-4 bg-amber-700 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-600 transition-colors mt-4 rounded cursor-pointer"
             >
               Login
             </button>
 
             <div className="text-center mt-6">
-              <Link href="/" className="text-sm text-stone-500 hover:text-stone-900 transition-colors">
+              <Link href="/" className="text-sm text-stone-400 hover:text-stone-200 transition-colors">
                 ← Return to the site
               </Link>
             </div>
