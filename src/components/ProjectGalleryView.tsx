@@ -63,18 +63,29 @@ export default function ProjectGalleryView({
       {/* 1. Main Showcase Image */}
       <div 
         onClick={() => openLightbox(activeIdx)}
-        className="relative aspect-[16/10] md:aspect-[21/9] w-full rounded-xl overflow-hidden border border-stone-800 shadow-2xl bg-stone-900 group cursor-pointer"
+        className="relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] w-full max-h-[580px] rounded-xl overflow-hidden border border-stone-800 shadow-2xl bg-stone-950 group cursor-pointer"
       >
+        {/* Ambient blurred backdrop for aesthetic fit */}
+        <Image 
+          src={safeImages[activeIdx]}
+          alt=""
+          fill
+          unoptimized
+          className="object-cover blur-3xl opacity-35 scale-110"
+        />
+        <div className="absolute inset-0 bg-stone-950/40" />
+
+        {/* Foreground full image: object-contain guarantees 100% full view without any clipping */}
         <Image 
           src={safeImages[activeIdx]}
           alt={`${projectName} - Image ${activeIdx + 1}`}
           fill
           priority
           unoptimized
-          sizes="100vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 1200px) 100vw, 1200px"
+          className="object-contain p-2 sm:p-4 z-10 transition-transform duration-500 group-hover:scale-[1.01]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/50 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/40 via-transparent to-transparent pointer-events-none z-10" />
 
         {/* Floating Zoom & Counter Badges */}
         <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
