@@ -3,13 +3,39 @@
 import prisma from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
+function normalizeProject(p: any) {
+  if (!p) return null;
+  let images: string[] = [];
+  if (Array.isArray(p.images)) {
+    images = p.images.filter((item: any) => typeof item === 'string' && item.trim() !== '');
+  } else if (typeof p.images === 'string') {
+    try {
+      const parsed = JSON.parse(p.images);
+      if (Array.isArray(parsed)) {
+        images = parsed.filter((item: any) => typeof item === 'string' && item.trim() !== '');
+      }
+    } catch {
+      if (p.images.trim()) images = [p.images];
+    }
+  }
+
+  if (images.length === 0 && p.img) {
+    images = [p.img];
+  }
+
+  return {
+    ...p,
+    images,
+  };
+}
+
 // Bütün projeleri getir
 export async function getProjects() {
   try {
     const projects = await prisma.project.findMany({
       orderBy: { createdAt: 'desc' }
     });
-    return { success: true, data: projects };
+    return { success: true, data: projects.map(normalizeProject) };
   } catch (error: any) {
     console.error("getProjects error:", error);
     return { success: false, error: error.message || "Projeler çekilemedi." };
@@ -22,19 +48,25 @@ export async function createProject(formData: {
   category: string;
   description?: string;
   img?: string;
+  images?: string[];
   metaTitle?: string;
   metaDesc?: string;
   metaKeys?: string;
   isFeatured?: boolean;
 }) {
   try {
-    const { name, category, description, img } = formData;
+    const images = formData.images && formData.images.length > 0 
+      ? formData.images 
+      : (formData.img ? [formData.img] : []);
+    const coverImg = formData.img || images[0] || "/dummygorsel/factory_workshop.png";
+
     const newProject = await prisma.project.create({
       data: {
         name: formData.name,
         category: formData.category,
         description: formData.description || "",
-        img: formData.img || "/dummygorsel/factory_workshop.png", // Varsayılan görsel
+        img: coverImg,
+        images: images,
         metaTitle: formData.metaTitle,
         metaDesc: formData.metaDesc,
         metaKeys: formData.metaKeys,
@@ -45,7 +77,7 @@ export async function createProject(formData: {
     revalidatePath('/projects');
     revalidatePath('/admin/projects');
     revalidatePath('/');
-    return { success: true, data: newProject };
+    return { success: true, data: normalizeProject(newProject) };
   } catch (error: any) {
     console.error("createProject error:", error);
     return { success: false, error: error.message || "Proje eklenemedi." };
@@ -77,7 +109,7 @@ export async function getProjectById(id: number) {
     if (!project) {
       return { success: false, error: "Proje bulunamadı." };
     }
-    return { success: true, data: project };
+    return { success: true, data: normalizeProject(project) };
   } catch (error: any) {
     console.error("getProjectById error:", error);
     return { success: false, error: error.message || "Proje çekilemedi." };
@@ -92,6 +124,7 @@ export async function updateProject(
     category?: string;
     description?: string;
     img?: string;
+    images?: string[];
     metaTitle?: string;
     metaDesc?: string;
     metaKeys?: string;
@@ -99,13 +132,23 @@ export async function updateProject(
   }
 ) {
   try {
+    let images = formData.images;
+    let coverImg = formData.img;
+
+    if (images !== undefined) {
+      if (images.length > 0 && !coverImg) {
+        coverImg = images[0];
+      }
+    }
+
     const updatedProject = await prisma.project.update({
       where: { id },
       data: {
         ...(formData.name && { name: formData.name }),
         ...(formData.category && { category: formData.category }),
         ...(formData.description !== undefined && { description: formData.description }),
-        ...(formData.img && { img: formData.img }),
+        ...(coverImg && { img: coverImg }),
+        ...(images !== undefined && { images: images }),
         ...(formData.metaTitle !== undefined && { metaTitle: formData.metaTitle }),
         ...(formData.metaDesc !== undefined && { metaDesc: formData.metaDesc }),
         ...(formData.metaKeys !== undefined && { metaKeys: formData.metaKeys }),
@@ -116,9 +159,10 @@ export async function updateProject(
     revalidatePath('/projects');
     revalidatePath('/admin/projects');
     revalidatePath('/');
-    return { success: true, data: updatedProject };
+    return { success: true, data: normalizeProject(updatedProject) };
   } catch (error: any) {
     console.error("updateProject error:", error);
     return { success: false, error: error.message || "Proje güncellenemedi." };
   }
 }
+

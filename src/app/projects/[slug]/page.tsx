@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getProjects, getProjectById } from '@/app/actions/projects';
 import { slugify, parseIdFromSlug } from '@/lib/slug';
+import ProjectGalleryView from '@/components/ProjectGalleryView';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -119,19 +120,17 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       {/* 2. Main Content Container */}
       <div className="max-w-6xl mx-auto px-6 -mt-12 md:-mt-16 relative z-20">
         
-        {/* Full-width Unconstrained Photo Showcase */}
-        <div className="relative aspect-[16/10] md:aspect-[21/9] w-full rounded-xl overflow-hidden border border-stone-800 shadow-2xl bg-stone-900 mb-10 group">
-          <Image 
-            src={project.img}
-            alt={project.metaTitle || project.name}
-            fill
-            priority
-            unoptimized
-            sizes="100vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/40 via-transparent to-transparent pointer-events-none" />
-        </div>
+        {/* Interactive Photo Showcase & Multi-Image Gallery */}
+        <ProjectGalleryView 
+          images={
+            project && 'images' in project && Array.isArray(project.images) && project.images.length > 0
+              ? (project.images as string[])
+              : (project.img ? [project.img] : [])
+          } 
+          projectName={project.name} 
+          category={project.category} 
+        />
+
 
         {/* 3. Technical Specifications Grid */}
         <div className="bg-white border border-stone-200 shadow-sm p-6 md:p-8 rounded-lg grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
