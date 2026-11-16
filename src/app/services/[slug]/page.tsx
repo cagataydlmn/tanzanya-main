@@ -27,15 +27,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export async function generateStaticParams() {
-  const res = await getServices();
-  if (res.success && res.data) {
-    return res.data.map((service: any) => ({
-      slug: service.slug,
-    }));
-  }
-  return [];
-}
+// Rendered on demand so admin edits show up immediately and the build
+// does not need a database connection.
+export const dynamic = 'force-dynamic';
 
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug } = await params;

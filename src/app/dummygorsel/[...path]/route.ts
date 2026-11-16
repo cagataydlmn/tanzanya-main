@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { safeJoin } from '@/lib/safe-path';
 
 export async function GET(
   request: NextRequest,
@@ -9,9 +10,9 @@ export async function GET(
   try {
     const { path } = await params;
     const fileName = path.map(p => decodeURIComponent(p)).join('/');
-    const filePath = join(process.cwd(), 'public', 'dummygorsel', fileName);
+    const filePath = safeJoin(join(process.cwd(), 'public', 'dummygorsel'), path);
 
-    if (!existsSync(filePath)) {
+    if (!filePath || !existsSync(filePath)) {
       return new NextResponse('File not found', { status: 404 });
     }
 

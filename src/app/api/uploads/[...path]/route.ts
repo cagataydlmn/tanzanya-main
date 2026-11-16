@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { safeJoin } from '@/lib/safe-path';
+import { getUploadDir } from '@/lib/upload-dir';
 
 export async function GET(
   request: NextRequest,
@@ -9,16 +11,21 @@ export async function GET(
   try {
     const { path } = await params;
     const fileName = path.map(p => decodeURIComponent(p)).join('/');
-    
-    // Check main public/uploads directory first
-    let filePath = join(process.cwd(), 'public', 'uploads', fileName);
 
-    // If not found in main, check standalone directory
-    if (!existsSync(filePath)) {
-      filePath = join(process.cwd(), '.next', 'standalone', 'public', 'uploads', fileName);
+    // Check main public/uploads directory first
+    let filePath = safeJoin(getUploadDir(), path);
+
+    // Fallback: eski konum (build içindeki public/uploads)
+    if (!filePath || !existsSync(filePath)) {
+      filePath = safeJoin(join(process.cwd(), 'public', 'uploads'), path);
     }
 
-    if (!existsSync(filePath)) {
+    // If not found in main, check standalone directory
+    if (!filePath || !existsSync(filePath)) {
+      filePath = safeJoin(join(process.cwd(), '.next', 'standalone', 'public', 'uploads'), path);
+    }
+
+    if (!filePath || !existsSync(filePath)) {
       return new NextResponse('File not found', { status: 404 });
     }
 

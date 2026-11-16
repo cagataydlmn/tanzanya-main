@@ -2,6 +2,7 @@
 
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
+import { getUploadDir } from '@/lib/upload-dir';
 
 export async function uploadImageAction(formData: FormData) {
   try {
@@ -29,7 +30,7 @@ export async function uploadImageAction(formData: FormData) {
     const buffer = Buffer.from(bytes);
 
     // Kaydetme dizinini ayarla: public/uploads
-    const mainUploadDir = join(process.cwd(), 'public', 'uploads');
+    const mainUploadDir = getUploadDir();
     
     try {
       mkdirSync(mainUploadDir, { recursive: true });
@@ -85,7 +86,7 @@ export async function uploadMultipleImagesAction(formData: FormData) {
     }
 
     const uploadedUrls: string[] = [];
-    const mainUploadDir = join(process.cwd(), 'public', 'uploads');
+    const mainUploadDir = getUploadDir();
     const standaloneDir = join(process.cwd(), '.next', 'standalone', 'public', 'uploads');
     const isStandalone = existsSync(join(process.cwd(), '.next', 'standalone'));
 
